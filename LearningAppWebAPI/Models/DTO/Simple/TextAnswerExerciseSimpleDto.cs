@@ -1,21 +1,24 @@
+using System.Text.Json.Serialization;
+
 namespace LearningAppWebAPI.Models.DTO.Simple
 {
+    // TODO: Complete docs
     /// <summary>
     /// The text answer exercise simple dto class
     /// </summary>
     public class TextAnswerExerciseSimpleDto
     {
         /// <summary>
-        /// Gets or sets the value of the expected answer
+        /// 
         /// </summary>
-        public string? ExpectedAnswer { get; set; }
+        [JsonPropertyName("expected_answer")] public string? ExpectedAnswer { get; set; }
         /// <summary>
-        /// Gets or sets the value of the case sensitive
+        /// 
         /// </summary>
-        public bool CaseSensitive { get; set; }
+        [JsonPropertyName("case_sensitive")] public bool CaseSensitive { get; set; }
         /// <summary>
-        /// Gets or sets the value of the hint
+        /// 
         /// </summary>
-        public string? Hint { get; set; }
+        [JsonPropertyName("hint")] public string? Hint { get; init; }
     }
 }

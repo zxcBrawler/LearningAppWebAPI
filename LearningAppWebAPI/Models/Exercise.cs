@@ -3,17 +3,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LearningAppWebAPI.Models
 {
-
     /// <summary>
     /// The exercise class
     /// </summary>
     [Table("exercise")]
     public class Exercise
     {
-
-     
         /// <summary>
-        /// Gets or inits the value of the id
+        /// The id of the exercise
         /// </summary>
         [Key]
         [Column("id_exercise")]
@@ -21,7 +18,7 @@ namespace LearningAppWebAPI.Models
         public int Id { get; init; }
      
         /// <summary>
-        /// Gets or inits the value of the question name
+        /// The name of exercise question
         /// </summary>
         [Required]
         [MaxLength(150)]
@@ -29,7 +26,7 @@ namespace LearningAppWebAPI.Models
         public string? QuestionName { get; init; }
         
         /// <summary>
-        /// Gets or inits the value of the question description
+        /// The description of exercise question
         /// </summary>
         [Required]
         [MaxLength(500)]
@@ -37,59 +34,59 @@ namespace LearningAppWebAPI.Models
         public string? QuestionDescription { get; init; }
 
         /// <summary>
-        /// Gets or inits the value of the xp reward
+        /// Xp reward granted for exercise completion
         /// </summary>
         [Column("xp_reward")]
         public int XpReward { get; init; }
 
         /// <summary>
-        /// Gets or inits the value of the created at
+        /// The time of exercise creation
         /// </summary>
         [Column("created_at")]
         public DateTime CreatedAt { get; init; } = DateTime.UtcNow;
 
        
         /// <summary>
-        /// Gets or inits the value of the updated at
+        /// Last time the exercise was updated
         /// </summary>
         [Column("updated_at")]
         public DateTime? UpdatedAt { get; init; } = DateTime.UtcNow;
 
      
         /// <summary>
-        /// Gets or inits the value of the type exercise id
+        /// The id of exercise type
         /// </summary>
         [Column("type_exercise_id")]
         public int TypeExerciseId { get; init; }
        
         /// <summary>
-        /// Gets or inits the value of the lesson id
+        /// The id of lesson that is corresponded with exercise
         /// </summary>
         [Column("lesson_id")]
         public int LessonId { get; init; }
       
         /// <summary>
-        /// Gets or inits the value of the type exercise
+        /// The exercise type value
         /// </summary>
         public TypeExercise? TypeExercise { get; init; }
     
         /// <summary>
-        /// Gets or inits the value of the lesson
+        /// The lesson that is corresponded with exercise
         /// </summary>
         public Lesson? Lesson { get; init; }
         
         /// <summary>
-        /// Gets or inits the value of the multiple choice exercise
+        /// 
         /// </summary>
         public MultipleChoiceExercise? MultipleChoiceExercise { get; init; }
        
         /// <summary>
-        /// Gets or inits the value of the text answer exercise
+        ///
         /// </summary>
         public TextAnswerExercise? TextAnswerExercise { get; init; }
       
         /// <summary>
-        /// Gets or inits the value of the true false exercise
+        /// 
         /// </summary>
         public TrueFalseExercise? TrueFalseExercise { get; init; }
     }

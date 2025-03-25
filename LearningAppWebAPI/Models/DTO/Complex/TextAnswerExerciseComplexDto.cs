@@ -1,7 +1,9 @@
+using System.Text.Json.Serialization;
 using LearningAppWebAPI.Models.DTO.Simple;
 
 namespace LearningAppWebAPI.Models.DTO.Complex
 {
+    // TODO: Complete doc
     /// <summary>
     /// The text answer exercise complex dto class
     /// </summary>
@@ -9,8 +11,8 @@ namespace LearningAppWebAPI.Models.DTO.Complex
     public class TextAnswerExerciseComplexDto : TextAnswerExerciseSimpleDto
     {
         /// <summary>
-        /// Gets or sets the value of the exercise
+        /// 
         /// </summary>
-        public ExerciseSimpleDto? Exercise { get; set; }
+        [JsonPropertyName("exercise")] public ExerciseSimpleDto? Exercise { get; set; }
     }
 }

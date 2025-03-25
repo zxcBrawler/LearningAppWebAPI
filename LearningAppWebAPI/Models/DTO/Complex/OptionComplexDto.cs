@@ -1,7 +1,9 @@
+using System.Text.Json.Serialization;
 using LearningAppWebAPI.Models.DTO.Simple;
 
 namespace LearningAppWebAPI.Models.DTO.Complex
 {
+    // TODO: Complete doc
     /// <summary>
     /// The option complex dto class
     /// </summary>
@@ -9,8 +11,8 @@ namespace LearningAppWebAPI.Models.DTO.Complex
     public class OptionComplexDto : OptionSimpleDto
     {
         /// <summary>
-        /// The multiple choice exercise simple dto
+        /// 
         /// </summary>
-        public MultipleChoiceExerciseSimpleDto? MultipleChoiceExerciseSimpleDto;
+        [JsonPropertyName("multiple_choice_exercise")] public MultipleChoiceExerciseSimpleDto? MultipleChoiceExerciseSimpleDto;
     }
 }

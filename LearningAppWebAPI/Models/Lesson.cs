@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LearningAppWebAPI.Models
 {
-
+    // TODO: Complete docs
     /// <summary>
     /// The lesson class
     /// </summary>
@@ -13,7 +13,7 @@ namespace LearningAppWebAPI.Models
     {
    
         /// <summary>
-        /// Gets or inits the value of the id
+        /// 
         /// </summary>
         [Key]
         [Column("id_lesson")]
@@ -22,7 +22,7 @@ namespace LearningAppWebAPI.Models
 
    
         /// <summary>
-        /// Gets or sets the value of the lesson name
+        /// 
         /// </summary>
         [Required]
         [MaxLength(200)]
@@ -31,7 +31,7 @@ namespace LearningAppWebAPI.Models
 
    
         /// <summary>
-        /// Gets or sets the value of the lesson description
+        /// 
         /// </summary>
         [Required]
         [MaxLength(200)]
@@ -40,14 +40,14 @@ namespace LearningAppWebAPI.Models
 
    
         /// <summary>
-        /// Gets or sets the value of the created at
+        /// 
         /// </summary>
         [Column("created_at")]
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
    
         /// <summary>
-        /// Gets or sets the value of the updated at
+        /// 
         /// </summary>
         [Column("updated_at")]
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
@@ -55,7 +55,7 @@ namespace LearningAppWebAPI.Models
 
    
         /// <summary>
-        /// Gets or inits the value of the uid
+        /// 
         /// </summary>
         [MaxLength(50)]
         [Column("uid")]
@@ -63,20 +63,20 @@ namespace LearningAppWebAPI.Models
 
    
         /// <summary>
-        /// Gets or inits the value of the course id
+        /// 
         /// </summary>
         [Column("course_id")]
         public int? CourseId { get; init; }
         
    
         /// <summary>
-        /// Gets or inits the value of the course
+        /// 
         /// </summary>
         public Course? Course { get; init; }
 
    
         /// <summary>
-        /// Gets or inits the value of the exercises
+        /// 
         /// </summary>
         public List<Exercise>? Exercises { get; init; }
     }

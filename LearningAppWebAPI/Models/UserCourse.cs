@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace LearningAppWebAPI.Models
 {
 
+    // TODO: Complete docs
     /// <summary>
     /// The user course class
     /// </summary>
@@ -13,21 +14,21 @@ namespace LearningAppWebAPI.Models
     {
 
         /// <summary>
-        /// Gets or inits the value of the user id
+        /// 
         /// </summary>
         [Column("user_id")]
         public int UserId { get; init; }
        
 
         /// <summary>
-        /// Gets or inits the value of the course id
+        ///
         /// </summary>
         [Column("course_id")]
         public int CourseId { get; init; }
         
 
         /// <summary>
-        /// Gets or inits the value of the is finished
+        /// 
         /// </summary>
         [Column("is_finished")]
         [DefaultValue(false)]
@@ -35,7 +36,7 @@ namespace LearningAppWebAPI.Models
 
 
         /// <summary>
-        /// Gets or inits the value of the course progress
+        /// 
         /// </summary>
         [Column("course_progress")]
         [DefaultValue(0)]
@@ -43,13 +44,13 @@ namespace LearningAppWebAPI.Models
         
 
         /// <summary>
-        /// Gets or inits the value of the course
+        /// 
         /// </summary>
         public Course? Course { get; init; }
         
 
         /// <summary>
-        /// Gets or inits the value of the user
+        /// 
         /// </summary>
         public User? User { get; init; }
     }

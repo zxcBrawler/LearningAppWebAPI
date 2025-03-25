@@ -58,7 +58,6 @@ namespace LearningAppWebAPI.Domain.Repository
             {
                 return false;
             }
-
             try
             {
                 await Context.SaveChangesAsync();
@@ -70,10 +69,7 @@ namespace LearningAppWebAPI.Domain.Repository
                 {
                     return false;
                 }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
 
             return true;

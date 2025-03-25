@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LearningAppWebAPI.Models
 {
-
+    // TODO: Complete docs
     /// <summary>
     /// The text answer exercise class
     /// </summary>
@@ -13,7 +13,7 @@ namespace LearningAppWebAPI.Models
     {
    
         /// <summary>
-        /// Gets or inits the value of the expected answer
+        /// 
         /// </summary>
         [Required]
         [MaxLength(500)]
@@ -22,14 +22,14 @@ namespace LearningAppWebAPI.Models
         
    
         /// <summary>
-        /// Gets or inits the value of the case sensitive
+        /// 
         /// </summary>
         [DefaultValue(false)]
         [Column("case_sensitive")]
         public bool CaseSensitive { get; init; }
    
         /// <summary>
-        /// Gets or inits the value of the hint
+        /// 
         /// </summary>
         [MaxLength(150)]
         [Column("hint")]
@@ -37,13 +37,13 @@ namespace LearningAppWebAPI.Models
 
    
         /// <summary>
-        /// Gets or inits the value of the exercise id
+        /// 
         /// </summary>
         [Column("exercise_id")]
         public int ExerciseId { get; init; }
    
         /// <summary>
-        /// Gets or inits the value of the exercise
+        /// 
         /// </summary>
         public Exercise? Exercise { get; init; }
     }

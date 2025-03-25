@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LearningAppWebAPI.Models
 {
-  
+    // TODO: Complete docs
     /// <summary>
     /// The type exercise class
     /// </summary>
@@ -12,33 +12,33 @@ namespace LearningAppWebAPI.Models
     {
    
         /// <summary>
-        /// Gets or sets the value of the id
+        /// 
         /// </summary>
         [Key]
         [Column("id_type_exercise")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public int Id { get; init; }
 
    
         /// <summary>
-        /// Gets or sets the value of the exercise type name
+        /// 
         /// </summary>
         [Required]
         [MaxLength(50)]
         [Column("exercise_type_name")]
-        public string? ExerciseTypeName { get; set; }
+        public string? ExerciseTypeName { get; init; }
 
    
         /// <summary>
-        /// Gets or sets the value of the exercise type description
+        /// 
         /// </summary>
         [MaxLength(50)]
         [Column("exercise_type_description")]
-        public string? ExerciseTypeDescription { get; set; }
+        public string? ExerciseTypeDescription { get; init; }
 
    
         /// <summary>
-        /// Gets or inits the value of the exercises
+        /// 
         /// </summary>
         public List<Exercise>? Exercises { get; init; }
     }

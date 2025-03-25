@@ -65,19 +65,13 @@ namespace LearningAppWebAPI.Domain.Repository
             .ThenInclude(s => s.MultipleChoiceExercise)
             .ThenInclude(w => w.Options)
             .Include(u => u.Lesson)
-            .ThenInclude(l => l.Exercises)
+            .ThenInclude(l => l.Exercises)!
             .ThenInclude(s => s.TextAnswerExercise)
-            .Include(u => u.Lesson)
-            .ThenInclude(l => l.Exercises)
+            .Include(u => u.Lesson)!
+            .ThenInclude(l => l.Exercises)!
             .ThenInclude(s => s.TrueFalseExercise)
             .FirstOrDefaultAsync(u => u.Id == id);
 
-        /// <summary>
-        /// Updates the id
-        /// </summary>
-        /// <param name="id">The id</param>
-        /// <param name="entity">The entity</param>
-        /// <returns>A task containing the bool</returns>
         public override async Task<bool> UpdateAsync(int id, Course entity)
         {
             if (id != entity.Id)
@@ -104,23 +98,10 @@ namespace LearningAppWebAPI.Domain.Repository
 
             return true;
         }
-
-
-        /// <summary>
-        /// Gets the by course name using the specified course name
-        /// </summary>
-        /// <param name="courseName">The course name</param>
-        /// <returns>A task containing the course</returns>
         public async Task<Course?> GetByCourseName(string courseName)
         {
             return await Context.Course.Where(n => n.CourseName == courseName).FirstAsync();
         }
-
-        /// <summary>
-        /// Courses the exists using the specified id
-        /// </summary>
-        /// <param name="id">The id</param>
-        /// <returns>The bool</returns>
         private bool CourseExists(int id)
         {
             return Context.Course.Any(u => u.Id == id);

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LearningAppWebAPI.Models
 {
-    
+    // TODO: Complete docs
     /// <summary>
     /// 
     /// </summary>
@@ -12,7 +12,7 @@ namespace LearningAppWebAPI.Models
     {
    
         /// <summary>
-        /// Gets or inits the value of the id
+        /// 
         /// </summary>
         [Key]
         [Column("id_role")]
@@ -20,14 +20,14 @@ namespace LearningAppWebAPI.Models
         public int Id { get; init; }
    
         /// <summary>
-        /// Gets or inits the value of the role name
+        /// 
         /// </summary>
         [MaxLength(50)]
         [Column("role_name")]
         public string? RoleName { get; init; }
    
         /// <summary>
-        /// Gets or inits the value of the user
+        /// 
         /// </summary>
         public List<User>? User { get; init; }
     }

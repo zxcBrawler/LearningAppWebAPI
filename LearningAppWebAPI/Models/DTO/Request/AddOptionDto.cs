@@ -1,5 +1,8 @@
+using System.Text.Json.Serialization;
+
 namespace LearningAppWebAPI.Models.DTO.Request;
 
+// TODO: Complete doc
 /// <summary>
 /// The add option dto class
 /// </summary>
@@ -7,11 +10,11 @@ public class AddOptionDto
 {
 
     /// <summary>
-    /// Gets or sets the value of the text
+    /// 
     /// </summary>
     public string? Text { get; set; }
     /// <summary>
-    /// Gets or sets the value of the multiple choice exercise id
+    /// 
     /// </summary>
-    public int MultipleChoiceExerciseId { get; set; }
+    [JsonPropertyName("multiple_choice_exercise_id")] public int MultipleChoiceExerciseId { get; set; }
 }

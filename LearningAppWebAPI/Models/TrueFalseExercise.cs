@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LearningAppWebAPI.Models
 {
+    // TODO: Complete docs
     /// <summary>
     /// The true false exercise class
     /// </summary>
@@ -11,20 +12,20 @@ namespace LearningAppWebAPI.Models
     {
    
         /// <summary>
-        /// Gets or inits the value of the answer value
+        /// 
         /// </summary>
         [Column("answer_value")]
         public bool AnswerValue { get; init; }
 
    
         /// <summary>
-        /// Gets or inits the value of the exercise id
+        /// 
         /// </summary>
         [Column("exercise_id")]
         public int ExerciseId { get; init; }
    
         /// <summary>
-        /// Gets or inits the value of the exercise
+        ///
         /// </summary>
         public Exercise? Exercise { get; init; }
     }

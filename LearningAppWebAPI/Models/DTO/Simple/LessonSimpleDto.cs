@@ -1,31 +1,34 @@
+using System.Text.Json.Serialization;
+
 namespace LearningAppWebAPI.Models.DTO.Simple
 {
+    // TODO: Complete docs
     /// <summary>
     /// The lesson simple dto class
     /// </summary>
     public class LessonSimpleDto
     {
         /// <summary>
-        /// Gets or sets the value of the id
+        /// 
         /// </summary>
-        public int Id { get; set; }
+        public int Id { get; init; }
         /// <summary>
-        /// Gets or sets the value of the lesson name
+        /// 
         /// </summary>
-        public string? LessonName { get; set; }
+        [JsonPropertyName("lesson_name")] public string? LessonName { get; init; }
         /// <summary>
-        /// Gets or sets the value of the lesson description
+        /// 
         /// </summary>
-        public string? LessonDescription { get; set; }
+        [JsonPropertyName("lesson_description")] public string? LessonDescription { get; init; }
         /// <summary>
-        /// Gets or sets the value of the created at
+        /// 
         /// </summary>
-        public DateTime? CreatedAt { get; set; }
+        [JsonPropertyName("created_at")] public DateTime? CreatedAt { get; init; }
 
         /// <summary>
-        /// Gets or sets the value of the uid
+        /// 
         /// </summary>
-        public string? Uid { get; set; }
+        [JsonPropertyName("uid")] public string? Uid { get; init; }
 
     }
 }

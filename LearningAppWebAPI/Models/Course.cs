@@ -4,34 +4,31 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LearningAppWebAPI.Models
 {
-   
     /// <summary>
     /// The course class
     /// </summary>
     [Table("course")]
     public class Course
     {
-       
         /// <summary>
-        /// Gets or sets the value of the id
+        /// The id of course
         /// </summary>
         [Key]
         [Column("id_course")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public int Id { get; init; }
         
         /// <summary>
-        /// Gets or sets the value of the course name
+        /// Course title
         /// </summary>
         [Required]
         [MaxLength(150)]
         [MinLength(5)]
         [Column("course_name")]
          public string? CourseName { get; set; }
-
         
         /// <summary>
-        /// Gets or sets the value of the course description
+        /// Course description
         /// </summary>
         [Required]
         [MaxLength(500)]
@@ -39,7 +36,7 @@ namespace LearningAppWebAPI.Models
         public string? CourseDescription { get; set; }
         
         /// <summary>
-        /// Gets or sets the value of the course language level
+        /// Target language level of the course, ranges from A1 to C1+
         /// </summary>
         [Required]
         [MinLength(2)]
@@ -47,44 +44,42 @@ namespace LearningAppWebAPI.Models
         [Column("course_language_level")]
         public string? CourseLanguageLevel { get; set; }
         
-        
-        
         /// <summary>
-        /// Gets or sets the value of the image url
+        /// Course Image
         /// </summary>
         [MaxLength(500)]
         [Column("image_url")]
-        public string? ImageUrl { get; set; }
+        public string? ImageUrl { get; init; }
 
         
         /// <summary>
-        /// Gets or sets the value of the is archived
+        /// Defines if course is archived
         /// </summary>
         [Column("is_archived")]
         [DefaultValue(false)]
-        public bool IsArchived { get; set; }
+        public bool IsArchived { get; init; }
        
         /// <summary>
-        /// Gets or sets the value of the created at
+        /// The time of course creation
         /// </summary>
         [Column("created_at")]
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedAt { get; init; } = DateTime.UtcNow;
         
         /// <summary>
-        /// Gets or sets the value of the updated at
+        /// Last time the course was updated
         /// </summary>
         [Column("updated_at")]
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime UpdatedAt { get; init; } = DateTime.UtcNow;
         
         /// <summary>
-        /// Gets or inits the value of the lesson
+        /// Lessons of the course
         /// </summary>
         public List<Lesson>? Lesson { get; init; }
         
         /// <summary>
-        /// Gets or inits the value of the users
+        /// Users that have enrolled to the course
         /// </summary>
         public List<User>? Users { get; init; }
 

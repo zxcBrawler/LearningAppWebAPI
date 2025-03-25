@@ -1,32 +1,36 @@
+using System.Text.Json.Serialization;
+
 namespace LearningAppWebAPI.Models.DTO.Simple;
 
+// TODO: Complete doc
 /// <summary>
 /// The exercise simple dto class
 /// </summary>
 public class ExerciseSimpleDto
 {
+ 
     /// <summary>
     /// Gets or sets the value of the id
     /// </summary>
-    public int Id { get; set; }
+    public int Id { get; init; }
     /// <summary>
-    /// Gets or sets the value of the question name
+    /// 
     /// </summary>
-    public string? QuestionName { get; set; }
+    [JsonPropertyName("question_name")] public string? QuestionName { get; init; }
     /// <summary>
-    /// Gets or sets the value of the question text
+    ///
     /// </summary>
-    public string? QuestionText { get; set; }
+    [JsonPropertyName("question_description")] public string? QuestionDescription { get; init; }
     /// <summary>
-    /// Gets or sets the value of the xp reward
+    /// 
     /// </summary>
-    public int XpReward { get; set; }
+    [JsonPropertyName("xp_reward")] public int XpReward { get; init; }
     /// <summary>
-    /// Gets or sets the value of the created at
+    /// 
     /// </summary>
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    [JsonPropertyName("created_at")] public DateTime CreatedAt { get; init; } 
     /// <summary>
-    /// Gets or sets the value of the type exercise
+    /// 
     /// </summary>
-    public TypeExerciseSimpleDto? TypeExercise { get; set; }
+    [JsonPropertyName("type_exercise")] public TypeExerciseSimpleDto? TypeExercise { get; init; }
 }

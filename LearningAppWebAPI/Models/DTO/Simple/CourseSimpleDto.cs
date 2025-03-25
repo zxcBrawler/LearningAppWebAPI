@@ -1,41 +1,50 @@
+using System.Text.Json.Serialization;
+
 namespace LearningAppWebAPI.Models.DTO.Simple
 {
+    // TODO: Complete doc
     /// <summary>
     /// 
     /// </summary>
     public class CourseSimpleDto
     {
+       
         /// <summary>
         /// 
         /// </summary>
-        public int Id { get; set; }
+        public int Id { get; init; }
 
+        
         /// <summary>
         /// 
         /// </summary>
-        public string? CourseName { get; set; }
+        [JsonPropertyName("course_name")] public string? CourseName { get; init; }
 
+        
         /// <summary>
         /// 
         /// </summary>
-        public string? CourseDescription { get; set; }
+        [JsonPropertyName("course_description")] public string? CourseDescription { get; init; }
 
+        
         /// <summary>
         /// 
         /// </summary>
-        public string? CourseLanguageLevel { get; set; }
+        [JsonPropertyName("course_language_level")] public string? CourseLanguageLevel { get; init; }
+       
         /// <summary>
         /// 
         /// </summary>
-        public bool IsArchived { get; set; }
+        [JsonPropertyName("is_archived")] public bool IsArchived { get; init; }
+        
+        /// <summary>
+        ///
+        /// </summary>
+        [JsonPropertyName("image_url")] public string? ImageUrl { get; init; }
+        
         /// <summary>
         /// 
         /// </summary>
-        public string? ImageUrl { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
+        [JsonPropertyName("created_at")] public DateTime CreatedAt { get; init; }
     }
 }

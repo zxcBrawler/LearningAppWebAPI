@@ -19,7 +19,7 @@ namespace LearningAppWebAPI.Domain.Repository
         /// <returns>A task containing a list of te</returns>
         public abstract Task<List<TE>> GetAllAsync();
         /// <summary>
-        /// Gets the by id using the specified id
+        /// Gets Entity by id using the specified id
         /// </summary>
         /// <param name="id">The id</param>
         /// <returns>A task containing the te</returns>
@@ -31,14 +31,14 @@ namespace LearningAppWebAPI.Domain.Repository
         /// <returns>A task containing the te</returns>
         public abstract Task<TE> CreateAsync(TE entity);
         /// <summary>
-        /// Updates the id
+        /// Updates Entity by id
         /// </summary>
         /// <param name="id">The id</param>
         /// <param name="entity">The entity</param>
         /// <returns>A task containing the bool</returns>
         public abstract Task<bool> UpdateAsync(int id, TE entity);
         /// <summary>
-        /// Deletes the id
+        /// Deletes Entity by id
         /// </summary>
         /// <param name="id">The id</param>
         /// <returns>A task containing the bool</returns>

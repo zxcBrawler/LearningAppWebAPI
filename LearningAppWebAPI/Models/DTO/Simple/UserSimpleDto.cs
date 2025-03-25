@@ -1,42 +1,45 @@
+using System.Text.Json.Serialization;
+
 namespace LearningAppWebAPI.Models.DTO.Simple
 {
+    // TODO: Complete docs
     /// <summary>
     /// The user simple dto class
     /// </summary>
     public class UserSimpleDto
     {
         /// <summary>
-        /// Gets or sets the value of the id
+        /// 
         /// </summary>
-        public int Id { get; set; }
+        public int Id { get; init; }
         /// <summary>
-        /// Gets or sets the value of the username
+        /// 
         /// </summary>
-        public string? Username { get; set; }
+        [JsonPropertyName("username")] public string? Username { get; set; }
         /// <summary>
-        /// Gets or sets the value of the profile picture
+        /// 
         /// </summary>
-        public string? ProfilePicture { get; set; }
+        [JsonPropertyName("profile_picture")] public string? ProfilePicture { get; set; }
         /// <summary>
-        /// Gets or sets the value of the registration date
+        /// 
         /// </summary>
-        public DateTime RegistrationDate { get; set; }
+        [JsonPropertyName("registration_date")] public DateTime RegistrationDate { get; set; }
         /// <summary>
-        /// Gets or sets the value of the email
+        /// 
         /// </summary>
-        public string? Email { get; set; }
+        [JsonPropertyName("email")] public string? Email { get; set; }
         /// <summary>
-        /// Gets or sets the value of the role
+        /// 
         /// </summary>
-        public RoleSimpleDto? Role { get; set; }
+        [JsonPropertyName("role")] public RoleSimpleDto? Role { get; set; }
 
         /// <summary>
-        /// Gets or sets the value of the level
+        /// 
         /// </summary>
-        public int Level { get; set; }
+        [JsonPropertyName("level")] public int Level { get; set; }
         /// <summary>
-        /// Gets or sets the value of the current xp
+        /// 
         /// </summary>
-        public int CurrentXp { get; set; }
+        [JsonPropertyName("current_xp")] public int CurrentXp { get; set; }
     }
 }

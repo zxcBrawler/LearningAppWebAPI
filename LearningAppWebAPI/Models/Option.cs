@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LearningAppWebAPI.Models
 {
-
+    // TODO: Complete docs
     /// <summary>
     /// The option class
     /// </summary>
@@ -14,7 +14,7 @@ namespace LearningAppWebAPI.Models
     {
    
         /// <summary>
-        /// Gets or inits the value of the id
+        /// 
         /// </summary>
         [Key]
         [Column("id_option")]
@@ -22,7 +22,7 @@ namespace LearningAppWebAPI.Models
         public int Id { get; init; }
    
         /// <summary>
-        /// Gets or inits the value of the text
+        /// 
         /// </summary>
         [Required]
         [MaxLength(150)]
@@ -30,13 +30,13 @@ namespace LearningAppWebAPI.Models
         public string? Text { get; init; }
    
         /// <summary>
-        /// Gets or inits the value of the multiple choice exercise id
+        /// 
         /// </summary>
         [Column("multiple_choice_exercise_id")]
         public int MultipleChoiceExerciseId { get; init; }
    
         /// <summary>
-        /// Gets or inits the value of the multiple choice exercise
+        /// 
         /// </summary>
         public MultipleChoiceExercise? MultipleChoiceExercise { get; init; }
     }
