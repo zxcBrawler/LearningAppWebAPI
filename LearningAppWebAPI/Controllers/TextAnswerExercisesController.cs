@@ -1,14 +1,17 @@
-﻿using LearningAppWebAPI.Domain.Service;
+using LearningAppWebAPI.Domain.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LearningAppWebAPI.Controllers
 {
+    /// <summary>
+    /// The text answer exercises controller class
+    /// </summary>
+    /// <seealso cref="ControllerBase"/>
     [Route("api/[controller]")]
     [ApiController]
     [ApiExplorerSettings(GroupName = "exercises")]
     public class TextAnswerExercisesController(TextAnswerExerciseService textAnswerExerciseService) : ControllerBase
     {
-        private readonly TextAnswerExerciseService _textAnswerExerciseService = textAnswerExerciseService;
         /*
         // GET: api/TextAnswerExercises
         [HttpGet]

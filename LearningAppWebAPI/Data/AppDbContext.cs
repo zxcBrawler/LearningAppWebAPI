@@ -1,29 +1,70 @@
-﻿
+
 using LearningAppWebAPI.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace LearningAppWebAPI.Data
 {
+    /// <summary>
+    /// The app db context class
+    /// </summary>
+    /// <seealso cref="DbContext"/>
     public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
     {
+        /// <summary>
+        /// Gets or sets the value of the user
+        /// </summary>
         public DbSet<User> User { get; set; }
+        /// <summary>
+        /// Gets or sets the value of the role
+        /// </summary>
         public DbSet<Role> Role { get; set; }
+        /// <summary>
+        /// Gets or sets the value of the course
+        /// </summary>
         public DbSet<Course> Course { get; set; }
+        /// <summary>
+        /// Gets or sets the value of the lesson
+        /// </summary>
         public DbSet<Lesson> Lesson { get; set; }
-        public DbSet<UserCourse> User_Course { get; set; }
+        /// <summary>
+        /// Gets or sets the value of the user course
+        /// </summary>
+        public DbSet<UserCourse> UserCourse { get; set; }
+        /// <summary>
+        /// Gets or sets the value of the exercises
+        /// </summary>
         public DbSet<Exercise> Exercises { get; set; }
-        public DbSet<MultipleChoiceExercise> Multiple_Choice_Exercises { get; set; }
-        public DbSet<TrueFalseExercise> True_False_Exercises { get; set; }
-        public DbSet<TextAnswerExercise> Text_Answer_Exercises { get; set; }
+        /// <summary>
+        /// Gets or sets the value of the multiple choice exercises
+        /// </summary>
+        public DbSet<MultipleChoiceExercise> MultipleChoiceExercises { get; set; }
+        /// <summary>
+        /// Gets or sets the value of the true false exercises
+        /// </summary>
+        public DbSet<TrueFalseExercise> TrueFalseExercises { get; set; }
+        /// <summary>
+        /// Gets or sets the value of the text answer exercises
+        /// </summary>
+        public DbSet<TextAnswerExercise> TextAnswerExercises { get; set; }
+        /// <summary>
+        /// Gets or sets the value of the options
+        /// </summary>
         public DbSet<Option> Options { get; set; }
-        public DbSet<TypeExercise> Type_Exercise { get; set; }
+        /// <summary>
+        /// Gets or sets the value of the type exercise
+        /// </summary>
+        public DbSet<TypeExercise> TypeExercise { get; set; }
 
+        /// <summary>
+        /// Ons the model creating using the specified model builder
+        /// </summary>
+        /// <param name="modelBuilder">The model builder</param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>()
             .HasOne(u => u.Role)
             .WithMany(r => r.User)
-            .HasForeignKey(u => u.Role_Id);
+            .HasForeignKey(u => u.RoleId);
 
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Email)
@@ -34,18 +75,18 @@ namespace LearningAppWebAPI.Data
                 .IsUnique();
 
             modelBuilder.Entity<Role>()
-                .HasIndex(u => u.Role_Name)
+                .HasIndex(u => u.RoleName)
                 .IsUnique();
 
             modelBuilder.Entity<Lesson>()
-                .HasIndex(l => l.UID)
+                .HasIndex(l => l.Uid)
                 .IsUnique();
-
+            
             modelBuilder.Entity<Lesson>()
                .HasOne(u => u.Course)
                .WithMany(r => r.Lesson)
-               .HasForeignKey(u => u.Course_Id);
-
+               .HasForeignKey(u => u.CourseId);
+            
             modelBuilder.Entity<User>()
                  .HasMany(u => u.Courses)
                  .WithMany(c => c.Users)
@@ -62,51 +103,47 @@ namespace LearningAppWebAPI.Data
                      {
                          j.HasKey(uc => new { uc.UserId, uc.CourseId });
                      });
-
+            
             modelBuilder.Entity<MultipleChoiceExercise>(entity =>
             {
-                entity.HasKey(uc => uc.Exercise_Id);
+                entity.HasKey(uc => uc.ExerciseId);
                 entity.HasMany(e => e.Options)
                      .WithOne(o => o.MultipleChoiceExercise)
                      .HasForeignKey(o => o.MultipleChoiceExerciseId)
                      .OnDelete(DeleteBehavior.Cascade);
                 entity.HasOne(mce => mce.Exercise)
                     .WithOne(e => e.MultipleChoiceExercise)
-                    .HasForeignKey<MultipleChoiceExercise>(mce => mce.Exercise_Id)
+                    .HasForeignKey<MultipleChoiceExercise>(mce => mce.ExerciseId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
+            
             modelBuilder.Entity<TrueFalseExercise>(entity =>
             {
-                entity.HasKey(uc => uc.Exercise_Id);
+                entity.HasKey(uc => uc.ExerciseId);
                 entity.HasOne(mce => mce.Exercise)
                     .WithOne(e => e.TrueFalseExercise)
-                    .HasForeignKey<TrueFalseExercise>(mce => mce.Exercise_Id);
+                    .HasForeignKey<TrueFalseExercise>(mce => mce.ExerciseId);
 
             });
-
+            
             modelBuilder.Entity<TextAnswerExercise>(entity =>
             {
-                entity.HasKey(uc => uc.Exercise_Id);
+                entity.HasKey(uc => uc.ExerciseId);
                 entity.HasOne(mce => mce.Exercise)
                     .WithOne(e => e.TextAnswerExercise)
-                    .HasForeignKey<TextAnswerExercise>(mce => mce.Exercise_Id)
+                    .HasForeignKey<TextAnswerExercise>(mce => mce.ExerciseId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
-
-
-
-
+            
             modelBuilder.Entity<Exercise>()
                 .HasOne(e => e.TypeExercise)
                 .WithMany(te => te.Exercises)
-                .HasForeignKey(e => e.Type_Exercise_Id);
+                .HasForeignKey(e => e.TypeExerciseId);
 
             modelBuilder.Entity<Exercise>()
                 .HasOne(e => e.Lesson)
                 .WithMany(l => l.Exercises)
-                .HasForeignKey(e => e.Lesson_Id);
-
-
+                .HasForeignKey(e => e.LessonId);
         }
     }
 }

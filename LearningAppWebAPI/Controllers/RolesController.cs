@@ -1,27 +1,38 @@
-﻿using LearningAppWebAPI.Domain.Service;
+using LearningAppWebAPI.Domain.Service;
 using LearningAppWebAPI.Models.DTO.Simple;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LearningAppWebAPI.Controllers
 {
+    /// <summary>
+    /// The roles controller class
+    /// </summary>
+    /// <seealso cref="ControllerBase"/>
     [Route("api/[controller]")]
     [ApiController]
     [ApiExplorerSettings(GroupName = "users")]
     public class RolesController(RoleService roleService) : ControllerBase
     {
-        private readonly RoleService _roleService = roleService;
-
+        /// <summary>
+        /// Gets the role
+        /// </summary>
+        /// <returns>A task containing an action result of i enumerable role simple dto</returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RoleSimpleDto>>> GetRole()
         {
-            return Ok(await _roleService.GetAllRolesAsync());
+            return Ok(await roleService.GetAllRolesAsync());
         }
 
 
+        /// <summary>
+        /// Gets the role using the specified id
+        /// </summary>
+        /// <param name="id">The id</param>
+        /// <returns>A task containing an action result of role simple dto</returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<RoleSimpleDto>> GetRole(int id)
         {
-            var role = await _roleService.GetRoleById(id);
+            var role = await roleService.GetRoleById(id);
 
             if (role == null)
             {

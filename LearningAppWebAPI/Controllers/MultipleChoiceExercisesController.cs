@@ -1,15 +1,17 @@
-﻿using LearningAppWebAPI.Domain.Service;
+using LearningAppWebAPI.Domain.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LearningAppWebAPI.Controllers
 {
+    /// <summary>
+    /// The multiple choice exercises controller class
+    /// </summary>
+    /// <seealso cref="ControllerBase"/>
     [Route("api/[controller]")]
     [ApiController]
     [ApiExplorerSettings(GroupName = "exercises")]
     public class MultipleChoiceExercisesController(MultipleChoiceExerciseService multipleChoiceExerciseService) : ControllerBase
     {
-        private readonly MultipleChoiceExerciseService _multipleChoiceExerciseService = multipleChoiceExerciseService;
-
         // GET: api/MultipleChoiceExercises
         /*[HttpGet]
         public async Task<ActionResult<IEnumerable<MultipleChoiceExercise>>> GetMultiple_Choice_Exercises()

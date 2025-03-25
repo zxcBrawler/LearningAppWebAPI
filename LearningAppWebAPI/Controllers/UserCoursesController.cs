@@ -1,29 +1,40 @@
-﻿using LearningAppWebAPI.Domain.Service;
+using LearningAppWebAPI.Domain.Service;
 using LearningAppWebAPI.Models.DTO.Complex;
 using LearningAppWebAPI.Models.DTO.Simple;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LearningAppWebAPI.Controllers
 {
+    /// <summary>
+    /// The user courses controller class
+    /// </summary>
+    /// <seealso cref="ControllerBase"/>
     [Route("api/[controller]")]
     [ApiController]
     [ApiExplorerSettings(GroupName = "admin")]
     public class UserCoursesController(UserCourseService userCourseService) : ControllerBase
     {
-        private readonly UserCourseService _userCourseService = userCourseService;
-
         // GET: api/UserCourses
+        /// <summary>
+        /// Gets the user course
+        /// </summary>
+        /// <returns>A task containing an action result of i enumerable user course simple dto</returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserCourseSimpleDto>>> GetUser_Course()
         {
-            return Ok(await _userCourseService.GetAllUsersWithCourses());
+            return Ok(await userCourseService.GetAllUsersWithCourses());
         }
 
         // GET: api/UserCourses/5
-        [HttpGet("{userId}")]
-        public async Task<ActionResult<IEnumerable<UserCourseComplexDTO>>> GetUserCourse(int userId)
+        /// <summary>
+        /// Gets the user course using the specified user id
+        /// </summary>
+        /// <param name="userId">The user id</param>
+        /// <returns>A task containing an action result of i enumerable user course complex dto</returns>
+        [HttpGet("{userId:int}")]
+        public async Task<ActionResult<IEnumerable<UserCourseComplexDto>>> GetUserCourse(int userId)
         {
-            return Ok(await _userCourseService.GetByAllByUserId(userId));
+            return Ok(await userCourseService.GetByAllByUserId(userId));
         }
 
         /*

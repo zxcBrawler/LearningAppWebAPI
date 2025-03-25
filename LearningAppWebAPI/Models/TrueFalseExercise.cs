@@ -1,11 +1,31 @@
-﻿
+
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace LearningAppWebAPI.Models
 {
+    /// <summary>
+    /// The true false exercise class
+    /// </summary>
+    [Table(name: "true_false_exercise")]
     public class TrueFalseExercise
     {
-        public bool IsTrue { get; set; }
+   
+        /// <summary>
+        /// Gets or inits the value of the answer value
+        /// </summary>
+        [Column("answer_value")]
+        public bool AnswerValue { get; init; }
 
-        public int Exercise_Id { get; set; }
-        public Exercise? Exercise { get; set; }
+   
+        /// <summary>
+        /// Gets or inits the value of the exercise id
+        /// </summary>
+        [Column("exercise_id")]
+        public int ExerciseId { get; init; }
+   
+        /// <summary>
+        /// Gets or inits the value of the exercise
+        /// </summary>
+        public Exercise? Exercise { get; init; }
     }
 }

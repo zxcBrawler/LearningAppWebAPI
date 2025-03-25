@@ -1,4 +1,4 @@
-﻿
+
 using LearningAppWebAPI.Domain.Service;
 using LearningAppWebAPI.Models;
 using LearningAppWebAPI.Models.DTO.Complex;
@@ -7,12 +7,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LearningAppWebAPI.Controllers
 {
+    /// <summary>
+    /// The options controller class
+    /// </summary>
+    /// <seealso cref="ControllerBase"/>
     [Route("api/[controller]")]
     [ApiController]
     public class OptionsController(OptionService optionService) : ControllerBase
     {
-        private readonly OptionService _optionService = optionService;
-
         /* // GET: api/Options
          [HttpGet]
          public async Task<ActionResult<IEnumerable<Option>>> GetOptions()
@@ -21,10 +23,15 @@ namespace LearningAppWebAPI.Controllers
          }*/
 
         // GET: api/Options/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<OptionComplexDTO>> GetOption(int id)
+        /// <summary>
+        /// Gets the option using the specified id
+        /// </summary>
+        /// <param name="id">The id</param>
+        /// <returns>A task containing an action result of option complex dto</returns>
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<OptionComplexDto>> GetOption(int id)
         {
-            var option = await _optionService.GetOption(id);
+            var option = await optionService.GetOption(id);
 
             if (option == null)
             {
@@ -67,10 +74,15 @@ namespace LearningAppWebAPI.Controllers
 
         // POST: api/Options
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Posts the option using the specified dto
+        /// </summary>
+        /// <param name="dto">The dto</param>
+        /// <returns>A task containing an action result of option</returns>
         [HttpPost]
-        public async Task<ActionResult<Option>> PostOption(AddOptionDTO dto)
+        public async Task<ActionResult<Option>> PostOption(AddOptionDto dto)
         {
-            var result = await _optionService.CreateOption(dto);
+            var result = await optionService.CreateOption(dto);
             if (result == null)
             {
                 return BadRequest();

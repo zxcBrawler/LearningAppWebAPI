@@ -1,4 +1,4 @@
-﻿using LearningAppWebAPI.Domain.Service;
+using LearningAppWebAPI.Domain.Service;
 using LearningAppWebAPI.Models.DTO.Complex;
 using LearningAppWebAPI.Models.DTO.Request;
 using LearningAppWebAPI.Models.DTO.Simple;
@@ -14,9 +14,6 @@ namespace LearningAppWebAPI.Controllers
     [ApiController]
     public class UsersController(UserService userService) : ControllerBase
     {
-
-        private readonly UserService _userService = userService;
-
         /// <summary>
         /// Gets all users.
         /// </summary>
@@ -28,7 +25,7 @@ namespace LearningAppWebAPI.Controllers
         [ProducesResponseType(typeof(List<UserSimpleDto>), 200)]
         public async Task<ActionResult<IEnumerable<UserSimpleDto>>> GetUser()
         {
-            return Ok(await _userService.GetAllUsersAsync());
+            return Ok(await userService.GetAllUsersAsync());
         }
 
         /// <summary>
@@ -42,11 +39,11 @@ namespace LearningAppWebAPI.Controllers
         // GET: api/Users/5
         [HttpGet("{id}")]
         [ApiExplorerSettings(GroupName = "users")]
-        [ProducesResponseType(typeof(UserComplexDTO), 200)]
+        [ProducesResponseType(typeof(UserComplexDto), 200)]
         [ProducesResponseType(typeof(string), 404)]
         public async Task<ActionResult<UserSimpleDto>> GetUserById(int id)
         {
-            var userSimpleDto = await _userService.GetUserById(id);
+            var userSimpleDto = await userService.GetUserById(id);
 
             if (userSimpleDto == null)
             {
@@ -67,14 +64,14 @@ namespace LearningAppWebAPI.Controllers
         /// <response code="404">If the user is not found.</response>
         [HttpPut("{id:int}")]
         [ApiExplorerSettings(GroupName = "admin")]
-        public async Task<IActionResult> PutUser(int id, [FromBody] AddUserRequestDTO updateRequest)
+        public async Task<IActionResult> PutUser(int id, [FromBody] AddUserRequestDto updateRequest)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            bool isUpdated = await _userService.UpdateUserAsync(id, updateRequest);
+            bool isUpdated = await userService.UpdateUserAsync(id, updateRequest);
 
             if (!isUpdated)
             {
@@ -107,12 +104,12 @@ namespace LearningAppWebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [ApiExplorerSettings(GroupName = "admin")]
-        public async Task<ActionResult<UserSimpleDto?>> PostUser(AddUserRequestDTO requestDto)
+        public async Task<ActionResult<UserSimpleDto?>> PostUser(AddUserRequestDto requestDto)
         {
-            var result = await _userService.CreateUserAsync(requestDto);
+            var result = await userService.CreateUserAsync(requestDto);
             if (result == null)
             {
-                return NotFound($"Role with id {requestDto.Role_Id} not found");
+                return NotFound($"Role with id {requestDto.RoleId} not found");
             }
 
             return CreatedAtAction("GetUser", new { id = result.Id }, result);
@@ -130,7 +127,7 @@ namespace LearningAppWebAPI.Controllers
         [ApiExplorerSettings(GroupName = "admin")]
         public async Task<IActionResult> DeleteUser(int id)
         {
-            bool isDeleted = await _userService.DeleteUserAsync(id);
+            bool isDeleted = await userService.DeleteUserAsync(id);
 
             if (!isDeleted)
             {

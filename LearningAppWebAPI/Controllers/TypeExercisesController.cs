@@ -1,15 +1,17 @@
-﻿using LearningAppWebAPI.Domain.Service;
+using LearningAppWebAPI.Domain.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LearningAppWebAPI.Controllers
 {
+    /// <summary>
+    /// The type exercises controller class
+    /// </summary>
+    /// <seealso cref="ControllerBase"/>
     [Route("api/[controller]")]
     [ApiController]
     [ApiExplorerSettings(GroupName = "exercises")]
     public class TypeExercisesController(TypeExerciseService typeExerciseService) : ControllerBase
     {
-        private readonly TypeExerciseService _typeExerciseService = typeExerciseService;
-
         /*// GET: api/TypeExercises
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TypeExercise>>> GetType_Exercise()

@@ -1,4 +1,4 @@
-﻿using LearningAppWebAPI.Data;
+using LearningAppWebAPI.Data;
 using LearningAppWebAPI.Domain.Repository;
 using LearningAppWebAPI.Models;
 using LearningAppWebAPI.Models.DTO.Complex;
@@ -7,8 +7,14 @@ using LearningAppWebAPI.Models.DTO.Simple;
 
 namespace LearningAppWebAPI.Domain.Service
 {
+    /// <summary>
+    /// The option service class
+    /// </summary>
     public class OptionService(OptionRepository optionRepository, MultipleChoiceExerciseRepository multipleChoiceExerciseRepository)
     {
+        /// <summary>
+        /// The configure mapper
+        /// </summary>
         private readonly AutoMapper.Mapper _mapper = MapperConfig.ConfigureMapper();
 
 
@@ -20,15 +26,25 @@ namespace LearningAppWebAPI.Domain.Service
          */
 
 
-        public async Task<OptionComplexDTO?> GetOption(int id)
+        /// <summary>
+        /// Gets the option using the specified id
+        /// </summary>
+        /// <param name="id">The id</param>
+        /// <returns>A task containing the option complex dto</returns>
+        public async Task<OptionComplexDto?> GetOption(int id)
         {
             var option = await optionRepository.GetByIdAsync(id);
-            return option == null ? null : _mapper.Map<OptionComplexDTO>(option);
+            return option == null ? null : _mapper.Map<OptionComplexDto>(option);
         }
 
-        public async Task<OptionSimpleDto> CreateOption(AddOptionDTO addOptionDto)
+        /// <summary>
+        /// Creates the option using the specified add option dto
+        /// </summary>
+        /// <param name="addOptionDto">The add option dto</param>
+        /// <returns>A task containing the option simple dto</returns>
+        public async Task<OptionSimpleDto> CreateOption(AddOptionDto addOptionDto)
         {
-            Option option = new Option
+            var option = new Option
             {
                 Text = addOptionDto.Text,
                 MultipleChoiceExercise = await multipleChoiceExerciseRepository.GetByIdAsync(addOptionDto.MultipleChoiceExerciseId)

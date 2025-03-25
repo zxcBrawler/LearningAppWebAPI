@@ -1,15 +1,17 @@
-﻿using LearningAppWebAPI.Domain.Service;
+using LearningAppWebAPI.Domain.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LearningAppWebAPI.Controllers
 {
+    /// <summary>
+    /// The true false exercises controller class
+    /// </summary>
+    /// <seealso cref="ControllerBase"/>
     [Route("api/[controller]")]
     [ApiController]
     [ApiExplorerSettings(GroupName = "exercises")]
     public class TrueFalseExercisesController(TrueFalseExerciseService trueFalseExerciseService) : ControllerBase
     {
-        private readonly TrueFalseExerciseService _trueFalseExerciseService = trueFalseExerciseService;
-
         /* // GET: api/TrueFalseExercises
          [HttpGet]
          public async Task<ActionResult<IEnumerable<TrueFalseExercise>>> GetTrue_False_Exercises()
