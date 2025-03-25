@@ -15,13 +15,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
 
-
-
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
 });
-
 
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<RoleService>();
@@ -46,7 +43,6 @@ builder.Services.AddScoped<MultipleChoiceExerciseRepository>();
 builder.Services.AddScoped<OptionRepository>();
 builder.Services.AddScoped<TextAnswerExerciseRepository>();
 builder.Services.AddScoped<TrueFalseExerciseRepository>();
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -68,12 +64,9 @@ builder.Services.AddSwaggerGen(c =>
 
         }
     });
-
     c.SwaggerDoc("exercises", new OpenApiInfo { Title = "LearningAppAPI Exercises", Version = "exercises", Description = "All HTTP Methods needed to interact with exercises" });
     c.SwaggerDoc("users", new OpenApiInfo { Title = "LearningAppAPI Users", Version = "users", Description = "All HTTP Methods needed to interact with users" });
     c.SwaggerDoc("admin", new OpenApiInfo { Title = "LearningAppAPI Admin", Version = "admin", Description = "Admin Methods" });
-
-
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     c.IncludeXmlComments(xmlPath);
@@ -81,7 +74,6 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -92,7 +84,6 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/users/swagger.json", "LearningAppAPI users");
         c.SwaggerEndpoint("/swagger/admin/swagger.json", "LearningAppAPI admin");
         c.InjectStylesheet("/swagger/ui/custom.css");
-
     });
 }
 
@@ -100,6 +91,5 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseAuthorization();
 app.MapControllers();
-
 app.Run();
 

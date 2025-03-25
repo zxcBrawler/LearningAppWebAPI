@@ -1,3 +1,4 @@
+using LearningAppWebAPI.Data;
 using LearningAppWebAPI.Domain.Service;
 using LearningAppWebAPI.Models.DTO.Complex;
 using LearningAppWebAPI.Models.DTO.Request;
@@ -23,9 +24,10 @@ namespace LearningAppWebAPI.Controllers
         [HttpGet]
         [ApiExplorerSettings(GroupName = "users")]
         [ProducesResponseType(typeof(List<UserSimpleDto>), 200)]
-        public async Task<ActionResult<IEnumerable<UserSimpleDto>>> GetUser()
+        public async Task<IActionResult> GetUser()
         {
-            return Ok(await userService.GetAllUsersAsync());
+            var result = await userService.GetAllUsersAsync();
+            return StatusCode(result.StatusCode, result.IsSuccess ? result.Value : result.ErrorMessage);
         }
 
         /// <summary>
@@ -41,16 +43,10 @@ namespace LearningAppWebAPI.Controllers
         [ApiExplorerSettings(GroupName = "users")]
         [ProducesResponseType(typeof(UserComplexDto), 200)]
         [ProducesResponseType(typeof(string), 404)]
-        public async Task<ActionResult<UserSimpleDto>> GetUserById(int id)
+        public async Task<IActionResult> GetUserById(int id)
         {
-            var userSimpleDto = await userService.GetUserById(id);
-
-            if (userSimpleDto == null)
-            {
-                return NotFound($"User with id {id} not found");
-            }
-
-            return Ok(userSimpleDto);
+            var result = await userService.GetUserByIdAsync(id);
+            return StatusCode(result.StatusCode, result.IsSuccess ? result.Value : result.ErrorMessage);
         }
 
         /// <summary>
@@ -71,14 +67,8 @@ namespace LearningAppWebAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            bool isUpdated = await userService.UpdateUserAsync(id, updateRequest);
-
-            if (!isUpdated)
-            {
-                return NotFound($"User with id {id} not found");
-            }
-
-            return NoContent();
+            var result = await userService.UpdateUserAsync(id, updateRequest);
+            return StatusCode(result.StatusCode, result.IsSuccess ? result.Value : result.ErrorMessage);
         }
 
         /// <summary>
@@ -104,15 +94,15 @@ namespace LearningAppWebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [ApiExplorerSettings(GroupName = "admin")]
-        public async Task<ActionResult<UserSimpleDto?>> PostUser(AddUserRequestDto requestDto)
+        public async Task<IActionResult> PostUser(AddUserRequestDto requestDto)
         {
-            var result = await userService.CreateUserAsync(requestDto);
-            if (result == null)
+            if (!ModelState.IsValid)
             {
-                return NotFound($"Role with id {requestDto.RoleId} not found");
+                return BadRequest(ModelState);
             }
 
-            return CreatedAtAction("GetUser", new { id = result.Id }, result);
+            var result = await userService.CreateUserAsync(requestDto);
+            return StatusCode(result.StatusCode, result.IsSuccess ? result.Value : result.ErrorMessage);
 
         }
 
@@ -127,14 +117,8 @@ namespace LearningAppWebAPI.Controllers
         [ApiExplorerSettings(GroupName = "admin")]
         public async Task<IActionResult> DeleteUser(int id)
         {
-            bool isDeleted = await userService.DeleteUserAsync(id);
-
-            if (!isDeleted)
-            {
-                return NotFound($"User with id {id} not found.");
-            }
-
-            return NoContent();
+            var result = await userService.DeleteUserAsync(id);
+            return StatusCode(result.StatusCode, result.IsSuccess ? result.Value : result.ErrorMessage);
         }
 
         /*
