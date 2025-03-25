@@ -4,8 +4,14 @@ namespace LearningAppWebAPI.Models
 {
     public class Course
     {
+        /// <summary>
+        /// 
+        /// </summary>
         [Key]
         public int Id { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
         [Required]
         [MaxLength(150)]
         [MinLength(5)]
