@@ -1,5 +1,6 @@
 using LearningAppWebAPI.Data;
 using LearningAppWebAPI.Models;
+using LearningAppWebAPI.Utils;
 using Microsoft.EntityFrameworkCore;
 
 namespace LearningAppWebAPI.Domain.Repository
@@ -8,6 +9,7 @@ namespace LearningAppWebAPI.Domain.Repository
     /// The true false exercise repository class
     /// </summary>
     /// <seealso cref="AbstractBaseRepository{TrueFalseExercise}"/>
+    [ScopedService]
     public class TrueFalseExerciseRepository(AppDbContext context) : AbstractBaseRepository<TrueFalseExercise>(context)
     {
         /// <summary>

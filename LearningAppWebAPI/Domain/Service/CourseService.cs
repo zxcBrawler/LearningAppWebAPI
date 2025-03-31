@@ -4,12 +4,14 @@ using LearningAppWebAPI.Models;
 using LearningAppWebAPI.Models.DTO.Complex;
 using LearningAppWebAPI.Models.DTO.Request;
 using LearningAppWebAPI.Models.DTO.Simple;
+using LearningAppWebAPI.Utils;
 
 namespace LearningAppWebAPI.Domain.Service
 {
     /// <summary>
     /// The course service class
     /// </summary>
+    [ScopedService]
     public class CourseService(CourseRepository courseRepository)
     {
         /// <summary>

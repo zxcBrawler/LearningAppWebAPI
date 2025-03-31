@@ -1,12 +1,14 @@
 using LearningAppWebAPI.Data;
 using LearningAppWebAPI.Domain.Repository;
 using LearningAppWebAPI.Models.DTO.Simple;
+using LearningAppWebAPI.Utils;
 
 namespace LearningAppWebAPI.Domain.Service
 {
     /// <summary>
     /// The role service class
     /// </summary>
+    [ScopedService]
     public class RoleService(RoleRepository roleRepository)
     {
         /// <summary>

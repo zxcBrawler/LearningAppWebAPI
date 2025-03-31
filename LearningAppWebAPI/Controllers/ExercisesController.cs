@@ -9,7 +9,7 @@ namespace LearningAppWebAPI.Controllers
     /// <seealso cref="ControllerBase"/>
     [Route("api/[controller]")]
     [ApiController]
-    [ApiExplorerSettings(GroupName = "exercises")]
+    [ApiExplorerSettings(GroupName = "admin")]
     public class ExercisesController(ExerciseService exerciseService) : ControllerBase
     {
         // GET: api/Exercises

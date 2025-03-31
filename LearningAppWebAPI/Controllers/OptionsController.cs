@@ -12,6 +12,7 @@ namespace LearningAppWebAPI.Controllers
     /// </summary>
     /// <seealso cref="ControllerBase"/>
     [Route("api/[controller]")]
+    [ApiExplorerSettings(GroupName = "admin")]
     [ApiController]
     public class OptionsController(OptionService optionService) : ControllerBase
     {

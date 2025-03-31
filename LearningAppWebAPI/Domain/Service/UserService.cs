@@ -3,12 +3,14 @@ using LearningAppWebAPI.Domain.Repository;
 using LearningAppWebAPI.Models;
 using LearningAppWebAPI.Models.DTO.Request;
 using LearningAppWebAPI.Models.DTO.Simple;
+using LearningAppWebAPI.Utils;
 
 namespace LearningAppWebAPI.Domain.Service
 {
     /// <summary>
     /// The user service class
     /// </summary>
+    [ScopedService]
     public class UserService(UserRepository userRepository, RoleRepository roleRepository)
     {
         /// <summary>

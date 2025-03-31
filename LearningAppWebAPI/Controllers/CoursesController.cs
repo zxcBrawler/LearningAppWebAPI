@@ -12,7 +12,7 @@ namespace LearningAppWebAPI.Controllers;
 /// <seealso cref="ControllerBase" />
 [Route("api/[controller]")]
 [ApiController]
-[ApiExplorerSettings(GroupName = "exercises")]
+[ApiExplorerSettings(GroupName = "admin")]
 public class CoursesController(CourseService courseService) : ControllerBase
 {
     /// <summary>

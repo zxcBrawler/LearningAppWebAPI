@@ -1,5 +1,6 @@
 using LearningAppWebAPI.Data;
 using LearningAppWebAPI.Models;
+using LearningAppWebAPI.Utils;
 using Microsoft.EntityFrameworkCore;
 
 namespace LearningAppWebAPI.Domain.Repository
@@ -8,6 +9,7 @@ namespace LearningAppWebAPI.Domain.Repository
     /// The option repository class
     /// </summary>
     /// <seealso cref="AbstractBaseRepository{Option}"/>
+    [ScopedService]
     public class OptionRepository(AppDbContext context) : AbstractBaseRepository<Option>(context)
     {
         /// <summary>

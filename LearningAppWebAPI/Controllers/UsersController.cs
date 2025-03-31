@@ -11,7 +11,7 @@ namespace LearningAppWebAPI.Controllers
     /// The UsersController manages user-related operations.
     /// </summary>
     [Route("api/[controller]")]
-
+    [ApiExplorerSettings(GroupName = "admin")]
     [ApiController]
     public class UsersController(UserService userService) : ControllerBase
     {
@@ -22,7 +22,6 @@ namespace LearningAppWebAPI.Controllers
         /// <response code="200">Returns the list of users.</response>
 
         [HttpGet]
-        [ApiExplorerSettings(GroupName = "users")]
         [ProducesResponseType(typeof(List<UserSimpleDto>), 200)]
         public async Task<IActionResult> GetUser()
         {
@@ -40,7 +39,6 @@ namespace LearningAppWebAPI.Controllers
 
         // GET: api/Users/5
         [HttpGet("{id}")]
-        [ApiExplorerSettings(GroupName = "users")]
         [ProducesResponseType(typeof(UserComplexDto), 200)]
         [ProducesResponseType(typeof(string), 404)]
         public async Task<IActionResult> GetUserById(int id)
@@ -48,29 +46,6 @@ namespace LearningAppWebAPI.Controllers
             var result = await userService.GetUserByIdAsync(id);
             return StatusCode(result.StatusCode, result.IsSuccess ? result.Value : result.ErrorMessage);
         }
-
-        /// <summary>
-        /// Updates an existing user.
-        /// </summary>
-        /// <param name="id">The ID of the user to update.</param>
-        /// <param name="updateRequest">The updated user data.</param>
-        /// <returns>No content if successful.</returns>
-        /// <response code="204">If the user is updated successfully.</response>
-        /// <response code="400">If the ID does not match the user data.</response>
-        /// <response code="404">If the user is not found.</response>
-        [HttpPut("{id:int}")]
-        [ApiExplorerSettings(GroupName = "admin")]
-        public async Task<IActionResult> PutUser(int id, [FromBody] AddUserRequestDto updateRequest)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var result = await userService.UpdateUserAsync(id, updateRequest);
-            return StatusCode(result.StatusCode, result.IsSuccess ? result.Value : result.ErrorMessage);
-        }
-
         /// <summary>
         /// Adds new User
         /// </summary>
@@ -93,7 +68,6 @@ namespace LearningAppWebAPI.Controllers
         /// <param name="requestDto">User</param>
         /// <returns></returns>
         [HttpPost]
-        [ApiExplorerSettings(GroupName = "admin")]
         public async Task<IActionResult> PostUser(AddUserRequestDto requestDto)
         {
             if (!ModelState.IsValid)
@@ -103,8 +77,30 @@ namespace LearningAppWebAPI.Controllers
 
             var result = await userService.CreateUserAsync(requestDto);
             return StatusCode(result.StatusCode, result.IsSuccess ? result.Value : result.ErrorMessage);
-
         }
+
+        /// <summary>
+        /// Updates an existing user.
+        /// </summary>
+        /// <param name="id">The ID of the user to update.</param>
+        /// <param name="updateRequest">The updated user data.</param>
+        /// <returns>No content if successful.</returns>
+        /// <response code="204">If the user is updated successfully.</response>
+        /// <response code="400">If the ID does not match the user data.</response>
+        /// <response code="404">If the user is not found.</response>
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> PutUser(int id, [FromBody] AddUserRequestDto updateRequest)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await userService.UpdateUserAsync(id, updateRequest);
+            return StatusCode(result.StatusCode, result.IsSuccess ? result.Value : result.ErrorMessage);
+        }
+
+       
 
         /// <summary>
         /// Deletes a user by ID.
@@ -114,23 +110,11 @@ namespace LearningAppWebAPI.Controllers
         /// <response code="204">If the user is deleted successfully.</response>
         /// <response code="404">If the user is not found.</response>
         [HttpDelete("{id}")]
-        [ApiExplorerSettings(GroupName = "admin")]
         public async Task<IActionResult> DeleteUser(int id)
         {
             var result = await userService.DeleteUserAsync(id);
             return StatusCode(result.StatusCode, result.IsSuccess ? result.Value : result.ErrorMessage);
         }
-
-        /*
-         - [] Enroll to course (int course_Id) -> adds new UserCourse entity
-         - [] Archive course (int course_Id) -> Updates Course sets IsArchived param in UserCourse to true 
-         - [] Login (LoginRequest loginRequest) -> Logs in with provided credentials, adds credentials to Windows Registry
-         - [] Sign up (SignUpRequest signUpRequest) -> Sign up new user, adds new User Entity, hashes password with salt creates access token
-         - [] Log out () -> Loggs out of current account, clears access token and Windows Registry
-         - [] Update profile data (AddUserRequestDTO addUSerRequestDTO) -> changes all user params except password
-         - [] Update password(UpdatePasswordRequestDTO updatePasswordRequstDTO) -> changes user's password, old and new password are required, hashes old password compares it to the one in database
-                if matched => proceed to update password
-         
-         */
+        
     }
 }

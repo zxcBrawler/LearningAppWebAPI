@@ -1,5 +1,6 @@
 using LearningAppWebAPI.Data;
 using LearningAppWebAPI.Models;
+using LearningAppWebAPI.Utils;
 using Microsoft.EntityFrameworkCore;
 
 namespace LearningAppWebAPI.Domain.Repository
@@ -8,6 +9,7 @@ namespace LearningAppWebAPI.Domain.Repository
     /// The type exercise repository class
     /// </summary>
     /// <seealso cref="AbstractBaseRepository{TypeExercise}"/>
+    [ScopedService]
     public class TypeExerciseRepository(AppDbContext context) : AbstractBaseRepository<TypeExercise>(context)
     {
         /// <summary>

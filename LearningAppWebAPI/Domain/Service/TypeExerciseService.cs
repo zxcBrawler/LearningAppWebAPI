@@ -1,12 +1,14 @@
 using LearningAppWebAPI.Data;
 using LearningAppWebAPI.Domain.Repository;
 using LearningAppWebAPI.Models.DTO.Simple;
+using LearningAppWebAPI.Utils;
 
 namespace LearningAppWebAPI.Domain.Service
 {
     /// <summary>
     /// The type exercise service class
     /// </summary>
+    [ScopedService]
     public class TypeExerciseService(TypeExerciseRepository typeExerciseRepository)
     {
         /// <summary>

@@ -1,6 +1,7 @@
 
 using LearningAppWebAPI.Data;
 using LearningAppWebAPI.Models;
+using LearningAppWebAPI.Utils;
 using Microsoft.EntityFrameworkCore;
 
 namespace LearningAppWebAPI.Domain.Repository
@@ -9,6 +10,7 @@ namespace LearningAppWebAPI.Domain.Repository
     /// The course repository class
     /// </summary>
     /// <seealso cref="AbstractBaseRepository{Course}"/>
+    [ScopedService]
     public class CourseRepository(AppDbContext context) : AbstractBaseRepository<Course>(context)
     {
         /// <summary>

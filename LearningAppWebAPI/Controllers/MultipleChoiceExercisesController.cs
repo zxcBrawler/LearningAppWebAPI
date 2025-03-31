@@ -9,7 +9,7 @@ namespace LearningAppWebAPI.Controllers
     /// <seealso cref="ControllerBase"/>
     [Route("api/[controller]")]
     [ApiController]
-    [ApiExplorerSettings(GroupName = "exercises")]
+    [ApiExplorerSettings(GroupName = "admin")]
     public class MultipleChoiceExercisesController(MultipleChoiceExerciseService multipleChoiceExerciseService) : ControllerBase
     {
         // GET: api/MultipleChoiceExercises

@@ -10,7 +10,7 @@ namespace LearningAppWebAPI.Controllers
     /// <seealso cref="ControllerBase"/>
     [Route("api/[controller]")]
     [ApiController]
-    [ApiExplorerSettings(GroupName = "users")]
+    [ApiExplorerSettings(GroupName = "admin")]
     public class RolesController(RoleService roleService) : ControllerBase
     {
         /// <summary>
