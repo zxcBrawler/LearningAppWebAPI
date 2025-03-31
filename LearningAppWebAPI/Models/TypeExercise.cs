@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using LearningAppWebAPI.Models.Enum;
 
 namespace LearningAppWebAPI.Models
 {
@@ -10,7 +11,6 @@ namespace LearningAppWebAPI.Models
     [Table("type_exercise")]
     public class TypeExercise
     {
-   
         /// <summary>
         /// 
         /// </summary>
@@ -26,7 +26,7 @@ namespace LearningAppWebAPI.Models
         [Required]
         [MaxLength(50)]
         [Column("exercise_type_name")]
-        public string? ExerciseTypeName { get; init; }
+        public TypeExerciseEnum ExerciseTypeName { get; set; }
 
    
         /// <summary>

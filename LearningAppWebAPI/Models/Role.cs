@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using LearningAppWebAPI.Models.Enum;
 
 namespace LearningAppWebAPI.Models
 {
@@ -24,7 +25,7 @@ namespace LearningAppWebAPI.Models
         /// </summary>
         [MaxLength(50)]
         [Column("role_name")]
-        public string? RoleName { get; init; }
+        public TypeRoleEnum RoleName { get; set; }
    
         /// <summary>
         /// 

@@ -77,13 +77,23 @@ namespace LearningAppWebAPI.Models
         [Column("current_xp")]
         [DefaultValue(0)]
         public int CurrentXp { get; set; }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        [Column("current_streak")]
+        [DefaultValue(0)]
+        public int CurrentStreak { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
         public List<Course>? Courses { get; init; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public List<Dictionary>? Dictionaries { get; init; }
         
-
         /// <summary>
         /// 
         /// </summary>

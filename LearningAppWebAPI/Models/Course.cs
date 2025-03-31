@@ -82,6 +82,5 @@ namespace LearningAppWebAPI.Models
         /// Users that have enrolled to the course
         /// </summary>
         public List<User>? Users { get; init; }
-
     }
 }
