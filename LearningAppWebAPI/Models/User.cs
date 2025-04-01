@@ -93,7 +93,10 @@ namespace LearningAppWebAPI.Models
         /// 
         /// </summary>
         public List<Dictionary>? Dictionaries { get; init; }
-        
+        /// <summary>
+        /// 
+        /// </summary>
+        public ICollection<RefreshToken> RefreshTokens { get; init; } = new List<RefreshToken>();
         /// <summary>
         /// 
         /// </summary>

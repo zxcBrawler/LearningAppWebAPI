@@ -22,6 +22,29 @@ namespace LearningAppWebAPI.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
+            modelBuilder.Entity("LearningAppWebAPI.Models.BlacklistedAccessToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id_token");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("expiry_date");
+
+                    b.Property<string>("Jti")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("jti");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("blacklisted_access_token");
+                });
+
             modelBuilder.Entity("LearningAppWebAPI.Models.Course", b =>
                 {
                     b.Property<int>("Id")
@@ -268,6 +291,43 @@ namespace LearningAppWebAPI.Migrations
                     b.HasIndex("MultipleChoiceExerciseId");
 
                     b.ToTable("option");
+                });
+
+            modelBuilder.Entity("LearningAppWebAPI.Models.RefreshToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id_token");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("expiry_date");
+
+                    b.Property<string>("HashedToken")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("hashed_token");
+
+                    b.Property<bool>("IsRevoked")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("is_revoked");
+
+                    b.Property<DateTime?>("RevokedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("revoked_at");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("refresh_token");
                 });
 
             modelBuilder.Entity("LearningAppWebAPI.Models.Role", b =>
@@ -669,6 +729,17 @@ namespace LearningAppWebAPI.Migrations
                     b.Navigation("MultipleChoiceExercise");
                 });
 
+            modelBuilder.Entity("LearningAppWebAPI.Models.RefreshToken", b =>
+                {
+                    b.HasOne("LearningAppWebAPI.Models.User", "User")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("LearningAppWebAPI.Models.TextAnswerExercise", b =>
                 {
                     b.HasOne("LearningAppWebAPI.Models.Exercise", "Exercise")
@@ -758,6 +829,8 @@ namespace LearningAppWebAPI.Migrations
             modelBuilder.Entity("LearningAppWebAPI.Models.User", b =>
                 {
                     b.Navigation("Dictionaries");
+
+                    b.Navigation("RefreshTokens");
                 });
 #pragma warning restore 612, 618
         }

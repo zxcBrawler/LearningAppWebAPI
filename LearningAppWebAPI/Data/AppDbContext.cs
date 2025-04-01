@@ -75,6 +75,14 @@ namespace LearningAppWebAPI.Data
         /// 
         /// </summary>
         public DbSet<Word> Word { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public DbSet<RefreshToken> RefreshToken { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public DbSet<BlacklistedAccessToken> BlacklistedAccessTokens { get; set; }
 
         /// <summary>
         /// Ons the model creating using the specified model builder
@@ -82,6 +90,12 @@ namespace LearningAppWebAPI.Data
         /// <param name="modelBuilder">The model builder</param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<BlacklistedAccessToken>()
+                .HasIndex(t => t.Jti)
+                .IsUnique(); 
+
+            modelBuilder.Entity<BlacklistedAccessToken>()
+                .HasIndex(t => t.ExpiryDate);
             modelBuilder.Entity<User>()
             .HasOne(u => u.Role)
             .WithMany(r => r.User)
@@ -111,6 +125,11 @@ namespace LearningAppWebAPI.Data
                .HasOne(u => u.Course)
                .WithMany(r => r.Lesson)
                .HasForeignKey(u => u.CourseId);
+
+            modelBuilder.Entity<RefreshToken>()
+                .HasOne(rt => rt.User)
+                .WithMany(u => u.RefreshTokens)
+                .HasForeignKey(rt => rt.UserId);
             
             modelBuilder.Entity<User>()
                  .HasMany(u => u.Courses)

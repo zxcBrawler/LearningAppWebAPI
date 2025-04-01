@@ -1,9 +1,15 @@
+using System.IdentityModel.Tokens.Jwt;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using System.Security.Claims;
 using System.Text;
+using Coravel;
 using LearningAppWebAPI.Data;
+using LearningAppWebAPI.Domain.Facade;
+using LearningAppWebAPI.Security;
 using LearningAppWebAPI.Utils;
+using LearningAppWebAPI.Utils.Job;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
@@ -21,10 +27,28 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
 
-builder.Services.AddControllers().AddJsonOptions(options =>
+builder.Services.AddControllers(options => 
+{
+    options.Filters.Add<CurrentUserFilter>();
+}).AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+    
 });
+
+builder.Services.Scan(scan => scan
+    .FromAssemblyOf<Program>()
+    .AddClasses(classes => classes.WithAttribute<ScopedServiceAttribute>())
+    .AsSelfWithInterfaces()
+    .WithScopedLifetime()
+);
+builder.Services.AddScoped<UserActionsFacade, UserActionsFacadeImpl>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<ITokenCleanupService, TokenCleanupService>();
+
+builder.Services.AddScoped<TokenCleanupJob>();
+builder.Services.AddScheduler();
+
 var jwtKey = builder.Configuration["Jwt:Key"];
 if (string.IsNullOrEmpty(jwtKey) || jwtKey.Length < 32)
     throw new ApplicationException("Key must be at least 32 characters long");
@@ -41,15 +65,29 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
-            ClockSkew = TimeSpan.Zero
+            
+        };
+        options.Events = new JwtBearerEvents
+        {
+            OnTokenValidated = async context =>
+            {
+                if (context.Principal != null)
+                {
+                    var tokenService = context.HttpContext.RequestServices
+                        .GetRequiredService<ITokenService>();
+                    
+                    var jti = context.Principal.FindFirstValue(JwtRegisteredClaimNames.Jti);
+                    var isBlacklisted = jti != null && await tokenService.IsTokenBlacklisted(jti);
+                    
+                    if (isBlacklisted)
+                    {
+                        context.Fail("Token revoked");
+                    }
+                }
+            }
         };
     });
-builder.Services.Scan(scan => scan
-    .FromAssemblyOf<Program>()
-    .AddClasses(classes => classes.WithAttribute<ScopedServiceAttribute>())
-    .AsSelfWithInterfaces()
-    .WithScopedLifetime()
-);
+
 
 builder.Services.AddAuthorization();
 builder.Services.AddEndpointsApiExplorer();
@@ -122,6 +160,11 @@ if (app.Environment.IsDevelopment())
         c.InjectStylesheet("/swagger/ui/custom.css");
     });
 }
+app.Services.UseScheduler(scheduler =>
+{
+    scheduler.Schedule<TokenCleanupJob>()
+        .EveryFifteenMinutes();
+});
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
