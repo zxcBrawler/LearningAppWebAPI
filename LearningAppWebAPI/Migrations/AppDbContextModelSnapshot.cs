@@ -37,10 +37,16 @@ namespace LearningAppWebAPI.Migrations
 
                     b.Property<string>("Jti")
                         .IsRequired()
-                        .HasColumnType("longtext")
+                        .HasMaxLength(450)
+                        .HasColumnType("varchar(450)")
                         .HasColumnName("jti");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ExpiryDate");
+
+                    b.HasIndex("Jti")
+                        .IsUnique();
 
                     b.ToTable("blacklisted_access_token");
                 });

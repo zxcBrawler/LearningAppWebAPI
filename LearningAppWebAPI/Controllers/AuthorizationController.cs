@@ -9,9 +9,11 @@ using LearningAppWebAPI.Models.DTO.Response;
 using LearningAppWebAPI.Models.Enum;
 using LearningAppWebAPI.Security;
 using LearningAppWebAPI.Utils;
+using LearningAppWebAPI.Utils.CustomAttributes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace LearningAppWebAPI.Controllers
 {
@@ -25,15 +27,15 @@ namespace LearningAppWebAPI.Controllers
     public class AuthorizationController(ITokenService tokenService, AuthorizationService authorizationService) : ControllerBase
     {
         /// <summary>
-        /// Dummy login for testing purposes
+        ///
         /// </summary>
         /// <returns></returns>
         [HttpPost("[action]")]
         [AllowAnonymous]
         [NoCurrentUser]
-        public async Task<IActionResult> Login() //LoginRequest loginRequest
+        public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
         {
-            var user = new DummyUser();
+            var user = authorizationService.LoginAsync(loginRequest).Result.Value;
             
             var claims = tokenService.WriteClaims(user);
             var accessToken = tokenService.GenerateAccessToken(claims);
@@ -58,12 +60,9 @@ namespace LearningAppWebAPI.Controllers
         [NoCurrentUser]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            var result = await authorizationService.RegisterAsync(request);
             
-            return Ok();
+            return Ok(result);
         }
         /// <summary>
         /// 
@@ -89,27 +88,29 @@ namespace LearningAppWebAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("[action]")]
-        [Authorize]
         [NoCurrentUser]
-        public async Task<IActionResult> RefreshToken([FromBody] string refreshToken)
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest refreshTokenRequest)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
+                var newTokens = await tokenService.RefreshTokensAsync(
+                    refreshTokenRequest.OldAccessToken, 
+                    refreshTokenRequest.RefreshToken);
+        
+                return Ok(newTokens);
             }
-            
-            return Ok();
-        }
-        [HttpPost("[action]")]
-        [Authorize]
-        public async Task<IActionResult> ValidateToken()
-        {
-            if (!ModelState.IsValid)
+            catch (SecurityTokenException ex)
             {
-                return BadRequest(ModelState);
+                return Unauthorized(ex.Message);
             }
-            
-            return Ok();
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred");
+            }
         }
     }
 }

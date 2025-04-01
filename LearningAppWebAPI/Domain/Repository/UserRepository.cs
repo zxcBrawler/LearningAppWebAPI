@@ -1,6 +1,7 @@
 using LearningAppWebAPI.Data;
 using LearningAppWebAPI.Models;
 using LearningAppWebAPI.Utils;
+using LearningAppWebAPI.Utils.CustomAttributes;
 using Microsoft.EntityFrameworkCore;
 
 namespace LearningAppWebAPI.Domain.Repository
@@ -10,7 +11,7 @@ namespace LearningAppWebAPI.Domain.Repository
     /// </summary>
     /// <seealso cref="AbstractBaseRepository{User}"/>
     [ScopedService]
-    public class UserRepository(AppDbContext context) : AbstractBaseRepository<User>(context)
+    public class UserRepository(AppDbContext context) : AbstractBaseRepository<User, int>(context)
     {
 
         /// <summary>
@@ -104,6 +105,27 @@ namespace LearningAppWebAPI.Domain.Repository
         private bool UserExists(int id)
         {
             return Context.User.Any(u => u.Id == id);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        public async Task<User?> GetUserByEmailAsync(string email)
+        {
+            return await Context.User.Include(r => r.Role).FirstOrDefaultAsync(u => u.Email == email);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public  async Task<Role?> GetByRoleIdAsync(int id)
+        {
+            return await Context.Role.FindAsync(id);
         }
     }
 }

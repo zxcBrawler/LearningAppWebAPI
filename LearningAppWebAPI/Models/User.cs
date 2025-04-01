@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
 
 namespace LearningAppWebAPI.Models
 {
@@ -11,7 +12,6 @@ namespace LearningAppWebAPI.Models
     [Table("user")]
     public class User
     {
-
         /// <summary>
         ///
         /// </summary>
@@ -96,7 +96,7 @@ namespace LearningAppWebAPI.Models
         /// <summary>
         /// 
         /// </summary>
-        public ICollection<RefreshToken> RefreshTokens { get; init; } = new List<RefreshToken>();
+        public ICollection<RefreshToken> RefreshTokens { get; init; } = [];
         /// <summary>
         /// 
         /// </summary>

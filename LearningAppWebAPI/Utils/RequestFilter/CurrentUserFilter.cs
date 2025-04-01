@@ -1,8 +1,9 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using LearningAppWebAPI.Utils.CustomAttributes;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace LearningAppWebAPI.Utils;
+namespace LearningAppWebAPI.Utils.RequestFilter;
 
 /// <summary>
 /// 

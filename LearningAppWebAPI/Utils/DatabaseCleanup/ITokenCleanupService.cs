@@ -1,4 +1,4 @@
-﻿namespace LearningAppWebAPI.Utils;
+﻿namespace LearningAppWebAPI.Utils.DatabaseCleanup;
 
 /// <summary>
 /// 

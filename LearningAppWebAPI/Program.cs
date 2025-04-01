@@ -9,7 +9,10 @@ using LearningAppWebAPI.Data;
 using LearningAppWebAPI.Domain.Facade;
 using LearningAppWebAPI.Security;
 using LearningAppWebAPI.Utils;
+using LearningAppWebAPI.Utils.CustomAttributes;
+using LearningAppWebAPI.Utils.DatabaseCleanup;
 using LearningAppWebAPI.Utils.Job;
+using LearningAppWebAPI.Utils.RequestFilter;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
@@ -26,6 +29,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
+
 
 builder.Services.AddControllers(options => 
 {

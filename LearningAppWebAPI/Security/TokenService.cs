@@ -55,6 +55,13 @@ public class TokenService(IConfiguration config, AppDbContext dbContext) : IToke
         );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="claims"></param>
+    /// <param name="expires"></param>
+    /// <param name="signingKey"></param>
+    /// <returns></returns>
     public TokenResponse GenerateJwtToken(
         ICollection<Claim> claims,
         DateTime expires,
@@ -83,14 +90,14 @@ public class TokenService(IConfiguration config, AppDbContext dbContext) : IToke
     /// </summary>
     /// <param name="user"></param>
     /// <returns></returns>
-    public ICollection<Claim> WriteClaims(DummyUser user) // change to User entity
+    public ICollection<Claim> WriteClaims(User? user)
     {
         return
         [
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new Claim(ClaimTypes.Name, user.Username),
             new Claim(ClaimTypes.Email, user.Email),
-            new Claim(ClaimTypes.Role, user.Role),
+            new Claim(ClaimTypes.Role, user.Role.RoleName.ToString()),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         ];
     }
@@ -102,6 +109,16 @@ public class TokenService(IConfiguration config, AppDbContext dbContext) : IToke
     /// <param name="token"></param>
     public async Task StoreRefreshTokenAsync(int userId, TokenResponse token)
     {
+        var existingTokens = await dbContext.RefreshToken
+            .Where(rt => rt.UserId == userId)
+            .ToListAsync();
+
+        foreach (var oldToken in existingTokens)
+        {
+            oldToken.RevokedAt = DateTime.UtcNow;
+            oldToken.IsRevoked = true;
+        }
+        
         var hashedToken = HashToken(token.Token);
         await dbContext.RefreshToken.AddAsync(new RefreshToken
         {
@@ -119,6 +136,7 @@ public class TokenService(IConfiguration config, AppDbContext dbContext) : IToke
     /// <param name="userId"></param>
     public async Task RevokeTokensFromUser(string userId)
     {
+       
         var tokens = await dbContext.RefreshToken
             .Where(rt => rt.UserId == int.Parse(userId))
             .ToListAsync();
@@ -158,8 +176,84 @@ public class TokenService(IConfiguration config, AppDbContext dbContext) : IToke
             .AnyAsync(t => t.Jti == jti && t.ExpiryDate > DateTime.UtcNow);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="expiredAccessToken"></param>
+    /// <param name="refreshToken"></param>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    public async Task<TokenResponse> RefreshTokensAsync(string expiredAccessToken, string refreshToken)
+    {
+        var principal = GetPrincipalFromExpiredToken(expiredAccessToken);
+        if (principal == null)
+            throw new SecurityTokenException("Invalid access token");
+        
+        var userId = principal.FindFirstValue(ClaimTypes.NameIdentifier);
+        var jti = principal.FindFirstValue(JwtRegisteredClaimNames.Jti);
+    
+        if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(jti))
+            throw new SecurityTokenException("Missing required claims");
+        
+        var isValidRefresh = await ValidateRefreshTokenAsync(int.Parse(userId), refreshToken);
+        if (!isValidRefresh)
+            throw new SecurityTokenException("Invalid refresh token");
+        
+        var user = await dbContext.User
+            .Include(u => u.Role)
+            .FirstOrDefaultAsync(u => u.Id == int.Parse(userId));
+    
+        if (user == null)
+            throw new ArgumentException("User not found");
+        
+        var claims = WriteClaims(user);
+        var newAccessToken = GenerateAccessToken(claims);
+        
+        await BlacklistAccessToken(jti);
+
+        return newAccessToken;
+    }
+
     private static string HashToken(string token)
     {
         return Convert.ToBase64String(SHA256.HashData(Encoding.UTF8.GetBytes(token)));
+    }
+    private ClaimsPrincipal? GetPrincipalFromExpiredToken(string token)
+    {
+        var tokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(ValidateSigningKey())),
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = false
+        };
+
+        var tokenHandler = new JwtSecurityTokenHandler();
+        try
+        {
+            return tokenHandler.ValidateToken(token, tokenValidationParameters, out _);
+        }
+        catch
+        {
+            return null;
+        }
+    }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="refreshToken"></param>
+    /// <returns></returns>
+    public async Task<bool> ValidateRefreshTokenAsync(int userId, string refreshToken)
+    {
+        var hashedToken = HashToken(refreshToken);
+    
+        return await dbContext.RefreshToken
+            .AnyAsync(rt => 
+                rt.UserId == userId &&
+                rt.HashedToken == hashedToken &&
+                !rt.IsRevoked &&
+                rt.ExpiryDate > DateTime.UtcNow);
     }
 }

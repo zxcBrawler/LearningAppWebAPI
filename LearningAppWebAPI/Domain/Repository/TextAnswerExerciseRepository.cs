@@ -1,6 +1,7 @@
 using LearningAppWebAPI.Data;
 using LearningAppWebAPI.Models;
 using LearningAppWebAPI.Utils;
+using LearningAppWebAPI.Utils.CustomAttributes;
 using Microsoft.EntityFrameworkCore;
 
 namespace LearningAppWebAPI.Domain.Repository
@@ -10,7 +11,7 @@ namespace LearningAppWebAPI.Domain.Repository
     /// </summary>
     /// <seealso cref="AbstractBaseRepository{TextAnswerExercise}"/>
     [ScopedService]
-    public class TextAnswerExerciseRepository(AppDbContext context) : AbstractBaseRepository<TextAnswerExercise>(context)
+    public class TextAnswerExerciseRepository(AppDbContext context) : AbstractBaseRepository<TextAnswerExercise, int>(context)
     {
         /// <summary>
         /// Creates the entity

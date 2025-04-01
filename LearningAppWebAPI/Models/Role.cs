@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using LearningAppWebAPI.Models.Enum;
+using Microsoft.AspNetCore.Identity;
 
 namespace LearningAppWebAPI.Models
 {
@@ -18,7 +19,7 @@ namespace LearningAppWebAPI.Models
         [Key]
         [Column("id_role")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; init; }
+        public int Id { get; set; }
    
         /// <summary>
         /// 

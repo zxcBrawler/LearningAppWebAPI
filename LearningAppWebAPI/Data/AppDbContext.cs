@@ -95,7 +95,7 @@ namespace LearningAppWebAPI.Data
                 .IsUnique(); 
 
             modelBuilder.Entity<BlacklistedAccessToken>()
-                .HasIndex(t => t.ExpiryDate);
+                .HasIndex(t => t.ExpiryDate);  
             modelBuilder.Entity<User>()
             .HasOne(u => u.Role)
             .WithMany(r => r.User)

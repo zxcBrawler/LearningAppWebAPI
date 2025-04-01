@@ -1,11 +1,12 @@
 ﻿using LearningAppWebAPI.Data;
 using LearningAppWebAPI.Models;
 using LearningAppWebAPI.Utils;
+using LearningAppWebAPI.Utils.CustomAttributes;
 
 namespace LearningAppWebAPI.Domain.Repository;
 
 [ScopedService]
-public class DictionaryRepository(AppDbContext context) : AbstractBaseRepository<Dictionary>(context)
+public class DictionaryRepository(AppDbContext context) : AbstractBaseRepository<Dictionary, int>(context)
 {
     public override Task<List<Dictionary>> GetAllAsync()
     {

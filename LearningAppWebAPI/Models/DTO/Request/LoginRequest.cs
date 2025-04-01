@@ -8,9 +8,9 @@ public class LoginRequest
     /// <summary>
     /// 
     /// </summary>
-    public string? Email { get; set; }
+    public required string Email { get; set; }
     /// <summary>
     /// 
     /// </summary>
-    public string? Password { get; set; }
+    public required string Password { get; set; }
 }

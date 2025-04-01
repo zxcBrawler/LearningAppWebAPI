@@ -1,7 +1,7 @@
 ﻿using LearningAppWebAPI.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace LearningAppWebAPI.Utils;
+namespace LearningAppWebAPI.Utils.DatabaseCleanup;
 
 /// <summary>
 /// 

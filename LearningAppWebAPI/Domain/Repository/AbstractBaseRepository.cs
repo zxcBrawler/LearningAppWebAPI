@@ -5,7 +5,7 @@ namespace LearningAppWebAPI.Domain.Repository
     /// <summary>
     /// The abstract base repository class
     /// </summary>
-    public abstract class AbstractBaseRepository<TE>(AppDbContext context)
+    public abstract class AbstractBaseRepository<TE, TKey>(AppDbContext context)
     {
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace LearningAppWebAPI.Domain.Repository
         /// </summary>
         /// <param name="id">The id</param>
         /// <returns>A task containing the te</returns>
-        public abstract Task<TE?> GetByIdAsync(int id);
+        public abstract Task<TE?> GetByIdAsync(TKey id);
         /// <summary>
         /// Creates the entity
         /// </summary>
@@ -36,12 +36,12 @@ namespace LearningAppWebAPI.Domain.Repository
         /// <param name="id">The id</param>
         /// <param name="entity">The entity</param>
         /// <returns>A task containing the bool</returns>
-        public abstract Task<bool> UpdateAsync(int id, TE entity);
+        public abstract Task<bool> UpdateAsync(TKey id, TE entity);
         /// <summary>
         /// Deletes Entity by id
         /// </summary>
         /// <param name="id">The id</param>
         /// <returns>A task containing the bool</returns>
-        public abstract Task<bool> DeleteAsync(int id);
+        public abstract Task<bool> DeleteAsync(TKey id);
     }
 }
