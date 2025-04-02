@@ -13,6 +13,7 @@ using LearningAppWebAPI.Utils.CustomAttributes;
 using LearningAppWebAPI.Utils.DatabaseCleanup;
 using LearningAppWebAPI.Utils.Job;
 using LearningAppWebAPI.Utils.RequestFilter;
+using MerriamWebster.NET;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
@@ -24,6 +25,7 @@ if (builder.Environment.IsDevelopment())
 }
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var mwConfig =  builder.Configuration.GetSection("MerriamWebster").Get<MerriamWebsterConfig>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
@@ -51,6 +53,7 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<ITokenCleanupService, TokenCleanupService>();
 
 builder.Services.AddScoped<TokenCleanupJob>();
+builder.Services.RegisterMerriamWebster(mwConfig);
 builder.Services.AddScheduler();
 
 var jwtKey = builder.Configuration["Jwt:Key"];
