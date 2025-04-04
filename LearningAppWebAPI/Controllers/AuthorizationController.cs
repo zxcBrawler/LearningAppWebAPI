@@ -1,17 +1,11 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using LearningAppWebAPI.Data;
 using LearningAppWebAPI.Domain.Service;
-using LearningAppWebAPI.Models;
-using LearningAppWebAPI.Models.DTO;
 using LearningAppWebAPI.Models.DTO.Request;
 using LearningAppWebAPI.Models.DTO.Response;
-using LearningAppWebAPI.Models.Enum;
 using LearningAppWebAPI.Security;
-using LearningAppWebAPI.Utils;
 using LearningAppWebAPI.Utils.CustomAttributes;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
@@ -26,23 +20,29 @@ namespace LearningAppWebAPI.Controllers
     [ApiController]
     public class AuthorizationController(ITokenService tokenService, AuthorizationService authorizationService) : ControllerBase
     {
+        
         /// <summary>
-        ///
+        /// Log in user method. All field are required
         /// </summary>
+        /// <param name="loginRequestDto"></param>
         /// <returns></returns>
         [HttpPost("[action]")]
         [AllowAnonymous]
         [NoCurrentUser]
-        public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
+        public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequestDto)
         {
-            var user = authorizationService.LoginAsync(loginRequest).Result.Value;
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var user = authorizationService.LoginAsync(loginRequestDto).Result.Value;
             
             var claims = tokenService.WriteClaims(user);
             var accessToken = tokenService.GenerateAccessToken(claims);
             var refreshToken = tokenService.GenerateRefreshToken(claims);
-            
-            await tokenService.StoreRefreshTokenAsync(user.Id, refreshToken);
-            
+
+            if (user != null) await tokenService.StoreRefreshTokenAsync(user.Id, refreshToken);
+
             return Ok(new LoginResponse
             {
                 AccessToken = accessToken.Token,
@@ -51,31 +51,34 @@ namespace LearningAppWebAPI.Controllers
                 RefreshTokenExpiryDate = refreshToken.ExpiryDate
             });
         }
+        
         /// <summary>
-        /// 
+        /// Register user method. All field are required
         /// </summary>
+        /// <param name="registerRequestDto"></param>
         /// <returns></returns>
         [HttpPost("[action]")]
         [AllowAnonymous]
         [NoCurrentUser]
-        public async Task<IActionResult> Register([FromBody] RegisterRequest request)
+        public async Task<IActionResult> Register([FromBody] RegisterRequestDto registerRequestDto)
         {
-            var result = await authorizationService.RegisterAsync(request);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await authorizationService.RegisterAsync(registerRequestDto);
             
             return Ok(result);
         }
         /// <summary>
-        /// 
+        ///  Revokes user's refresh token, and blacklists user's access token
         /// </summary>
         /// <returns></returns>
         [HttpPost("[action]")]
         [Authorize]
         public async Task<IActionResult> LogOut()
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+         
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId != null) await tokenService.RevokeTokensFromUser(userId);
             
@@ -84,18 +87,19 @@ namespace LearningAppWebAPI.Controllers
             return NoContent();
         }
         /// <summary>
-        /// 
+        /// Refreshes user access token based on provided refreshTokenRequest, containing old access token and current refresh token
         /// </summary>
+        /// <param name="refreshTokenRequestDto"></param>
         /// <returns></returns>
         [HttpPost("[action]")]
         [NoCurrentUser]
-        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest refreshTokenRequest)
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequestDto refreshTokenRequestDto)
         {
             try
             {
                 var newTokens = await tokenService.RefreshTokensAsync(
-                    refreshTokenRequest.OldAccessToken, 
-                    refreshTokenRequest.RefreshToken);
+                    refreshTokenRequestDto.OldAccessToken, 
+                    refreshTokenRequestDto.RefreshToken);
         
                 return Ok(newTokens);
             }
@@ -109,7 +113,7 @@ namespace LearningAppWebAPI.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "An error occurred");
+                return StatusCode(500, ex.Message);
             }
         }
     }

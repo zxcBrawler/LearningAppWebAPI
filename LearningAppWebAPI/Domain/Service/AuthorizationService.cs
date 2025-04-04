@@ -1,10 +1,9 @@
 using LearningAppWebAPI.Data;
 using LearningAppWebAPI.Domain.Repository;
 using LearningAppWebAPI.Models;
+using LearningAppWebAPI.Models.DTO.Request;
 using LearningAppWebAPI.Utils;
 using LearningAppWebAPI.Utils.CustomAttributes;
-using LoginRequest = LearningAppWebAPI.Models.DTO.Request.LoginRequest;
-using RegisterRequest = LearningAppWebAPI.Models.DTO.Request.RegisterRequest;
 
 namespace LearningAppWebAPI.Domain.Service
 {
@@ -18,21 +17,21 @@ namespace LearningAppWebAPI.Domain.Service
        /// <summary>
        /// 
        /// </summary>
-       /// <param name="registerRequest"></param>
+       /// <param name="registerRequestDto"></param>
        /// <returns></returns>
-       public async Task<DataState<string>> RegisterAsync(RegisterRequest registerRequest)
+       public async Task<DataState<string>> RegisterAsync(RegisterRequestDto registerRequestDto)
        {
            
-           var existingUser = await repository.GetUserByEmailAsync(registerRequest.Email);
+           var existingUser = await repository.GetUserByEmailAsync(registerRequestDto.Email);
            if (existingUser != null)
                return DataState<string>.Failure("User already exists", StatusCodes.Status400BadRequest);
        
            var existingRole = await repository.GetByRoleIdAsync(1);
            var user = new User
            {
-               Email = registerRequest.Email,
-               PasswordHash = PasswordHasher.HashPassword(registerRequest.Password),
-               Username = registerRequest.Username,
+               Email = registerRequestDto.Email,
+               PasswordHash = PasswordHasher.HashPassword(registerRequestDto.Password),
+               Username = registerRequestDto.Username,
                RoleId = 1,
                Role = existingRole
            };
@@ -45,17 +44,18 @@ namespace LearningAppWebAPI.Domain.Service
        /// <summary>
        /// 
        /// </summary>
-       /// <param name="loginRequest"></param>
+       /// <param name="loginRequestDto"></param>
        /// <returns></returns>
-       public async Task<DataState<User?>> LoginAsync(LoginRequest loginRequest)
+       public async Task<DataState<User>> LoginAsync(LoginRequestDto loginRequestDto)
        {
-           var user = await repository.GetUserByEmailAsync(loginRequest.Email);
+           var user = await repository.GetUserByEmailAsync(loginRequestDto.Email);
            if (user == null)
-               return DataState<User?>.Failure("User not found", StatusCodes.Status404NotFound);
+               return DataState<User>.Failure("User not found", StatusCodes.Status404NotFound);
 
-           var result =  user.PasswordHash != null && PasswordHasher.VerifyPassword(loginRequest.Password, user.PasswordHash);
+           var result =  user.PasswordHash != null && PasswordHasher.VerifyPassword(loginRequestDto.Password, user.PasswordHash);
             
-           return !result ? DataState<User?>.Failure("Invalid sign in credentials", StatusCodes.Status400BadRequest) : DataState<User?>.Success(user, StatusCodes.Status200OK);
+           return !result ? DataState<User>.Failure("Invalid sign in credentials", StatusCodes.Status400BadRequest) : 
+               DataState<User>.Success(user, StatusCodes.Status200OK);
        }
     }
 }

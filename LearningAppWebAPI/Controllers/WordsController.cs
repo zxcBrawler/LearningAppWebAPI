@@ -15,8 +15,13 @@ namespace LearningAppWebAPI.Controllers
     [ApiController]
     public class WordsController(MerriamWebsterSearch search) : ControllerBase
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="requestWord"></param>
+        /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> GetWord(string requestWord)
+        public async Task<IActionResult> GetWordFromDictionary(string requestWord)
         {
             
             var result = await search.SearchCollegiateDictionary(requestWord);

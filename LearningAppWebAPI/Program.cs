@@ -48,7 +48,7 @@ builder.Services.Scan(scan => scan
     .AsSelfWithInterfaces()
     .WithScopedLifetime()
 );
-builder.Services.AddScoped<UserActionsFacade, UserActionsFacadeImpl>();
+builder.Services.AddScoped<IUserActionsFacade, UserActionsFacadeImpl>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<ITokenCleanupService, TokenCleanupService>();
 
@@ -170,7 +170,7 @@ if (app.Environment.IsDevelopment())
 app.Services.UseScheduler(scheduler =>
 {
     scheduler.Schedule<TokenCleanupJob>()
-        .EveryFifteenMinutes();
+        .EveryMinute();
 });
 
 app.UseHttpsRedirection();

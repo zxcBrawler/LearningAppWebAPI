@@ -6,10 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LearningAppWebAPI.Domain.Repository
 {
+
     /// <summary>
-    /// The user repository class
+    /// 
     /// </summary>
-    /// <seealso cref="AbstractBaseRepository{User}"/>
+    /// <param name="context"></param>
     [ScopedService]
     public class UserRepository(AppDbContext context) : AbstractBaseRepository<User, int>(context)
     {

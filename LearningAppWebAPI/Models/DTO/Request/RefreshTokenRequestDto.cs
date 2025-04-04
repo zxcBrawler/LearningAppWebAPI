@@ -3,14 +3,14 @@
 /// <summary>
 /// 
 /// </summary>
-public class LoginRequest
+public class RefreshTokenRequestDto
 {
     /// <summary>
     /// 
     /// </summary>
-    public required string Email { get; set; }
+    public required string RefreshToken { get; set; }
     /// <summary>
     /// 
     /// </summary>
-    public required string Password { get; set; }
+    public required string OldAccessToken { get; set; }
 }

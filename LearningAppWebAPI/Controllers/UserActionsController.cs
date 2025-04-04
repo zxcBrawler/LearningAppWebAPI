@@ -1,9 +1,9 @@
-using System.Net;
+using System.Security.Claims;
 using LearningAppWebAPI.Domain.Facade;
 using LearningAppWebAPI.Models.DTO.Request;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace LearningAppWebAPI.Controllers
 {
@@ -13,11 +13,9 @@ namespace LearningAppWebAPI.Controllers
     /// <param name="userActionsFacade"></param>
     [Route("api/[controller]/[action]")]
     [ApiExplorerSettings(GroupName = "users")]
-    [Authorize]
     [ApiController]
-    public class UserActionsController(UserActionsFacade userActionsFacade) : ControllerBase
+    public class UserActionsController(IUserActionsFacade userActionsFacade) : BasicController
     {
-        
         /// <summary>
         /// 
         /// </summary>
@@ -25,7 +23,8 @@ namespace LearningAppWebAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUserCourses()
         {
-            return Ok();
+            var courses = await userActionsFacade.GetUserCourses(UserId);
+            return Ok(courses);
         }
         /// <summary>
         /// 
@@ -34,17 +33,19 @@ namespace LearningAppWebAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUserDictionaries()
         {
-            return Ok();
+            var dictionaries = await userActionsFacade.GetUserDictionaries(UserId);
+            return Ok(dictionaries);
         }
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="dictionaryId"></param>
         /// <returns></returns>
-        [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetUserDictionaryById(int id)
+        [HttpGet("{dictionaryId:int}")]
+        public async Task<IActionResult> GetUserDictionaryById(int dictionaryId)
         {
-            return Ok();
+            var dictionary = await userActionsFacade.GetUserDictionaryById(dictionaryId, UserId);
+            return Ok(dictionary);
         }
         
         
@@ -53,7 +54,7 @@ namespace LearningAppWebAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> UpdateProfileData()
+        public async Task<IActionResult> UpdateProfileData([FromBody] UpdateProfileRequestDto updateProfileRequestDto)
         {
             return Ok();
         }
@@ -104,9 +105,10 @@ namespace LearningAppWebAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> AddNewDictionary()
+        public async Task<IActionResult> AddNewDictionary([FromBody] AddDictionaryRequestDto addDictionaryRequestDto)
         {
-            return Ok();
+            var response = await userActionsFacade.AddNewDictionary(UserId, addDictionaryRequestDto);
+            return StatusCode(response.StatusCode, response.Value);
         }
         /// <summary>
         /// 
@@ -136,25 +138,8 @@ namespace LearningAppWebAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDictionary(int id)
         {
-            return Ok();
+            var result = await userActionsFacade.DeleteDictionary(id);
+            return StatusCode(result.StatusCode, result.IsSuccess ? result.Value : result.ErrorMessage);
         }
     }
-    /*
-        - [] Enroll to course (int course_Id) -> adds new UserCourse entity
-        - [] Archive course (int course_Id) -> Updates Course sets IsArchived param in UserCourse to true
-        - [] Add Dictionary
-        - [] Add word to dictionary
-        - [] Update dictionary
-        - [] Delete dictionary
-        
-        (separate endpoints)
-        - [] Get current user courses
-        - [] Get current user dictionaries
-        (separate endpoints)
-        
-        - [] Update profile data (AddUserRequestDTO addUSerRequestDTO) -> changes all user params except password
-        - [] Update password(UpdatePasswordRequestDTO updatePasswordRequstDTO) -> changes user's password, old and new password are required, hashes old password compares it to the one in database
-               if matched => proceed to update password
-
-        */
 }

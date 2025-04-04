@@ -32,10 +32,18 @@ namespace LearningAppWebAPI.Domain.Service
         /// </summary>
         /// <param name="userId">The user id</param>
         /// <returns>A task containing a list of user course simple dto</returns>
-        public async Task<List<UserCourseSimpleDto>> GetByAllByUserId(int userId)
+        public async Task<DataState<List<UserCourseSimpleDto>>> GetByAllByUserId(int userId)
         {
-            var users = await userCourseRepository.GetByAllByUserId(userId);
-            return users.Select(_mapper.Map<UserCourseSimpleDto>).ToList();
+            try
+            {
+                var users = await userCourseRepository.GetByAllByUserId(userId);
+                return DataState<List<UserCourseSimpleDto>>.Success(users.Select(_mapper.Map<UserCourseSimpleDto>).ToList(), StatusCodes.Status200OK);
+            }
+            catch (Exception ex)
+            {
+                return DataState<List<UserCourseSimpleDto>>.Failure($"Error getting user courses: {ex.Message}", StatusCodes.Status500InternalServerError);
+            }
+          
         }
     }
 }

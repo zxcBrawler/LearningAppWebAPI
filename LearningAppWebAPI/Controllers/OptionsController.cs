@@ -78,12 +78,12 @@ namespace LearningAppWebAPI.Controllers
         /// <summary>
         /// Posts the option using the specified dto
         /// </summary>
-        /// <param name="dto">The dto</param>
+        /// <param name="requestDto">The dto</param>
         /// <returns>A task containing an action result of option</returns>
         [HttpPost]
-        public async Task<ActionResult<Option>> PostOption(AddOptionDto dto)
+        public async Task<ActionResult<Option>> PostOption(AddOptionRequestDto requestDto)
         {
-            var result = await optionService.CreateOption(dto);
+            var result = await optionService.CreateOption(requestDto);
             if (result == null)
             {
                 return BadRequest();

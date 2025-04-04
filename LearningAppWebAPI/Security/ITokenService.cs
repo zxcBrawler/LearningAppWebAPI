@@ -4,6 +4,9 @@ using LearningAppWebAPI.Models.DTO.Response;
 
 namespace LearningAppWebAPI.Security;
 
+/// <summary>
+/// 
+/// </summary>
 public interface ITokenService
 {
      /// <summary>
@@ -66,14 +69,4 @@ public interface ITokenService
      /// <param name="refreshToken"></param>
      /// <returns></returns>
      Task<TokenResponse> RefreshTokensAsync(string expiredAccessToken, string refreshToken);
-
-     /// <summary>
-     /// 
-     /// </summary>
-     /// <param name="userId"></param>
-     /// <param name="refreshToken"></param>
-     /// <returns></returns>
-     Task<bool> ValidateRefreshTokenAsync(int userId, string refreshToken);
-
-
 }

@@ -5,17 +5,18 @@ using System.Text;
 using LearningAppWebAPI.Data;
 using LearningAppWebAPI.Models;
 using LearningAppWebAPI.Models.DTO.Response;
-using LearningAppWebAPI.Utils;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 namespace LearningAppWebAPI.Security;
 
+
+
 /// <summary>
 /// 
 /// </summary>
 /// <param name="config"></param>
-
+/// <param name="dbContext"></param>
 public class TokenService(IConfiguration config, AppDbContext dbContext) : ITokenService
 {
     private string ValidateSigningKey()
@@ -40,7 +41,6 @@ public class TokenService(IConfiguration config, AppDbContext dbContext) : IToke
             signingKey: ValidateSigningKey() 
         );
     }
-    
     /// <summary>
     /// 
     /// </summary>
@@ -182,7 +182,8 @@ public class TokenService(IConfiguration config, AppDbContext dbContext) : IToke
     /// <param name="expiredAccessToken"></param>
     /// <param name="refreshToken"></param>
     /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
+    /// <exception cref="SecurityTokenException"></exception>
+    /// <exception cref="ArgumentException"></exception>
     public async Task<TokenResponse> RefreshTokensAsync(string expiredAccessToken, string refreshToken)
     {
         var principal = GetPrincipalFromExpiredToken(expiredAccessToken);
@@ -245,7 +246,7 @@ public class TokenService(IConfiguration config, AppDbContext dbContext) : IToke
     /// <param name="userId"></param>
     /// <param name="refreshToken"></param>
     /// <returns></returns>
-    public async Task<bool> ValidateRefreshTokenAsync(int userId, string refreshToken)
+    private async Task<bool> ValidateRefreshTokenAsync(int userId, string refreshToken)
     {
         var hashedToken = HashToken(refreshToken);
     

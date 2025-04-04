@@ -40,6 +40,8 @@ namespace LearningAppWebAPI.Data
                 cfg.CreateMap<TextAnswerExercise, TextAnswerExerciseComplexDto>();
                 cfg.CreateMap<TrueFalseExercise, TrueFalseExerciseSimpleDto>();
                 cfg.CreateMap<TrueFalseExercise, TrueFalseExerciseComplexDto>();
+                cfg.CreateMap<Dictionary, DictionarySimpleDto>();
+                cfg.CreateMap<Word, WordSimpleDto>();
 
             });
 

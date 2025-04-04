@@ -34,5 +34,6 @@ public class TokenCleanupService(AppDbContext context) : ITokenCleanupService
             .ToListAsync();
 
         context.BlacklistedAccessTokens.RemoveRange(revokedTokens);
+        await context.SaveChangesAsync();
     }
 }

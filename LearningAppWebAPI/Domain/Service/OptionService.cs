@@ -43,14 +43,14 @@ namespace LearningAppWebAPI.Domain.Service
         /// <summary>
         /// Creates the option using the specified add option dto
         /// </summary>
-        /// <param name="addOptionDto">The add option dto</param>
+        /// <param name="addOptionRequestDto">The add option dto</param>
         /// <returns>A task containing the option simple dto</returns>
-        public async Task<OptionSimpleDto> CreateOption(AddOptionDto addOptionDto)
+        public async Task<OptionSimpleDto> CreateOption(AddOptionRequestDto addOptionRequestDto)
         {
             var option = new Option
             {
-                Text = addOptionDto.Text,
-                MultipleChoiceExercise = await multipleChoiceExerciseRepository.GetByIdAsync(addOptionDto.MultipleChoiceExerciseId)
+                Text = addOptionRequestDto.Text,
+                MultipleChoiceExercise = await multipleChoiceExerciseRepository.GetByIdAsync(addOptionRequestDto.MultipleChoiceExerciseId)
             };
             await optionRepository.CreateAsync(option);
             return _mapper.Map<OptionSimpleDto>(option);

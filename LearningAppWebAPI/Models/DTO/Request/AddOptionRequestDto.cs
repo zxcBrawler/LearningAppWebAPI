@@ -6,7 +6,7 @@ namespace LearningAppWebAPI.Models.DTO.Request;
 /// <summary>
 /// The add option dto class
 /// </summary>
-public class AddOptionDto
+public class AddOptionRequestDto
 {
 
     /// <summary>
