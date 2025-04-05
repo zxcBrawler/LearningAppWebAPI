@@ -37,12 +37,12 @@ public class Dictionary
     /// 
     /// </summary>
     [Column("user_id")]
-    public int? UserId { get; set; }
+    public long? UserId { get; set; }
 
     /// <summary>
     /// 
     /// </summary>
-    public List<Word>? Words { get; init; }
+    public List<Word>? Words { get; set; }
   
    
     /// <summary>

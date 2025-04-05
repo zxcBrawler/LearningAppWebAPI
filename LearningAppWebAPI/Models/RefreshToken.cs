@@ -11,6 +11,9 @@ namespace LearningAppWebAPI.Models;
 public class RefreshToken
 {
     
+    /// <summary>
+    /// 
+    /// </summary>
     [Key]
     [Column("id_token")]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -25,7 +28,7 @@ public class RefreshToken
     /// 
     /// </summary>
     [Column("expiry_date")]
-    public DateTime ExpiryDate { get; set; }
+    public DateTime ExpiryDate { get; init; }
     
     /// <summary>
     /// 
@@ -43,7 +46,7 @@ public class RefreshToken
     /// 
     /// </summary>
     [Column("user_id")]
-    public int UserId { get; set; }
+    public long UserId { get; init; }
     
     /// <summary>
     /// 

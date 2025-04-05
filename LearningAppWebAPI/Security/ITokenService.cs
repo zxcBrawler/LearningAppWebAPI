@@ -42,13 +42,13 @@ public interface ITokenService
      /// <param name="userId"></param>
      /// <param name="token"></param>
      /// <returns></returns>
-     Task StoreRefreshTokenAsync(int userId, TokenResponse token);
+     Task StoreRefreshTokenAsync(long userId, TokenResponse token);
      /// <summary>
      /// 
      /// </summary>
      /// <param name="userId"></param>
      /// <returns></returns>
-     Task RevokeTokensFromUser(string userId);
+     Task RevokeTokensFromUser(long userId);
      /// <summary>
      /// 
      /// </summary>

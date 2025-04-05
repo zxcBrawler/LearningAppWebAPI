@@ -107,7 +107,7 @@ public class TokenService(IConfiguration config, AppDbContext dbContext) : IToke
     /// </summary>
     /// <param name="userId"></param>
     /// <param name="token"></param>
-    public async Task StoreRefreshTokenAsync(int userId, TokenResponse token)
+    public async Task StoreRefreshTokenAsync(long userId, TokenResponse token)
     {
         var existingTokens = await dbContext.RefreshToken
             .Where(rt => rt.UserId == userId)
@@ -134,11 +134,11 @@ public class TokenService(IConfiguration config, AppDbContext dbContext) : IToke
     /// 
     /// </summary>
     /// <param name="userId"></param>
-    public async Task RevokeTokensFromUser(string userId)
+    public async Task RevokeTokensFromUser(long userId)
     {
        
         var tokens = await dbContext.RefreshToken
-            .Where(rt => rt.UserId == int.Parse(userId))
+            .Where(rt => rt.UserId == userId)
             .ToListAsync();
 
         foreach (var token in tokens)

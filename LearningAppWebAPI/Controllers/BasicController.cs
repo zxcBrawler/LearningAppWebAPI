@@ -16,7 +16,7 @@ public class BasicController : ControllerBase
     /// </summary>
     /// <exception cref="UnauthorizedAccessException"></exception>
     /// <exception cref="FormatException"></exception>
-    protected int UserId
+    protected long UserId
     {
         get
         {
@@ -26,7 +26,7 @@ public class BasicController : ControllerBase
                 throw new UnauthorizedAccessException("User is not logged in");
             }
 
-            if (!int.TryParse(value, out var userId))
+            if (!long.TryParse(value, out var userId))
             {
                 throw new FormatException($"Invalid user id {userId}");
             }

@@ -33,7 +33,7 @@ namespace LearningAppWebAPI.Domain.Service
         /// </summary>
         /// <param name="userId">The user id</param>
         /// <returns>A task containing a list of user course simple dto</returns>
-        public async Task<DataState<List<UserCourseSimpleDto>>> GetByAllByUserId(int userId)
+        public async Task<DataState<List<UserCourseSimpleDto>>> GetByAllByUserId(long userId)
         {
             try
             {
@@ -53,7 +53,7 @@ namespace LearningAppWebAPI.Domain.Service
         /// <param name="userId"></param>
         /// <param name="courseId"></param>
         /// <returns></returns>
-        public async Task<DataState<UserCourseSimpleDto>> StartNewCourse(int userId, int courseId)
+        public async Task<DataState<UserCourseSimpleDto>> StartNewCourse(long userId, long courseId)
         {
             try
             {

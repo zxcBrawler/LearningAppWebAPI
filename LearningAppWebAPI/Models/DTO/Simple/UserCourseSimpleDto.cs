@@ -9,10 +9,7 @@ namespace LearningAppWebAPI.Models.DTO.Simple
     public class UserCourseSimpleDto
     {
         
-        /// <summary>
-        /// 
-        /// </summary>
-        [JsonPropertyName("user")] public UserSimpleDto? User { get; set; }
+
 
         
         /// <summary>

@@ -17,20 +17,20 @@ public interface IUserActionsFacade
     /// </summary>
     /// <param name="userId"></param>
     /// <returns></returns>
-    Task<DataState<List<DictionarySimpleDto>>> GetUserDictionaries(int userId);
+    Task<DataState<List<DictionarySimpleDto>>> GetUserDictionaries(long userId);
     /// <summary>
     /// 
     /// </summary>
     /// <param name="userId"></param>
     /// <returns></returns>
-    Task<DataState<List<UserCourseSimpleDto>>> GetUserCourses(int userId);
+    Task<DataState<List<UserCourseSimpleDto>>> GetUserCourses(long userId);
     /// <summary>
     /// 
     /// </summary>
     /// <param name="userId"></param>
     /// <param name="dictionaryId"></param>
     /// <returns></returns>
-    Task<DataState<DictionarySimpleDto>> GetUserDictionaryById(int dictionaryId, int userId);
+    Task<DataState<DictionarySimpleDto>> GetUserDictionaryById(int dictionaryId, long userId);
 
     /// <summary>
     /// 
@@ -38,7 +38,16 @@ public interface IUserActionsFacade
     /// <param name="userId"></param>
     /// <param name="addDictionaryRequestDto"></param>
     /// <returns></returns>
-    Task<DataState<DictionarySimpleDto>> AddNewDictionary(int userId, AddDictionaryRequestDto addDictionaryRequestDto);
+    Task<DataState<DictionarySimpleDto>> AddNewDictionary(long userId, AddDictionaryRequestDto addDictionaryRequestDto);
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="dictionaryId"></param>
+    /// <param name="updateDictionaryRequestDto"></param>
+    /// <returns></returns>
+    Task<DataState<bool>> UpdateDictionary(long userId, int dictionaryId, UpdateDictionaryRequestDto updateDictionaryRequestDto);
 
     /// <summary>
     /// 
@@ -53,14 +62,14 @@ public interface IUserActionsFacade
     /// <param name="userId"></param>
     /// <param name="updatePasswordRequestDto"></param>
     /// <returns></returns>
-    Task<DataState<bool>> UpdateUserPassword(int userId, UpdatePasswordRequestDto updatePasswordRequestDto);
+    Task<DataState<bool>> UpdateUserPassword(long userId, UpdatePasswordRequestDto updatePasswordRequestDto);
     /// <summary>
     /// 
     /// </summary>
     /// <param name="userId"></param>
     /// <param name="updateProfileRequestDto"></param>
     /// <returns></returns>
-    Task<DataState<bool>> UpdateUserProfile(int userId, UpdateProfileRequestDto updateProfileRequestDto);
+    Task<DataState<bool>> UpdateUserProfile(long userId, UpdateProfileRequestDto updateProfileRequestDto);
     
     
     /// <summary>
@@ -69,6 +78,17 @@ public interface IUserActionsFacade
     /// <param name="userId"></param>
     /// <param name="courseId"></param>
     /// <returns></returns>
-    Task<DataState<UserCourseSimpleDto>> StartNewCourse(int userId, int courseId);
+    Task<DataState<UserCourseSimpleDto>> StartNewCourse(long userId, long courseId);
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="dictionaryId"></param>
+    /// <param name="wordId"></param>
+    /// <returns></returns>
+    Task<DataState<DictionarySimpleDto>> AddWordToDictionary(long userId, int dictionaryId, int wordId);
+    
+    
    
 }

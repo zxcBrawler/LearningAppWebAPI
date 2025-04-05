@@ -24,12 +24,12 @@ namespace LearningAppWebAPI.Migrations
 
             modelBuilder.Entity("LearningAppWebAPI.Models.BlacklistedAccessToken", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("bigint")
                         .HasColumnName("id_token");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("ExpiryDate")
                         .HasColumnType("datetime(6)")
@@ -53,12 +53,12 @@ namespace LearningAppWebAPI.Migrations
 
             modelBuilder.Entity("LearningAppWebAPI.Models.Course", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("bigint")
                         .HasColumnName("id_course");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<string>("CourseDescription")
                         .IsRequired()
@@ -126,8 +126,8 @@ namespace LearningAppWebAPI.Migrations
                         .HasColumnType("varchar(500)")
                         .HasColumnName("image_url");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int")
+                    b.Property<long?>("UserId")
+                        .HasColumnType("bigint")
                         .HasColumnName("user_id");
 
                     b.HasKey("Id");
@@ -213,8 +213,8 @@ namespace LearningAppWebAPI.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CourseId")
-                        .HasColumnType("int")
+                    b.Property<long?>("CourseId")
+                        .HasColumnType("bigint")
                         .HasColumnName("course_id");
 
                     b.Property<DateTime>("CreatedAt")
@@ -325,8 +325,8 @@ namespace LearningAppWebAPI.Migrations
                         .HasColumnType("datetime(6)")
                         .HasColumnName("revoked_at");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int")
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint")
                         .HasColumnName("user_id");
 
                     b.HasKey("Id");
@@ -462,12 +462,12 @@ namespace LearningAppWebAPI.Migrations
 
             modelBuilder.Entity("LearningAppWebAPI.Models.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("bigint")
                         .HasColumnName("id_user");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<int>("CurrentStreak")
                         .HasColumnType("int")
@@ -530,12 +530,12 @@ namespace LearningAppWebAPI.Migrations
 
             modelBuilder.Entity("LearningAppWebAPI.Models.UserCourse", b =>
                 {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int")
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint")
                         .HasColumnName("user_id");
 
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int")
+                    b.Property<long>("CourseId")
+                        .HasColumnType("bigint")
                         .HasColumnName("course_id");
 
                     b.Property<float>("CourseProgress")

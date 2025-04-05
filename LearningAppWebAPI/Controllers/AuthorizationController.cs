@@ -12,21 +12,45 @@ using Microsoft.IdentityModel.Tokens;
 namespace LearningAppWebAPI.Controllers
 {
     /// <summary>
-    /// The authorization controller class
+    /// Provides endpoints for user authentication, registration, and token management.
+    /// Implements JWT-based authentication flow with access and refresh tokens.
     /// </summary>
+    /// <remarks>
+    /// This controller handles the complete authentication lifecycle including:
+    /// - User login with JWT generation
+    /// - New user registration
+    /// - Token refresh mechanism
+    /// - Session invalidation (logout)
+    /// </remarks>
     /// <seealso cref="ControllerBase"/>
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiExplorerSettings(GroupName = "users")]
     [ApiController]
     public class AuthorizationController(ITokenService tokenService, AuthorizationService authorizationService) : ControllerBase
     {
         
         /// <summary>
-        /// Log in user method. All field are required
+        /// Authenticates a user and generates JWT tokens
         /// </summary>
-        /// <param name="loginRequestDto"></param>
-        /// <returns></returns>
-        [HttpPost("[action]")]
+        /// <param name="loginRequestDto">Contains user credentials (username/email and password)</param>
+        /// <returns>
+        /// Returns a LoginResponse containing:
+        /// - Access token (short-lived, for API authorization)
+        /// - Refresh token (long-lived, for obtaining new access tokens)
+        /// - Token expiration dates
+        /// </returns>
+        /// <response code="200">Successful authentication. Returns tokens.</response>
+        /// <response code="400">Invalid request format or missing required fields.</response>
+        /// <response code="401">Invalid credentials or unauthorized access attempt.</response>
+        /// <remarks>
+        /// Sample request:
+        /// POST /api/Authorization/login
+        /// {
+        ///     "username": "johndoe",
+        ///     "password": "Str0ngP@ssw0rd!"
+        /// }
+        /// </remarks>
+        [HttpPost]
         [AllowAnonymous]
         [NoCurrentUser]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequestDto)
@@ -53,11 +77,22 @@ namespace LearningAppWebAPI.Controllers
         }
         
         /// <summary>
-        /// Register user method. All field are required
+        /// Registers a new user in the system
         /// </summary>
-        /// <param name="registerRequestDto"></param>
-        /// <returns></returns>
-        [HttpPost("[action]")]
+        /// <param name="registerRequestDto">Contains user registration information</param>
+        /// <returns>Result of the registration operation</returns>
+        /// <response code="200">User successfully registered</response>
+        /// <response code="400">Invalid request or user already exists</response>
+        /// <remarks>
+        /// Sample request:
+        /// POST /api/Authorization/register
+        /// {
+        ///     "username": "johndoe",
+        ///     "email": "john@example.com",
+        ///     "password": "Str0ngP@ssw0rd!"
+        /// }
+        /// </remarks>
+        [HttpPost]
         [AllowAnonymous]
         [NoCurrentUser]
         public async Task<IActionResult> Register([FromBody] RegisterRequestDto registerRequestDto)
@@ -71,27 +106,50 @@ namespace LearningAppWebAPI.Controllers
             return Ok(result);
         }
         /// <summary>
-        ///  Revokes user's refresh token, and blacklists user's access token
+        /// Invalidates the current user's authentication tokens
         /// </summary>
-        /// <returns></returns>
-        [HttpPost("[action]")]
+        /// <returns>No content</returns>
+        /// <response code="204">Tokens successfully invalidated</response>
+        /// <response code="401">Unauthorized access attempt</response>
+        /// <remarks>
+        /// This endpoint:
+        /// 1. Revokes all refresh tokens for the current user
+        /// 2. Blacklists the current access token
+        /// Requires a valid access token in the Authorization header
+        /// </remarks>
+        [HttpPost]
         [Authorize]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(401)]
         public async Task<IActionResult> LogOut()
         {
          
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId != null) await tokenService.RevokeTokensFromUser(userId);
+            if (userId != null) await tokenService.RevokeTokensFromUser(long.Parse(userId));
             
             var jti = User.FindFirstValue(JwtRegisteredClaimNames.Jti);
             if (jti != null) await tokenService.BlacklistAccessToken(jti);
             return NoContent();
         }
         /// <summary>
-        /// Refreshes user access token based on provided refreshTokenRequest, containing old access token and current refresh token
+        /// Generates new access token using a valid refresh token
         /// </summary>
-        /// <param name="refreshTokenRequestDto"></param>
-        /// <returns></returns>
-        [HttpPost("[action]")]
+        /// <param name="refreshTokenRequestDto">Contains the expired access token and valid refresh token</param>
+        /// <returns>New access token</returns>
+        /// <response code="200">Returns new tokens</response>
+        /// <response code="401">Invalid or expired tokens provided</response>
+        /// <response code="404">Refresh token not found</response>
+        /// <remarks>
+        /// Sample request:
+        /// POST /api/Authorization/refresh-token
+        /// {
+        ///     "oldAccessToken": "expired.jwt.token",
+        ///     "refreshToken": "valid.refresh.token"
+        /// }
+        /// 
+        /// This implements the refresh token rotation pattern for enhanced security.
+        /// </remarks>
+        [HttpPost]
         [NoCurrentUser]
         public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequestDto refreshTokenRequestDto)
         {

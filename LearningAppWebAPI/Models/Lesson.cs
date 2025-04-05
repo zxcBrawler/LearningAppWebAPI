@@ -44,14 +44,14 @@ namespace LearningAppWebAPI.Models
         /// </summary>
         [Column("created_at")]
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedAt { get; init; } = DateTime.UtcNow;
    
         /// <summary>
         /// 
         /// </summary>
         [Column("updated_at")]
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime UpdatedAt { get; init; } = DateTime.UtcNow;
 
    
         /// <summary>
@@ -66,7 +66,7 @@ namespace LearningAppWebAPI.Models
         /// 
         /// </summary>
         [Column("course_id")]
-        public int? CourseId { get; init; }
+        public long? CourseId { get; init; }
         
    
         /// <summary>
@@ -74,10 +74,10 @@ namespace LearningAppWebAPI.Models
         /// </summary>
         public Course? Course { get; init; }
 
-   
+
         /// <summary>
         /// 
         /// </summary>
-        public List<Exercise>? Exercises { get; init; }
+        public List<Exercise>? Exercises { get; init; } = [];
     }
 }

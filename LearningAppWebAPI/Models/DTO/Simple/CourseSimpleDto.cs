@@ -12,7 +12,7 @@ namespace LearningAppWebAPI.Models.DTO.Simple
         /// <summary>
         /// 
         /// </summary>
-        public int Id { get; init; }
+        public long Id { get; init; }
 
         
         /// <summary>

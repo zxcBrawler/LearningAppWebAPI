@@ -154,7 +154,7 @@ namespace LearningAppWebAPI.Domain.Service
         /// <param name="userId"></param>
         /// <param name="updateProfileRequestDto"></param>
         /// <returns></returns>
-        public async Task<DataState<bool>> UpdateUserProfile(int userId,
+        public async Task<DataState<bool>> UpdateUserProfile(long userId,
             UpdateProfileRequestDto updateProfileRequestDto)
         {
             try
@@ -190,7 +190,7 @@ namespace LearningAppWebAPI.Domain.Service
         /// <param name="userId"></param>
         /// <param name="updatePasswordRequestDto"></param>
         /// <returns></returns>
-        public async Task<DataState<bool>> UpdateUserPassword(int userId,
+        public async Task<DataState<bool>> UpdateUserPassword(long userId,
             UpdatePasswordRequestDto updatePasswordRequestDto)
         {
             try

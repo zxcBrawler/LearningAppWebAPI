@@ -12,7 +12,7 @@ namespace LearningAppWebAPI.Domain.Repository
     /// </summary>
     /// <seealso cref="AbstractBaseRepository{Course}"/>
     [ScopedService]
-    public class CourseRepository(AppDbContext context) : AbstractBaseRepository<Course, int>(context)
+    public class CourseRepository(AppDbContext context) : AbstractBaseRepository<Course, long>(context)
     {
         /// <summary>
         /// Creates the entity
@@ -31,7 +31,7 @@ namespace LearningAppWebAPI.Domain.Repository
         /// </summary>
         /// <param name="id">The id</param>
         /// <returns>A task containing the bool</returns>
-        public override async Task<bool> DeleteAsync(int id)
+        public override async Task<bool> DeleteAsync(long id)
         {
             var user = await GetByIdAsync(id);
 
@@ -59,7 +59,7 @@ namespace LearningAppWebAPI.Domain.Repository
         /// </summary>
         /// <param name="id">The id</param>
         /// <returns>A task containing the course</returns>
-        public override async Task<Course?> GetByIdAsync(int id) => await Context.Course
+        public override async Task<Course?> GetByIdAsync(long id) => await Context.Course
             .Include(u => u.Lesson)
             .ThenInclude(l => l.Exercises)
             .ThenInclude(t => t.TypeExercise)
@@ -75,7 +75,7 @@ namespace LearningAppWebAPI.Domain.Repository
             .ThenInclude(s => s.TrueFalseExercise)
             .FirstOrDefaultAsync(u => u.Id == id);
 
-        public override async Task<bool> UpdateAsync(int id, Course entity)
+        public override async Task<bool> UpdateAsync(long id, Course entity)
         {
             if (id != entity.Id)
             {
@@ -105,7 +105,7 @@ namespace LearningAppWebAPI.Domain.Repository
         {
             return await Context.Course.Where(n => n.CourseName == courseName).FirstAsync();
         }
-        private bool CourseExists(int id)
+        private bool CourseExists(long id)
         {
             return Context.Course.Any(u => u.Id == id);
         }

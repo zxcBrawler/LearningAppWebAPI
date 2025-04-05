@@ -12,7 +12,7 @@ namespace LearningAppWebAPI.Domain.Repository
     /// </summary>
     /// <param name="context"></param>
     [ScopedService]
-    public class UserRepository(AppDbContext context) : AbstractBaseRepository<User, int>(context)
+    public class UserRepository(AppDbContext context) : AbstractBaseRepository<User, long>(context)
     {
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace LearningAppWebAPI.Domain.Repository
         /// </summary>
         /// <param name="id">The id</param>
         /// <returns>A task containing the user</returns>
-        public override async Task<User?> GetByIdAsync(int id)
+        public override async Task<User?> GetByIdAsync(long id)
         {
             return await Context.User.Include(u => u.Role).FirstOrDefaultAsync(u => u.Id == id);
         }
@@ -56,7 +56,7 @@ namespace LearningAppWebAPI.Domain.Repository
         /// <param name="id">The id</param>
         /// <param name="entity">The entity</param>
         /// <returns>A task containing the bool</returns>
-        public override async Task<bool> UpdateAsync(int id, User entity)
+        public override async Task<bool> UpdateAsync(long id, User entity)
         {
             if (id != entity.Id)
             {
@@ -84,7 +84,7 @@ namespace LearningAppWebAPI.Domain.Repository
         /// </summary>
         /// <param name="id">The id</param>
         /// <returns>A task containing the bool</returns>
-        public override async Task<bool> DeleteAsync(int id)
+        public override async Task<bool> DeleteAsync(long id)
         {
             var user = await GetByIdAsync(id);
 
@@ -103,7 +103,7 @@ namespace LearningAppWebAPI.Domain.Repository
         /// </summary>
         /// <param name="id">The id</param>
         /// <returns>The bool</returns>
-        private bool UserExists(int id)
+        private bool UserExists(long id)
         {
             return Context.User.Any(u => u.Id == id);
         }

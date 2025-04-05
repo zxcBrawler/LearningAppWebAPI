@@ -15,7 +15,7 @@ public class BlacklistedAccessToken
     [Key]
     [Column("id_token")]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Id { get; init; }
+    public long Id { get; init; }
     
     /// <summary>
     /// 

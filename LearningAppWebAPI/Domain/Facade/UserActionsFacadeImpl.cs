@@ -18,7 +18,7 @@ public class UserActionsFacadeImpl(UserService userService, UserCourseService us
     /// </summary>
     /// <param name="userId"></param>
     /// <returns></returns>
-    public async Task<DataState<List<DictionarySimpleDto>>> GetUserDictionaries(int userId)
+    public async Task<DataState<List<DictionarySimpleDto>>> GetUserDictionaries(long userId)
     {
         return await dictionaryService.GetAllByUserIdAsync(userId);
     }
@@ -28,7 +28,7 @@ public class UserActionsFacadeImpl(UserService userService, UserCourseService us
     /// </summary>
     /// <param name="userId"></param>
     /// <returns></returns>
-    public async Task<DataState<List<UserCourseSimpleDto>>> GetUserCourses(int userId)
+    public async Task<DataState<List<UserCourseSimpleDto>>> GetUserCourses(long userId)
     {
         return await userCourseService.GetByAllByUserId(userId);
     }
@@ -39,7 +39,7 @@ public class UserActionsFacadeImpl(UserService userService, UserCourseService us
     /// <param name="dictionaryId"></param>
     /// <param name="userId"></param>
     /// <returns></returns>
-    public async Task<DataState<DictionarySimpleDto>> GetUserDictionaryById(int dictionaryId, int userId)
+    public async Task<DataState<DictionarySimpleDto>> GetUserDictionaryById(int dictionaryId, long userId)
     {
         return await dictionaryService.GetUserDictionaryById(dictionaryId, userId);
     }
@@ -50,9 +50,21 @@ public class UserActionsFacadeImpl(UserService userService, UserCourseService us
     /// <param name="userId"></param>
     /// <param name="addDictionaryRequestDto"></param>
     /// <returns></returns>
-    public async Task<DataState<DictionarySimpleDto>> AddNewDictionary(int userId, AddDictionaryRequestDto addDictionaryRequestDto)
+    public async Task<DataState<DictionarySimpleDto>> AddNewDictionary(long userId, AddDictionaryRequestDto addDictionaryRequestDto)
     {
         return await dictionaryService.AddNewDictionary(userId, addDictionaryRequestDto);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="dictionaryId"></param>
+    /// <param name="updateDictionaryRequestDto"></param>
+    /// <returns></returns>
+    public async Task<DataState<bool>> UpdateDictionary(long userId, int dictionaryId, UpdateDictionaryRequestDto updateDictionaryRequestDto)
+    {
+        return await dictionaryService.UpdateDictionary(userId, dictionaryId, updateDictionaryRequestDto);
     }
 
     /// <summary>
@@ -71,7 +83,7 @@ public class UserActionsFacadeImpl(UserService userService, UserCourseService us
     /// <param name="userId"></param>
     /// <param name="updatePasswordRequestDto"></param>
     /// <returns></returns>
-    public async Task<DataState<bool>> UpdateUserPassword(int userId, UpdatePasswordRequestDto updatePasswordRequestDto)
+    public async Task<DataState<bool>> UpdateUserPassword(long userId, UpdatePasswordRequestDto updatePasswordRequestDto)
     {
         return  await userService.UpdateUserPassword(userId, updatePasswordRequestDto);
     }
@@ -82,7 +94,7 @@ public class UserActionsFacadeImpl(UserService userService, UserCourseService us
     /// <param name="userId"></param>
     /// <param name="updatePasswordRequestDto"></param>
     /// <returns></returns>
-    public async Task<DataState<bool>> UpdateUserProfile(int userId, UpdateProfileRequestDto updatePasswordRequestDto)
+    public async Task<DataState<bool>> UpdateUserProfile(long userId, UpdateProfileRequestDto updatePasswordRequestDto)
     {
         return await userService.UpdateUserProfile(userId, updatePasswordRequestDto);
     }
@@ -93,9 +105,20 @@ public class UserActionsFacadeImpl(UserService userService, UserCourseService us
     /// <param name="userId"></param>
     /// <param name="courseId"></param>
     /// <returns></returns>
-    public async Task<DataState<UserCourseSimpleDto>> StartNewCourse(int userId, int courseId)
+    public async Task<DataState<UserCourseSimpleDto>> StartNewCourse(long userId, long courseId)
     {
         return await userCourseService.StartNewCourse(userId, courseId);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="dictionaryId"></param>
+    /// <param name="wordId"></param>
+    /// <returns></returns>
+    public async Task<DataState<DictionarySimpleDto>> AddWordToDictionary(long userId, int dictionaryId, int wordId)
+    {
+        return await dictionaryService.AddWordToDictionary(userId, dictionaryId, wordId);
+    }
 }

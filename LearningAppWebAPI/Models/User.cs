@@ -18,7 +18,7 @@ namespace LearningAppWebAPI.Models
         [Key]
         [Column("id_user")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; init; }
+        public long Id { get; init; }
 
         /// <summary>
         /// 
@@ -34,7 +34,7 @@ namespace LearningAppWebAPI.Models
         [Required]
         [MaxLength(500)]
         [Column("password_hash")]
-        public string? PasswordHash { get; set; }
+        public required string PasswordHash { get; set; }
 
         /// <summary>
         /// 
@@ -47,7 +47,8 @@ namespace LearningAppWebAPI.Models
         /// 
         /// </summary>
         [Column("registration_date")]
-        public DateTime RegistrationDate { get; init; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public DateTime RegistrationDate { get; init; } = DateTime.UtcNow;
 
         /// <summary>
         /// 
@@ -55,7 +56,7 @@ namespace LearningAppWebAPI.Models
         [Required]
         [MaxLength(125)]
         [Column("email")]
-        public string? Email { get; set; }
+        public required string Email { get; set; }
 
         /// <summary>
         /// 
@@ -87,11 +88,12 @@ namespace LearningAppWebAPI.Models
         /// <summary>
         /// 
         /// </summary>
-        public List<Course>? Courses { get; set; }
+        public List<Course>? Courses { get; init; } = [];
+
         /// <summary>
         /// 
         /// </summary>
-        public List<Dictionary>? Dictionaries { get; set; }
+        public List<Dictionary>? Dictionaries { get; init; } = [];
         /// <summary>
         /// 
         /// </summary>

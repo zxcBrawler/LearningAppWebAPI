@@ -54,7 +54,7 @@ namespace LearningAppWebAPI.Domain.Repository
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public async Task<List<UserCourse>> GetByAllByUserId(int userId)
+        public async Task<List<UserCourse>> GetByAllByUserId(long userId)
         {
             return await Context.UserCourse
                 .Include(u => u.Course)

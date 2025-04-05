@@ -26,7 +26,7 @@ public class DictionaryRepository(AppDbContext context) : AbstractBaseRepository
     /// </summary>
     /// <param name="userId"></param>
     /// <returns></returns>
-    public async Task<List<Dictionary>> GetAllByUserIdAsync(int userId)
+    public async Task<List<Dictionary>> GetAllByUserIdAsync(long userId)
     {
         return await Context.Dictionary.Where(d => d.UserId == userId).ToListAsync();
     }
@@ -40,9 +40,15 @@ public class DictionaryRepository(AppDbContext context) : AbstractBaseRepository
     {
         return await Context.Dictionary.FirstOrDefaultAsync(d => d.Id == id);
     }
-    public  async Task<Dictionary?> GetByIdAndUserIdAsync(int dictionaryId, int userId)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="dictionaryId"></param>
+    /// <param name="userId"></param>
+    /// <returns></returns>
+    public  async Task<Dictionary?> GetByIdAndUserIdAsync(int dictionaryId, long userId)
     {
-        return await Context.Dictionary.Where(d => d.Id == dictionaryId && d.UserId == userId).FirstOrDefaultAsync();
+        return await Context.Dictionary.Where(d => d.Id == dictionaryId && d.UserId == userId).Include(w => w.Words).FirstOrDefaultAsync();
     }
 
     /// <summary>
@@ -64,9 +70,14 @@ public class DictionaryRepository(AppDbContext context) : AbstractBaseRepository
     /// <param name="entity"></param>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
-    public override Task<bool> UpdateAsync(int id, Dictionary entity)
+    public override async Task<bool> UpdateAsync(int id, Dictionary entity)
     {
-        throw new NotImplementedException();
+        if (id != entity.Id)
+        {
+            return false;
+        }
+        await Context.SaveChangesAsync();
+        return true;
     }
 
     /// <summary>

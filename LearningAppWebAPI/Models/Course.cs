@@ -16,7 +16,7 @@ namespace LearningAppWebAPI.Models
         [Key]
         [Column("id_course")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; init; }
+        public long Id { get; init; }
         
         /// <summary>
         /// Course title

@@ -17,14 +17,14 @@ namespace LearningAppWebAPI.Models
         /// 
         /// </summary>
         [Column("user_id")]
-        public int UserId { get; init; }
+        public long UserId { get; init; }
        
 
         /// <summary>
         ///
         /// </summary>
         [Column("course_id")]
-        public int CourseId { get; init; }
+        public long CourseId { get; init; }
         
 
         /// <summary>
