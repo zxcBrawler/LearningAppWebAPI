@@ -86,4 +86,16 @@ public class UserActionsFacadeImpl(UserService userService, UserCourseService us
     {
         return await userService.UpdateUserProfile(userId, updatePasswordRequestDto);
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="courseId"></param>
+    /// <returns></returns>
+    public async Task<DataState<UserCourseSimpleDto>> StartNewCourse(int userId, int courseId)
+    {
+        return await userCourseService.StartNewCourse(userId, courseId);
+    }
+
 }

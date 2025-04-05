@@ -1,5 +1,6 @@
 using LearningAppWebAPI.Data;
 using LearningAppWebAPI.Domain.Repository;
+using LearningAppWebAPI.Models;
 using LearningAppWebAPI.Models.DTO.Simple;
 using LearningAppWebAPI.Utils;
 using LearningAppWebAPI.Utils.CustomAttributes;
@@ -10,7 +11,7 @@ namespace LearningAppWebAPI.Domain.Service
     /// The user course service class
     /// </summary>
     [ScopedService]
-    public class UserCourseService(UserCourseRepository userCourseRepository)
+    public class UserCourseService(UserCourseRepository userCourseRepository, UserRepository userRepository, CourseRepository courseRepository)
     {
         /// <summary>
         /// The configure mapper
@@ -44,6 +45,35 @@ namespace LearningAppWebAPI.Domain.Service
                 return DataState<List<UserCourseSimpleDto>>.Failure($"Error getting user courses: {ex.Message}", StatusCodes.Status500InternalServerError);
             }
           
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="courseId"></param>
+        /// <returns></returns>
+        public async Task<DataState<UserCourseSimpleDto>> StartNewCourse(int userId, int courseId)
+        {
+            try
+            {
+                var currentUser = await userRepository.GetByIdAsync(userId);
+                var currentCourse = await courseRepository.GetByIdAsync(courseId);
+                var newUserCourse = new UserCourse
+                {
+                    UserId = userId,
+                    CourseId = courseId,
+                    User = currentUser,
+                    Course = currentCourse
+                    
+                };
+                var result = await userCourseRepository.CreateAsync(newUserCourse);
+                return DataState<UserCourseSimpleDto>.Success(_mapper.Map<UserCourseSimpleDto>(result), StatusCodes.Status201Created);
+            }
+            catch (Exception e)
+            {
+                return DataState<UserCourseSimpleDto>.Failure($"You have already applied to this course", StatusCodes.Status500InternalServerError);
+            }
         }
     }
 }

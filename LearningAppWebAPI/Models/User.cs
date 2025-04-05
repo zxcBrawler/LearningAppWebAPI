@@ -47,8 +47,7 @@ namespace LearningAppWebAPI.Models
         /// 
         /// </summary>
         [Column("registration_date")]
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        public DateTime RegistrationDate { get; init; } = DateTime.UtcNow;
+        public DateTime RegistrationDate { get; init; }
 
         /// <summary>
         /// 

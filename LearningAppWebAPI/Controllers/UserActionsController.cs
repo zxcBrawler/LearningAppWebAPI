@@ -8,7 +8,7 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace LearningAppWebAPI.Controllers
 {
     /// <summary>
-    /// 
+    /// All user-specific actions. Requires authorization
     /// </summary>
     /// <param name="userActionsFacade"></param>
     [Route("api/[controller]/[action]")]
@@ -17,27 +17,27 @@ namespace LearningAppWebAPI.Controllers
     public class UserActionsController(IUserActionsFacade userActionsFacade) : BasicController
     {
         /// <summary>
-        /// 
+        ///  Get a list of current user's courses
         /// </summary>
         /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> GetUserCourses()
         {
             var courses = await userActionsFacade.GetUserCourses(UserId);
-            return Ok(courses);
+            return StatusCode(courses.StatusCode, courses.IsSuccess ? courses.Value : courses.ErrorMessage);
         }
         /// <summary>
-        /// 
+        /// Get a list of user dictionaries
         /// </summary>
         /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> GetUserDictionaries()
         {
             var dictionaries = await userActionsFacade.GetUserDictionaries(UserId);
-            return Ok(dictionaries);
+            return StatusCode(dictionaries.StatusCode, dictionaries.IsSuccess ? dictionaries.Value : dictionaries.ErrorMessage);
         }
         /// <summary>
-        /// 
+        /// Get single dictionary by dictionary id
         /// </summary>
         /// <param name="dictionaryId"></param>
         /// <returns></returns>
@@ -45,11 +45,13 @@ namespace LearningAppWebAPI.Controllers
         public async Task<IActionResult> GetUserDictionaryById(int dictionaryId)
         {
             var dictionary = await userActionsFacade.GetUserDictionaryById(dictionaryId, UserId);
-            return Ok(dictionary);
+            return StatusCode(dictionary.StatusCode, dictionary.IsSuccess ? dictionary.Value : dictionary.ErrorMessage);
         }
+        
         /// <summary>
-        /// 
+        /// Updates user profile data. All fields are required
         /// </summary>
+        /// <param name="updateProfileRequestDto"></param>
         /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> UpdateProfileData([FromBody] UpdateProfileRequestDto updateProfileRequestDto)
@@ -59,12 +61,13 @@ namespace LearningAppWebAPI.Controllers
                 return BadRequest();
             }
             var result = await userActionsFacade.UpdateUserProfile(UserId, updateProfileRequestDto);
-            return Ok(result);
+            return StatusCode(result.StatusCode, result.IsSuccess ? result.Value : result.ErrorMessage);
         }
         
         /// <summary>
-        /// 
+        /// Updates user password. Old password and new password
         /// </summary>
+        /// <param name="updatePasswordRequestDto"></param>
         /// <returns></returns>
         [HttpPatch]
         public async Task<IActionResult> UpdatePassword([FromBody] UpdatePasswordRequestDto updatePasswordRequestDto)
@@ -80,23 +83,16 @@ namespace LearningAppWebAPI.Controllers
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="courseId"></param>
         /// <returns></returns>
-        [HttpPost("{id:int}")]
-        public async Task<IActionResult> StartCourse(int id)
+        [HttpPost("{courseId:int}")]
+        public async Task<IActionResult> StartCourse(int courseId)
         {
-            return Ok();
+            var response = await userActionsFacade.StartNewCourse(UserId, courseId);
+            return StatusCode(response.StatusCode, response.IsSuccess ? response.Value : response.ErrorMessage);
+        
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        [HttpDelete("{id:int}")]
-        public async Task<IActionResult> StopCourse(int id)
-        {
-            return Ok();
-        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -107,16 +103,17 @@ namespace LearningAppWebAPI.Controllers
         {
             return Ok();
         }
-        
+
         /// <summary>
-        /// 
+        /// User action. Adds new dictionary for current authenticated user
         /// </summary>
+        ///  <param name="addDictionaryRequestDto"></param>
         /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> AddNewDictionary([FromBody] AddDictionaryRequestDto addDictionaryRequestDto)
         {
             var response = await userActionsFacade.AddNewDictionary(UserId, addDictionaryRequestDto);
-            return StatusCode(response.StatusCode, response.Value);
+            return StatusCode(response.StatusCode, response.IsSuccess ? response.Value : response.ErrorMessage);
         }
         /// <summary>
         /// 
@@ -139,7 +136,7 @@ namespace LearningAppWebAPI.Controllers
         }
         
         /// <summary>
-        /// 
+        /// Deletes dictionary by id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>

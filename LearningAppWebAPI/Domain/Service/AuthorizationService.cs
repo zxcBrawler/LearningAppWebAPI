@@ -33,7 +33,8 @@ namespace LearningAppWebAPI.Domain.Service
                PasswordHash = PasswordHasher.HashPassword(registerRequestDto.Password),
                Username = registerRequestDto.Username,
                RoleId = 1,
-               Role = existingRole
+               Role = existingRole,
+               RegistrationDate = DateTime.UtcNow
            };
            
            var newUser = await repository.CreateAsync(user);

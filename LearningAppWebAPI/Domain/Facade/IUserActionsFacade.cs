@@ -61,5 +61,14 @@ public interface IUserActionsFacade
     /// <param name="updateProfileRequestDto"></param>
     /// <returns></returns>
     Task<DataState<bool>> UpdateUserProfile(int userId, UpdateProfileRequestDto updateProfileRequestDto);
-
+    
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="courseId"></param>
+    /// <returns></returns>
+    Task<DataState<UserCourseSimpleDto>> StartNewCourse(int userId, int courseId);
+   
 }
