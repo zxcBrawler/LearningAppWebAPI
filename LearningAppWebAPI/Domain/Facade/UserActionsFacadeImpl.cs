@@ -64,4 +64,26 @@ public class UserActionsFacadeImpl(UserService userService, UserCourseService us
     {
         return await dictionaryService.DeleteDictionaryAsync(dictionaryId);
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="updatePasswordRequestDto"></param>
+    /// <returns></returns>
+    public async Task<DataState<bool>> UpdateUserPassword(int userId, UpdatePasswordRequestDto updatePasswordRequestDto)
+    {
+        return  await userService.UpdateUserPassword(userId, updatePasswordRequestDto);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="updatePasswordRequestDto"></param>
+    /// <returns></returns>
+    public async Task<DataState<bool>> UpdateUserProfile(int userId, UpdateProfileRequestDto updatePasswordRequestDto)
+    {
+        return await userService.UpdateUserProfile(userId, updatePasswordRequestDto);
+    }
 }

@@ -34,14 +34,14 @@ namespace LearningAppWebAPI.Models
         [Required]
         [MaxLength(500)]
         [Column("password_hash")]
-        public string? PasswordHash { get; init; }
+        public string? PasswordHash { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
         [MaxLength(500)]
         [Column("profile_picture")]
-        public string? ProfilePicture { get; init; }
+        public string? ProfilePicture { get; set; }
 
         /// <summary>
         /// 
@@ -88,11 +88,11 @@ namespace LearningAppWebAPI.Models
         /// <summary>
         /// 
         /// </summary>
-        public List<Course>? Courses { get; init; }
+        public List<Course>? Courses { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        public List<Dictionary>? Dictionaries { get; init; }
+        public List<Dictionary>? Dictionaries { get; set; }
         /// <summary>
         /// 
         /// </summary>

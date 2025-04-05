@@ -146,5 +146,78 @@ namespace LearningAppWebAPI.Domain.Service
                 return DataState<bool>.Failure($"Error deleting user with ID {id}: {ex.Message}", StatusCodes.Status500InternalServerError);
             }
         }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="updateProfileRequestDto"></param>
+        /// <returns></returns>
+        public async Task<DataState<bool>> UpdateUserProfile(int userId,
+            UpdateProfileRequestDto updateProfileRequestDto)
+        {
+            try
+            {
+                var currentUser = await userRepository.GetByIdAsync(userId);
+                if (currentUser == null)
+                {
+                    return DataState<bool>.Failure("User not found.", StatusCodes.Status404NotFound);
+                }
+
+                currentUser.Username = updateProfileRequestDto.Username;
+                currentUser.Email = updateProfileRequestDto.Email;
+                currentUser.ProfilePicture = updateProfileRequestDto.ProfilePicture;
+                var result = await userRepository.UpdateAsync(userId, currentUser);
+                return result
+                    ? DataState<bool>.Success(true, StatusCodes.Status200OK)
+                    : DataState<bool>.Failure("User update failed.", StatusCodes.Status400BadRequest);
+
+
+            }
+            catch (Exception e)
+            {
+                return DataState<bool>.Failure($"Error updating user profile with ID {userId} : {e.Message}",
+                    StatusCodes.Status500InternalServerError);
+            }
+        }
+
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="updatePasswordRequestDto"></param>
+        /// <returns></returns>
+        public async Task<DataState<bool>> UpdateUserPassword(int userId,
+            UpdatePasswordRequestDto updatePasswordRequestDto)
+        {
+            try
+            {
+                var currentUser = await userRepository.GetByIdAsync(userId);
+                if (currentUser == null)
+                {
+                    return DataState<bool>.Failure("User not found.", StatusCodes.Status404NotFound);
+                }
+
+                if (!PasswordHasher.VerifyPassword(updatePasswordRequestDto.OldPassword, currentUser.PasswordHash))
+                {
+                    return DataState<bool>.Failure("Old password is invalid", StatusCodes.Status400BadRequest);
+                }
+
+                currentUser.PasswordHash = PasswordHasher.HashPassword(updatePasswordRequestDto.NewPassword);
+                var result = await userRepository.UpdateAsync(userId, currentUser);
+                return result
+                    ? DataState<bool>.Success(true, StatusCodes.Status200OK)
+                    : DataState<bool>.Failure("User password update failed.", StatusCodes.Status400BadRequest);
+            }
+            catch (Exception e)
+            {
+                return DataState<bool>.Failure($"Error updating user password with ID {userId} : {e.Message}",
+                    StatusCodes.Status500InternalServerError);
+            }
+            
+        }
     }
 }

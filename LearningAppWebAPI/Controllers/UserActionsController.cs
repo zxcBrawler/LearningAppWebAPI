@@ -47,8 +47,6 @@ namespace LearningAppWebAPI.Controllers
             var dictionary = await userActionsFacade.GetUserDictionaryById(dictionaryId, UserId);
             return Ok(dictionary);
         }
-        
-        
         /// <summary>
         /// 
         /// </summary>
@@ -56,7 +54,12 @@ namespace LearningAppWebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateProfileData([FromBody] UpdateProfileRequestDto updateProfileRequestDto)
         {
-            return Ok();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            var result = await userActionsFacade.UpdateUserProfile(UserId, updateProfileRequestDto);
+            return Ok(result);
         }
         
         /// <summary>
@@ -64,9 +67,14 @@ namespace LearningAppWebAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPatch]
-        public async Task<IActionResult> UpdatePassword()
+        public async Task<IActionResult> UpdatePassword([FromBody] UpdatePasswordRequestDto updatePasswordRequestDto)
         {
-            return Ok();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            var result = await userActionsFacade.UpdateUserPassword(UserId, updatePasswordRequestDto);
+            return StatusCode(result.StatusCode, result.IsSuccess ? result.Value : result.ErrorMessage);
         }
         
         /// <summary>

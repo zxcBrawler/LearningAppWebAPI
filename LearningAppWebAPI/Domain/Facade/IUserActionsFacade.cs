@@ -46,5 +46,20 @@ public interface IUserActionsFacade
     /// <param name="dictionaryId"></param>
     /// <returns></returns>
     Task<DataState<bool>> DeleteDictionary(int dictionaryId);
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="updatePasswordRequestDto"></param>
+    /// <returns></returns>
+    Task<DataState<bool>> UpdateUserPassword(int userId, UpdatePasswordRequestDto updatePasswordRequestDto);
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="updateProfileRequestDto"></param>
+    /// <returns></returns>
+    Task<DataState<bool>> UpdateUserProfile(int userId, UpdateProfileRequestDto updateProfileRequestDto);
 
 }
