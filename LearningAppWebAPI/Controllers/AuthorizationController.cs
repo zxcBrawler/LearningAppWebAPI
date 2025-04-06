@@ -54,7 +54,7 @@ namespace LearningAppWebAPI.Controllers
         [HttpPost]
         [AllowAnonymous]
         [NoCurrentUser]
-        public async Task<ActionResult<LoginResponse>> Login([FromBody] LoginRequestDto loginRequestDto)
+        public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequestDto)
         {
             if (!ModelState.IsValid)
             {
@@ -115,7 +115,6 @@ namespace LearningAppWebAPI.Controllers
         [ProducesResponseType(401)]
         public async Task<IActionResult> LogOut()
         {
-         
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var jti = User.FindFirstValue(JwtRegisteredClaimNames.Jti);
             var response = await authorizationService.LogoutAsync(long.Parse(userId), jti);
@@ -140,7 +139,7 @@ namespace LearningAppWebAPI.Controllers
         /// This implements the refresh token rotation pattern for enhanced security.
         /// </remarks>
         [HttpPost]
-        public async Task<ActionResult<TokenResponse>> RefreshToken([FromBody] RefreshTokenRequestDto refreshTokenRequestDto)
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequestDto refreshTokenRequestDto)
         {
             if (!ModelState.IsValid)
             {
