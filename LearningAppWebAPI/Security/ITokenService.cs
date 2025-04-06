@@ -21,15 +21,6 @@ public interface ITokenService
      /// <param name="claims"></param>
      /// <returns></returns>
      TokenResponse GenerateRefreshToken(ICollection<Claim> claims);
-
-     /// <summary>
-     /// 
-     /// </summary>
-     /// <param name="claims"></param>
-     /// <param name="expires"></param>
-     /// <param name="signingKey"></param>
-     /// <returns></returns>
-     TokenResponse GenerateJwtToken(ICollection<Claim> claims, DateTime expires, string signingKey);
      /// <summary>
      /// 
      /// </summary>

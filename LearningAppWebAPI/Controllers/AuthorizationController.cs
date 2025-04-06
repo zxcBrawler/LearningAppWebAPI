@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using LearningAppWebAPI.Data;
 using LearningAppWebAPI.Domain.Service;
 using LearningAppWebAPI.Models.DTO.Request;
 using LearningAppWebAPI.Models.DTO.Response;
@@ -26,7 +27,7 @@ namespace LearningAppWebAPI.Controllers
     [Route("api/[controller]/[action]")]
     [ApiExplorerSettings(GroupName = "users")]
     [ApiController]
-    public class AuthorizationController(ITokenService tokenService, AuthorizationService authorizationService) : ControllerBase
+    public class AuthorizationController(AuthorizationService authorizationService) : ControllerBase
     {
         
         /// <summary>
@@ -53,27 +54,18 @@ namespace LearningAppWebAPI.Controllers
         [HttpPost]
         [AllowAnonymous]
         [NoCurrentUser]
-        public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequestDto)
+        public async Task<ActionResult<LoginResponse>> Login([FromBody] LoginRequestDto loginRequestDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var user = authorizationService.LoginAsync(loginRequestDto).Result.Value;
+            var userResult = await authorizationService.LoginAsync(loginRequestDto);
+
+            if (userResult.IsSuccess) return Ok(userResult.Value);
+            Console.WriteLine($"Login failed: {userResult.ErrorMessage}");
             
-            var claims = tokenService.WriteClaims(user);
-            var accessToken = tokenService.GenerateAccessToken(claims);
-            var refreshToken = tokenService.GenerateRefreshToken(claims);
-
-            if (user != null) await tokenService.StoreRefreshTokenAsync(user.Id, refreshToken);
-
-            return Ok(new LoginResponse
-            {
-                AccessToken = accessToken.Token,
-                AccessTokenExpiryDate = accessToken.ExpiryDate,
-                RefreshToken = refreshToken.Token,
-                RefreshTokenExpiryDate = refreshToken.ExpiryDate
-            });
+            return StatusCode(userResult.StatusCode, new { message = userResult.ErrorMessage });
         }
         
         /// <summary>
@@ -103,7 +95,7 @@ namespace LearningAppWebAPI.Controllers
             }
             var result = await authorizationService.RegisterAsync(registerRequestDto);
             
-            return Ok(result);
+            return StatusCode(result.StatusCode, result.IsSuccess ? result.Value : result.ErrorMessage);
         }
         /// <summary>
         /// Invalidates the current user's authentication tokens
@@ -125,11 +117,9 @@ namespace LearningAppWebAPI.Controllers
         {
          
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId != null) await tokenService.RevokeTokensFromUser(long.Parse(userId));
-            
             var jti = User.FindFirstValue(JwtRegisteredClaimNames.Jti);
-            if (jti != null) await tokenService.BlacklistAccessToken(jti);
-            return NoContent();
+            var response = await authorizationService.LogoutAsync(long.Parse(userId), jti);
+            return StatusCode(response.StatusCode, response.IsSuccess ? response.Value : response.ErrorMessage);
         }
         /// <summary>
         /// Generates new access token using a valid refresh token
@@ -150,29 +140,17 @@ namespace LearningAppWebAPI.Controllers
         /// This implements the refresh token rotation pattern for enhanced security.
         /// </remarks>
         [HttpPost]
-        [NoCurrentUser]
-        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequestDto refreshTokenRequestDto)
+        public async Task<ActionResult<TokenResponse>> RefreshToken([FromBody] RefreshTokenRequestDto refreshTokenRequestDto)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                var newTokens = await tokenService.RefreshTokensAsync(
-                    refreshTokenRequestDto.OldAccessToken, 
-                    refreshTokenRequestDto.RefreshToken);
-        
-                return Ok(newTokens);
+                return BadRequest(ModelState);
             }
-            catch (SecurityTokenException ex)
-            {
-                return Unauthorized(ex.Message);
-            }
-            catch (ArgumentException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
+            var response = await authorizationService.RefreshToken(refreshTokenRequestDto);
+            if (response.IsSuccess) return Ok(response.Value);
+            Console.WriteLine($"Login failed: {response.ErrorMessage}");
+            
+            return StatusCode(response.StatusCode, new { message = response.ErrorMessage });
         }
     }
 }

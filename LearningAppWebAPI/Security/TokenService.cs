@@ -62,7 +62,7 @@ public class TokenService(IConfiguration config, AppDbContext dbContext) : IToke
     /// <param name="expires"></param>
     /// <param name="signingKey"></param>
     /// <returns></returns>
-    public TokenResponse GenerateJwtToken(
+    private TokenResponse GenerateJwtToken(
         ICollection<Claim> claims,
         DateTime expires,
         string signingKey)
@@ -136,7 +136,6 @@ public class TokenService(IConfiguration config, AppDbContext dbContext) : IToke
     /// <param name="userId"></param>
     public async Task RevokeTokensFromUser(long userId)
     {
-       
         var tokens = await dbContext.RefreshToken
             .Where(rt => rt.UserId == userId)
             .ToListAsync();

@@ -13,7 +13,7 @@ namespace LearningAppWebAPI.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 [ApiExplorerSettings(GroupName = "admin")]
-public class CoursesController(CourseService courseService) : ControllerBase
+public class CoursesController(CourseService courseService) : BasicController
 {
     /// <summary>
     ///     Gets the courses
@@ -71,7 +71,7 @@ public class CoursesController(CourseService courseService) : ControllerBase
     /// </summary>
     /// <param name="id">The id</param>
     /// <returns>A task containing the action result</returns>
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:int}")]
     public async Task<IActionResult> DeleteCourse(int id)
     {
         var isDeleted = await courseService.DeleteCourse(id);

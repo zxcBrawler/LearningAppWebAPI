@@ -2,8 +2,12 @@ using LearningAppWebAPI.Data;
 using LearningAppWebAPI.Domain.Repository;
 using LearningAppWebAPI.Models;
 using LearningAppWebAPI.Models.DTO.Request;
+using LearningAppWebAPI.Models.DTO.Response;
+using LearningAppWebAPI.Models.DTO.Simple;
+using LearningAppWebAPI.Security;
 using LearningAppWebAPI.Utils;
 using LearningAppWebAPI.Utils.CustomAttributes;
+using Microsoft.IdentityModel.Tokens;
 
 namespace LearningAppWebAPI.Domain.Service
 {
@@ -11,7 +15,7 @@ namespace LearningAppWebAPI.Domain.Service
     /// The authorization service class
     /// </summary>
     [ScopedService]
-    public class AuthorizationService(UserRepository repository)
+    public class AuthorizationService(UserRepository repository, ITokenService tokenService)
     {
         
        /// <summary>
@@ -37,7 +41,7 @@ namespace LearningAppWebAPI.Domain.Service
                RegistrationDate = DateTime.UtcNow
            };
            
-           var newUser = await repository.CreateAsync(user);
+           await repository.CreateAsync(user);
           
            return DataState<string>.Success("Registration successful", StatusCodes.Status200OK);
        }
@@ -47,16 +51,72 @@ namespace LearningAppWebAPI.Domain.Service
        /// </summary>
        /// <param name="loginRequestDto"></param>
        /// <returns></returns>
-       public async Task<DataState<User>> LoginAsync(LoginRequestDto loginRequestDto)
+       public async Task<DataState<LoginResponse>> LoginAsync(LoginRequestDto loginRequestDto)
        {
            var user = await repository.GetUserByEmailAsync(loginRequestDto.Email);
            if (user == null)
-               return DataState<User>.Failure("User not found", StatusCodes.Status404NotFound);
+               return DataState<LoginResponse>.Failure("User not found", StatusCodes.Status404NotFound);
 
-           var result =  user.PasswordHash != null && PasswordHasher.VerifyPassword(loginRequestDto.Password, user.PasswordHash);
-            
-           return !result ? DataState<User>.Failure("Invalid sign in credentials", StatusCodes.Status400BadRequest) : 
-               DataState<User>.Success(user, StatusCodes.Status200OK);
+           var result =  PasswordHasher.VerifyPassword(loginRequestDto.Password, user.PasswordHash);
+           
+           if (!result) return DataState<LoginResponse>.Failure("Invalid credentials", StatusCodes.Status400BadRequest);
+           
+           var claims = tokenService.WriteClaims(user);
+           var accessToken = tokenService.GenerateAccessToken(claims);
+           var refreshToken = tokenService.GenerateRefreshToken(claims);
+
+           await tokenService.StoreRefreshTokenAsync(user.Id, refreshToken);
+           return DataState<LoginResponse>.Success(new LoginResponse
+           {
+               AccessToken = accessToken.Token, 
+               RefreshToken = refreshToken.Token,
+               AccessTokenExpiryDate = accessToken.ExpiryDate,
+               RefreshTokenExpiryDate = refreshToken.ExpiryDate
+           }, StatusCodes.Status200OK);
+
+       }
+
+       /// <summary>
+       /// 
+       /// </summary>
+       /// <param name="userId"></param>
+       /// <param name="jti"></param>
+       /// <returns></returns>
+       public async Task<DataState<string>> LogoutAsync(long userId, string jti)
+       {
+           await tokenService.RevokeTokensFromUser(userId);
+           await tokenService.BlacklistAccessToken(jti);
+           return DataState<string>.Success("Logout successful", StatusCodes.Status200OK);
+       }
+
+       /// <summary>
+       /// 
+       /// </summary>
+       /// <param name="refreshTokenRequestDto"></param>
+       /// <returns></returns>
+       public async Task<DataState<TokenResponse>> RefreshToken(RefreshTokenRequestDto refreshTokenRequestDto)
+       {
+           try
+           {
+               var newTokens = await tokenService.RefreshTokensAsync(
+                   refreshTokenRequestDto.OldAccessToken, 
+                   refreshTokenRequestDto.RefreshToken);
+        
+               return DataState<TokenResponse>.Success(newTokens, StatusCodes.Status200OK);
+           }
+           catch (SecurityTokenException ex)
+           {
+               return DataState<TokenResponse>.Failure(ex.Message, StatusCodes.Status401Unauthorized);
+           }
+           catch (ArgumentException ex)
+           {
+               return DataState<TokenResponse>.Failure(ex.Message, StatusCodes.Status400BadRequest);
+           }
+           catch (Exception ex)
+           {
+               return DataState<TokenResponse>.Failure(ex.Message, StatusCodes.Status500InternalServerError);
+           }
+          
        }
     }
 }
