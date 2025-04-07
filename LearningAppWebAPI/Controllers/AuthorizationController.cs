@@ -139,6 +139,8 @@ namespace LearningAppWebAPI.Controllers
         /// This implements the refresh token rotation pattern for enhanced security.
         /// </remarks>
         [HttpPost]
+        [AllowAnonymous]
+        [NoCurrentUser]
         public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequestDto refreshTokenRequestDto)
         {
             if (!ModelState.IsValid)

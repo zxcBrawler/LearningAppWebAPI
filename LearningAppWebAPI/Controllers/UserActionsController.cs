@@ -47,6 +47,16 @@ namespace LearningAppWebAPI.Controllers
             var dictionaries = await userActionsFacade.GetUserDictionaries(UserId);
             return StatusCode(dictionaries.StatusCode, dictionaries.IsSuccess ? dictionaries.Value : dictionaries.ErrorMessage);
         }
+
+        /// <summary>
+        /// This endpoint triggers refreshToken method in Desktop App when opening it
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public IActionResult LaunchApp()
+        {
+            return Ok();
+        }
         
         /// <summary>
         /// Retrieves a specific dictionary by ID for the current authenticated user
