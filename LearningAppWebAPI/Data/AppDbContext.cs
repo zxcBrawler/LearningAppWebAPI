@@ -211,10 +211,6 @@ namespace LearningAppWebAPI.Data
                 .WithMany(l => l.Dictionaries)
                 .HasForeignKey(e => e.UserId);
             
-            modelBuilder.Entity<TypeExercise>()
-                .Property(e => e.ExerciseTypeName)
-                .HasConversion<int>();
-            
             modelBuilder.Entity<Role>()
                 .Property(e => e.RoleName)
                 .HasConversion<int>();
@@ -229,15 +225,6 @@ namespace LearningAppWebAPI.Data
                     .Metadata.SetValueComparer(PartOfSpeechComparer);
             });
             
-            modelBuilder.Entity<TypeExercise>().HasData(
-                Enum.GetValues<TypeExerciseEnum>()
-                    .Select(e => new TypeExercise
-                    {
-                        Id = (int)e + 1,
-                        ExerciseTypeName = e,
-                        ExerciseTypeDescription = e.ToString()
-                    })
-            );
             modelBuilder.Entity<Role>().HasData(
                 Enum.GetValues<TypeRoleEnum>()
                     .Select(e => new Role()

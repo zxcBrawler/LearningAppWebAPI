@@ -122,6 +122,21 @@ namespace LearningAppWebAPI.Controllers
             var result = await userActionsFacade.UpdateUserPassword(UserId, updatePasswordRequestDto);
             return StatusCode(result.StatusCode, result.IsSuccess ? result.Value : result.ErrorMessage);
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="refreshTokenRequestDto"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<IActionResult> UpdateTokens([FromBody] RefreshTokenRequestDto refreshTokenRequestDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            var result = await userActionsFacade.UpdateAllTokens(refreshTokenRequestDto);
+            return StatusCode(result.StatusCode, result.IsSuccess ? result.Value : result.ErrorMessage);
+        }
         
         /// <summary>
         /// Enrolls the current user in a new course

@@ -60,4 +60,11 @@ public interface ITokenService
      /// <param name="refreshToken"></param>
      /// <returns></returns>
      Task<TokenResponse> RefreshTokensAsync(string expiredAccessToken, string refreshToken);
+     /// <summary>
+     /// 
+     /// </summary>
+     /// <param name="accessToken"></param>
+     /// <param name="refreshToken"></param>
+     /// <returns></returns>
+     Task<LoginResponse> UpdateAllTokens(string accessToken, string refreshToken);
 }

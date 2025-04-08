@@ -2,7 +2,9 @@
 using LearningAppWebAPI.Domain.Service;
 using LearningAppWebAPI.Models.DTO.Complex;
 using LearningAppWebAPI.Models.DTO.Request;
+using LearningAppWebAPI.Models.DTO.Response;
 using LearningAppWebAPI.Models.DTO.Simple;
+using LearningAppWebAPI.Security;
 
 namespace LearningAppWebAPI.Domain.Facade;
 
@@ -12,7 +14,7 @@ namespace LearningAppWebAPI.Domain.Facade;
 /// <param name="userService"></param>
 /// <param name="userCourseService"></param>
 /// <param name="dictionaryService"></param>
-public class UserActionsFacadeImpl(UserService userService, UserCourseService userCourseService, DictionaryService dictionaryService) : IUserActionsFacade
+public class UserActionsFacadeImpl(UserService userService, UserCourseService userCourseService, DictionaryService dictionaryService, ITokenService tokenService) : IUserActionsFacade
 {
     /// <summary>
     /// 
@@ -109,6 +111,8 @@ public class UserActionsFacadeImpl(UserService userService, UserCourseService us
     {
         return await userService.UpdateUserProfile(userId, updatePasswordRequestDto);
     }
+    
+    
 
     /// <summary>
     /// 
@@ -131,5 +135,16 @@ public class UserActionsFacadeImpl(UserService userService, UserCourseService us
     public async Task<DataState<DictionarySimpleDto>> AddWordToDictionary(long userId, int dictionaryId, int wordId)
     {
         return await dictionaryService.AddWordToDictionary(userId, dictionaryId, wordId);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="refreshTokenRequestDto"></param>
+    /// <returns></returns>
+    public async Task<DataState<LoginResponse>> UpdateAllTokens(RefreshTokenRequestDto refreshTokenRequestDto)
+    {
+        var response = await tokenService.UpdateAllTokens(refreshTokenRequestDto.OldAccessToken, refreshTokenRequestDto.RefreshToken);
+        return DataState<LoginResponse>.Success(response, StatusCodes.Status200OK);
     }
 }

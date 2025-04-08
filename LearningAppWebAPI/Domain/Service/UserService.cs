@@ -3,6 +3,7 @@ using LearningAppWebAPI.Domain.Repository;
 using LearningAppWebAPI.Models;
 using LearningAppWebAPI.Models.DTO.Request;
 using LearningAppWebAPI.Models.DTO.Simple;
+using LearningAppWebAPI.Security;
 using LearningAppWebAPI.Utils;
 using LearningAppWebAPI.Utils.CustomAttributes;
 
@@ -116,10 +117,8 @@ namespace LearningAppWebAPI.Domain.Service
 
                 currentUser.Username = updateRequest.Username;
                 currentUser.Email = updateRequest.Email;
-                currentUser.CurrentXp = updateRequest.CurrentXp;
-                currentUser.Level = updateRequest.Level;
-                currentUser.Role = role;
-                currentUser.RoleId = role.Id;
+                currentUser.ProfilePicture = updateRequest.ProfilePicture;
+                
 
                 var updateResult = await userRepository.UpdateAsync(id, currentUser);
                 return !updateResult ? DataState<bool>.Failure("User update failed.", StatusCodes.Status400BadRequest) : DataState<bool>.Success(true, StatusCodes.Status204NoContent);

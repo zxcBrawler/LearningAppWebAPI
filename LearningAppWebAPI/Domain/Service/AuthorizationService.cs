@@ -45,7 +45,7 @@ namespace LearningAppWebAPI.Domain.Service
            await repository.CreateAsync(user);
            emailSender.SendEmail(registerRequestDto.Email, registerRequestDto.Username, user.Id);
           
-           return DataState<string>.Success("Registration successful", StatusCodes.Status200OK);
+           return DataState<string>.Success("Registration successful", StatusCodes.Status201Created);
        }
        
        /// <summary>

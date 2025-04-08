@@ -1,6 +1,7 @@
 ﻿using LearningAppWebAPI.Data;
 using LearningAppWebAPI.Models.DTO.Complex;
 using LearningAppWebAPI.Models.DTO.Request;
+using LearningAppWebAPI.Models.DTO.Response;
 using LearningAppWebAPI.Models.DTO.Simple;
 
 namespace LearningAppWebAPI.Domain.Facade;
@@ -14,6 +15,11 @@ namespace LearningAppWebAPI.Domain.Facade;
 public interface IUserActionsFacade
 {
     
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <returns></returns>
     Task<DataState<UserSimpleDto>> GetUserProfileAsync(long userId);
     /// <summary>
     /// 
@@ -91,6 +97,12 @@ public interface IUserActionsFacade
     /// <param name="wordId"></param>
     /// <returns></returns>
     Task<DataState<DictionarySimpleDto>> AddWordToDictionary(long userId, int dictionaryId, int wordId);
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="refreshTokenRequestDto"></param>
+    /// <returns></returns>
+    Task<DataState<LoginResponse>> UpdateAllTokens(RefreshTokenRequestDto refreshTokenRequestDto);
     
     
    

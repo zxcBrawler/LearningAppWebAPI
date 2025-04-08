@@ -210,8 +210,51 @@ public class TokenService(IConfiguration config, AppDbContext dbContext) : IToke
         var newAccessToken = GenerateAccessToken(claims);
         
         await BlacklistAccessToken(jti);
+        
 
         return newAccessToken;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="accessToken"></param>
+    /// <param name="refreshToken"></param>
+    /// <returns></returns>
+    /// <exception cref="SecurityTokenException"></exception>
+    /// <exception cref="ArgumentException"></exception>
+    public async Task<LoginResponse> UpdateAllTokens(string accessToken, string refreshToken)
+    {
+        var principal = GetPrincipalFromExpiredToken(accessToken);
+        if (principal == null)
+            throw new SecurityTokenException("Invalid access token");
+        
+        var userId = principal.FindFirstValue(ClaimTypes.NameIdentifier);
+        var jti = principal.FindFirstValue(JwtRegisteredClaimNames.Jti);
+    
+        if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(jti))
+            throw new SecurityTokenException("Missing required claims");
+        
+        var user = await dbContext.User
+            .Include(u => u.Role)
+            .FirstOrDefaultAsync(u => u.Id == int.Parse(userId));
+    
+        if (user == null)
+            throw new ArgumentException("User not found");
+        
+        var claims = WriteClaims(user);
+        var newAccessToken = GenerateAccessToken(claims);
+        var newRefreshToken = GenerateRefreshToken(claims);
+        
+        await BlacklistAccessToken(jti);
+        await StoreRefreshTokenAsync(long.Parse(userId), newRefreshToken);
+        return new LoginResponse()
+        {
+            AccessToken = newAccessToken.Token,
+            AccessTokenExpiryDate = newAccessToken.ExpiryDate,
+            RefreshToken = newRefreshToken.Token,
+            RefreshTokenExpiryDate = newRefreshToken.ExpiryDate,
+        };
     }
 
     private static string HashToken(string token)

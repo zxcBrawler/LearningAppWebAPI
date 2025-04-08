@@ -430,34 +430,15 @@ namespace LearningAppWebAPI.Migrations
                         .HasColumnType("varchar(50)")
                         .HasColumnName("exercise_type_description");
 
-                    b.Property<int>("ExerciseTypeName")
+                    b.Property<string>("ExerciseTypeName")
+                        .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("int")
+                        .HasColumnType("varchar(50)")
                         .HasColumnName("exercise_type_name");
 
                     b.HasKey("Id");
 
                     b.ToTable("type_exercise");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ExerciseTypeDescription = "Text",
-                            ExerciseTypeName = 0
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ExerciseTypeDescription = "MultipleChoice",
-                            ExerciseTypeName = 1
-                        },
-                        new
-                        {
-                            Id = 3,
-                            ExerciseTypeDescription = "TrueFalse",
-                            ExerciseTypeName = 2
-                        });
                 });
 
             modelBuilder.Entity("LearningAppWebAPI.Models.User", b =>

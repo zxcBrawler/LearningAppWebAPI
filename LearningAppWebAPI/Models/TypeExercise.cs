@@ -26,7 +26,7 @@ namespace LearningAppWebAPI.Models
         [Required]
         [MaxLength(50)]
         [Column("exercise_type_name")]
-        public TypeExerciseEnum ExerciseTypeName { get; set; }
+        public string? ExerciseTypeName { get; set; }
 
    
         /// <summary>
