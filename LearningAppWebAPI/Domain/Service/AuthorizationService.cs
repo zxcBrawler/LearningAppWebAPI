@@ -4,6 +4,7 @@ using LearningAppWebAPI.Models;
 using LearningAppWebAPI.Models.DTO.Request;
 using LearningAppWebAPI.Models.DTO.Response;
 using LearningAppWebAPI.Models.DTO.Simple;
+using LearningAppWebAPI.Remote;
 using LearningAppWebAPI.Security;
 using LearningAppWebAPI.Utils;
 using LearningAppWebAPI.Utils.CustomAttributes;
@@ -15,7 +16,7 @@ namespace LearningAppWebAPI.Domain.Service
     /// The authorization service class
     /// </summary>
     [ScopedService]
-    public class AuthorizationService(UserRepository repository, ITokenService tokenService)
+    public class AuthorizationService(UserRepository repository, ITokenService tokenService, IEmailSender emailSender)
     {
         
        /// <summary>
@@ -42,6 +43,7 @@ namespace LearningAppWebAPI.Domain.Service
            };
            
            await repository.CreateAsync(user);
+           emailSender.SendEmail(registerRequestDto.Email, registerRequestDto.Username, user.Id);
           
            return DataState<string>.Success("Registration successful", StatusCodes.Status200OK);
        }
@@ -56,6 +58,8 @@ namespace LearningAppWebAPI.Domain.Service
            var user = await repository.GetUserByEmailAsync(loginRequestDto.Email);
            if (user == null)
                return DataState<LoginResponse>.Failure("User not found", StatusCodes.Status404NotFound);
+           if (!user.IsRegistrationConfirmed)
+            return DataState<LoginResponse>.Failure("Please confirm your email first", StatusCodes.Status400BadRequest);
 
            var result =  PasswordHasher.VerifyPassword(loginRequestDto.Password, user.PasswordHash);
            
@@ -117,6 +121,21 @@ namespace LearningAppWebAPI.Domain.Service
                return DataState<TokenResponse>.Failure(ex.Message, StatusCodes.Status500InternalServerError);
            }
           
+       }
+
+       /// <summary>
+       /// 
+       /// </summary>
+       /// <param name="userId"></param>
+       /// <returns></returns>
+       public async Task<DataState<string>> ConfirmEmail(long userId)
+       {
+           var existingUser = await repository.GetByIdAsync(userId);
+           if (existingUser == null)
+               return DataState<string>.Failure("User not found", StatusCodes.Status404NotFound);
+           existingUser.IsRegistrationConfirmed = true;
+           await repository.UpdateAsync(userId, existingUser);
+           return DataState<string>.Success("Email confirmation successful. You can now Log in into your account", StatusCodes.Status200OK);
        }
     }
 }

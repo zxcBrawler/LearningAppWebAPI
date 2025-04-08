@@ -7,6 +7,7 @@ using System.Text;
 using Coravel;
 using LearningAppWebAPI.Data;
 using LearningAppWebAPI.Domain.Facade;
+using LearningAppWebAPI.Remote;
 using LearningAppWebAPI.Security;
 using LearningAppWebAPI.Utils;
 using LearningAppWebAPI.Utils.CustomAttributes;
@@ -51,6 +52,7 @@ builder.Services.Scan(scan => scan
 builder.Services.AddScoped<IUserActionsFacade, UserActionsFacadeImpl>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<ITokenCleanupService, TokenCleanupService>();
+builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 builder.Services.AddScoped<TokenCleanupJob>();
 builder.Services.RegisterMerriamWebster(mwConfig);

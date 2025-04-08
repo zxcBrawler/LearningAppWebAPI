@@ -97,6 +97,19 @@ namespace LearningAppWebAPI.Controllers
             
             return StatusCode(result.StatusCode, result.IsSuccess ? result.Value : result.ErrorMessage);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("{userId:long}")]
+        [AllowAnonymous]
+        [NoCurrentUser]
+        public async Task<IActionResult> ConfirmEmail(long userId)
+        {
+            var result = await authorizationService.ConfirmEmail(userId);
+            return StatusCode(result.StatusCode, result.IsSuccess ? result.Value : result.ErrorMessage);
+        }
         /// <summary>
         /// Invalidates the current user's authentication tokens
         /// </summary>

@@ -84,6 +84,13 @@ namespace LearningAppWebAPI.Models
         [Column("current_streak")]
         [DefaultValue(0)]
         public int CurrentStreak { get; set; }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        [Column("is_registration_confirmed")]
+        [DefaultValue(false)]
+        public bool IsRegistrationConfirmed { get; set; }
 
         /// <summary>
         /// 

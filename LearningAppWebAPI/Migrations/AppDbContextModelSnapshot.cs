@@ -483,6 +483,10 @@ namespace LearningAppWebAPI.Migrations
                         .HasColumnType("varchar(125)")
                         .HasColumnName("email");
 
+                    b.Property<bool>("IsRegistrationConfirmed")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("is_registration_confirmed");
+
                     b.Property<int>("Level")
                         .HasColumnType("int")
                         .HasColumnName("level");

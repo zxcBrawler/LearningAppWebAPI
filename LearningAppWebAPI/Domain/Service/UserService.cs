@@ -42,7 +42,7 @@ namespace LearningAppWebAPI.Domain.Service
         /// </summary>
         /// <param name="id">The id</param>
         /// <returns>A task containing the user simple dto</returns>
-        public async Task<DataState<UserSimpleDto>> GetUserByIdAsync(int id)
+        public async Task<DataState<UserSimpleDto>> GetUserByIdAsync(long id)
         {
             try
             {

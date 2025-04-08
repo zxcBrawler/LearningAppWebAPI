@@ -1,4 +1,5 @@
 ﻿using LearningAppWebAPI.Data;
+using LearningAppWebAPI.Models.DTO.Complex;
 using LearningAppWebAPI.Models.DTO.Request;
 using LearningAppWebAPI.Models.DTO.Simple;
 
@@ -12,6 +13,8 @@ namespace LearningAppWebAPI.Domain.Facade;
 /// <param name="dictionaryService"></param>
 public interface IUserActionsFacade
 {
+    
+    Task<DataState<UserSimpleDto>> GetUserProfileAsync(long userId);
     /// <summary>
     /// 
     /// </summary>

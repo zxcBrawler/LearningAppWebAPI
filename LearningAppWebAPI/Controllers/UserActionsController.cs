@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using LearningAppWebAPI.Domain.Facade;
 using LearningAppWebAPI.Models.DTO.Request;
+using LearningAppWebAPI.Models.DTO.Response;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -20,6 +21,17 @@ namespace LearningAppWebAPI.Controllers
     [ApiController]
     public class UserActionsController(IUserActionsFacade userActionsFacade) : BasicController
     {
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> GetUserProfile()
+        {
+            var profile = await userActionsFacade.GetUserProfileAsync(UserId);
+            return StatusCode(profile.StatusCode, profile.IsSuccess ? profile.Value : profile.ErrorMessage);
+        }
         /// <summary>
         /// Retrieves all courses associated with the current authenticated user
         /// </summary>
