@@ -8,6 +8,7 @@ namespace LearningAppWebAPI.Models;
 /// Stores users refresh token in hash
 /// </summary>
 [Table("refresh_token")]
+[Serializable]
 public class RefreshToken
 {
     

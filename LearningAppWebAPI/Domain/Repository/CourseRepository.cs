@@ -1,7 +1,6 @@
 
 using LearningAppWebAPI.Data;
 using LearningAppWebAPI.Models;
-using LearningAppWebAPI.Utils;
 using LearningAppWebAPI.Utils.CustomAttributes;
 using Microsoft.EntityFrameworkCore;
 
@@ -59,55 +58,76 @@ namespace LearningAppWebAPI.Domain.Repository
         /// </summary>
         /// <param name="id">The id</param>
         /// <returns>A task containing the course</returns>
-        public override async Task<Course?> GetByIdAsync(long id) => await Context.Course
-            .Include(u => u.Lesson)
-            .ThenInclude(l => l.Exercises)
-            .ThenInclude(t => t.TypeExercise)
-            .Include(u => u.Lesson)
-            .ThenInclude(l => l.Exercises)
-            .ThenInclude(s => s.MultipleChoiceExercise)
-            .ThenInclude(w => w.Options)
-            .Include(u => u.Lesson)
-            .ThenInclude(l => l.Exercises)!
-            .ThenInclude(s => s.TextAnswerExercise)
-            .Include(u => u.Lesson)!
-            .ThenInclude(l => l.Exercises)!
-            .ThenInclude(s => s.TrueFalseExercise)
-            .FirstOrDefaultAsync(u => u.Id == id);
+        public override async Task<Course?> GetByIdAsync(long id)
+        {
+            var course = await Context.Course
+                .FirstOrDefaultAsync(u => u.Id == id);
 
+            if (course == null) return null;
+            
+            course.Lesson = await Context.Lesson
+                .Where(l => l.CourseId == id)
+                .Include(l => l.Exercises)
+                .ThenInclude(e => e.TypeExercise)
+                .ToListAsync();
+            
+            foreach (var lesson in course.Lesson)
+            {
+                lesson.Exercises = await Context.Exercises
+                    .Where(e => e.LessonId == lesson.Id)
+                    .Include(e => e.MultipleChoiceExercise)
+                    .ThenInclude(m => m.Options)
+                    .Include(e => e.TextAnswerExercise)
+                    .Include(e => e.TrueFalseExercise)
+                    .ToListAsync();
+            }
+            return course;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         public override async Task<bool> UpdateAsync(long id, Course entity)
         {
             if (id != entity.Id)
             {
                 return false;
             }
-
             try
             {
-                await Context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
+                var existing = await Context.Course
+                    .AsTracking()
+                    .FirstOrDefaultAsync(c => c.Id == id);
 
-                if (!CourseExists(id))
+                if (existing == null)
                 {
                     return false;
                 }
-                else
-                {
-                    throw;
-                }
+                Context.Entry(existing).CurrentValues.SetValues(entity);
+                
+                var affectedRows = await Context.SaveChangesAsync();
+                return affectedRows > 0;
             }
-
-            return true;
+            catch (DbUpdateConcurrencyException ex)
+            {
+                var stillExists = await Context.Course
+                    .AsNoTracking()
+                    .AnyAsync(c => c.Id == id);
+            
+                return !stillExists;
+            }
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="courseName"></param>
+        /// <returns></returns>
         public async Task<Course?> GetByCourseName(string courseName)
         {
             return await Context.Course.Where(n => n.CourseName == courseName).FirstAsync();
-        }
-        private bool CourseExists(long id)
-        {
-            return Context.Course.Any(u => u.Id == id);
         }
     }
 }

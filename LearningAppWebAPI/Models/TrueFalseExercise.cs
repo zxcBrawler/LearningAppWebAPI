@@ -8,6 +8,7 @@ namespace LearningAppWebAPI.Models
     /// The true false exercise class
     /// </summary>
     [Table("true_false_exercise")]
+    [Serializable]
     public class TrueFalseExercise
     {
    

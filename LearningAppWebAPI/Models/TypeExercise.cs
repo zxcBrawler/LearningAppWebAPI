@@ -9,6 +9,7 @@ namespace LearningAppWebAPI.Models
     /// The type exercise class
     /// </summary>
     [Table("type_exercise")]
+    [Serializable]
     public class TypeExercise
     {
         /// <summary>
@@ -36,10 +37,10 @@ namespace LearningAppWebAPI.Models
         [Column("exercise_type_description")]
         public string? ExerciseTypeDescription { get; init; }
 
-   
+
         /// <summary>
         /// 
         /// </summary>
-        public List<Exercise>? Exercises { get; init; }
+        public List<Exercise> Exercises { get; set; } = [];
     }
 }

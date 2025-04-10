@@ -1,24 +1,21 @@
-    using LearningAppWebAPI.Data;
+using AutoMapper;
 using LearningAppWebAPI.Domain.Repository;
+using LearningAppWebAPI.Domain.Service.Interface;
 using LearningAppWebAPI.Models;
 using LearningAppWebAPI.Models.DTO.Complex;
 using LearningAppWebAPI.Models.DTO.Request;
 using LearningAppWebAPI.Models.DTO.Simple;
-using LearningAppWebAPI.Utils;
-using LearningAppWebAPI.Utils.CustomAttributes;
 
-namespace LearningAppWebAPI.Domain.Service
+namespace LearningAppWebAPI.Domain.Service.Impl
 {
     /// <summary>
     /// The course service class
     /// </summary>
-    [ScopedService]
-    public class CourseService(CourseRepository courseRepository)
+    public class CourseServiceImpl(CourseRepository courseRepository,  IMapper mapper) : ICourseService
     {
         /// <summary>
         /// The configure mapper
         /// </summary>
-        private readonly AutoMapper.Mapper _mapper = MapperConfig.ConfigureMapper();
 
         /// <summary>
         /// Gets the all courses
@@ -27,7 +24,7 @@ namespace LearningAppWebAPI.Domain.Service
         public async Task<List<CourseComplexDto>> GetAllCoursesAsync()
         {
             var roles = await courseRepository.GetAllAsync();
-            return roles.Select(_mapper.Map<CourseComplexDto>).ToList();
+            return roles.Select(mapper.Map<CourseComplexDto>).ToList();
         }
 
         /// <summary>
@@ -38,7 +35,7 @@ namespace LearningAppWebAPI.Domain.Service
         public async Task<CourseComplexDto?> GetCourseById(int id)
         {
             var course = await courseRepository.GetByIdAsync(id);
-            return course == null ? null : _mapper.Map<CourseComplexDto>(course);
+            return course == null ? null : mapper.Map<CourseComplexDto>(course);
         }
 
 
@@ -90,7 +87,7 @@ namespace LearningAppWebAPI.Domain.Service
             };
 
             await courseRepository.CreateAsync(course);
-            return _mapper.Map<CourseSimpleDto>(course);
+            return mapper.Map<CourseSimpleDto>(course);
 
         }
 

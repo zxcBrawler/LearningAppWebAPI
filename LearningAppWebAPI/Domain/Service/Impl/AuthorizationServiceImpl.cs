@@ -1,22 +1,20 @@
 using LearningAppWebAPI.Data;
 using LearningAppWebAPI.Domain.Repository;
+using LearningAppWebAPI.Domain.Service.Interface;
 using LearningAppWebAPI.Models;
 using LearningAppWebAPI.Models.DTO.Request;
 using LearningAppWebAPI.Models.DTO.Response;
-using LearningAppWebAPI.Models.DTO.Simple;
 using LearningAppWebAPI.Remote;
 using LearningAppWebAPI.Security;
 using LearningAppWebAPI.Utils;
-using LearningAppWebAPI.Utils.CustomAttributes;
 using Microsoft.IdentityModel.Tokens;
 
-namespace LearningAppWebAPI.Domain.Service
+namespace LearningAppWebAPI.Domain.Service.Impl
 {
     /// <summary>
     /// The authorization service class
     /// </summary>
-    [ScopedService]
-    public class AuthorizationService(UserRepository repository, ITokenService tokenService, IEmailSender emailSender)
+    public class AuthorizationServiceImpl(UserRepository repository, ITokenService tokenService, IEmailSender emailSender) : IAuthorizationService
     {
         
        /// <summary>

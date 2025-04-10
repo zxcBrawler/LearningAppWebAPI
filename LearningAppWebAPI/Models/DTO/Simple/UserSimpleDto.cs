@@ -41,5 +41,13 @@ namespace LearningAppWebAPI.Models.DTO.Simple
         /// 
         /// </summary>
         [JsonPropertyName("current_xp")] public int CurrentXp { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        [JsonPropertyName("current_streak")] public int CurrentStreak { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        [JsonPropertyName("is_registration_confirmed")] public bool IsRegistrationConfirmed { get; set; }
     }
 }

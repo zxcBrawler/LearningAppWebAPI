@@ -9,6 +9,7 @@ namespace LearningAppWebAPI.Models
     /// The lesson class
     /// </summary>
     [Table("lesson")]
+    [Serializable]
     public class Lesson
     {
    
@@ -72,12 +73,12 @@ namespace LearningAppWebAPI.Models
         /// <summary>
         /// 
         /// </summary>
-        public Course? Course { get; init; }
+        public required Course Course { get; init; }
 
 
         /// <summary>
         /// 
         /// </summary>
-        public List<Exercise>? Exercises { get; init; } = [];
+        public List<Exercise> Exercises { get; set; } = [];
     }
 }

@@ -1,4 +1,6 @@
 using LearningAppWebAPI.Domain.Service;
+using LearningAppWebAPI.Domain.Service.Impl;
+using LearningAppWebAPI.Domain.Service.Interface;
 using LearningAppWebAPI.Models.DTO.Complex;
 using LearningAppWebAPI.Models.DTO.Request;
 using LearningAppWebAPI.Models.DTO.Simple;
@@ -13,7 +15,7 @@ namespace LearningAppWebAPI.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 [ApiExplorerSettings(GroupName = "admin")]
-public class CoursesController(CourseService courseService) : BasicController
+public class CoursesController(ICourseService courseService) : BasicController
 {
     /// <summary>
     ///     Gets the courses

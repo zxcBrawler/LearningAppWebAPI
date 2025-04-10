@@ -9,6 +9,7 @@ namespace LearningAppWebAPI.Models
     /// The text answer exercise class
     /// </summary>
     [Table("text_answer_exercise")]
+    [Serializable]
     public class TextAnswerExercise
     {
    

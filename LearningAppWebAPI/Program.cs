@@ -4,9 +4,12 @@ using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.Security.Claims;
 using System.Text;
+using AutoMapper;
 using Coravel;
 using LearningAppWebAPI.Data;
 using LearningAppWebAPI.Domain.Facade;
+using LearningAppWebAPI.Domain.Service.Impl;
+using LearningAppWebAPI.Domain.Service.Interface;
 using LearningAppWebAPI.Remote;
 using LearningAppWebAPI.Security;
 using LearningAppWebAPI.Utils;
@@ -16,7 +19,11 @@ using LearningAppWebAPI.Utils.Job;
 using LearningAppWebAPI.Utils.RequestFilter;
 using MerriamWebster.NET;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
+using Scrutor;
+using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
+using IAuthorizationService = LearningAppWebAPI.Domain.Service.Interface.IAuthorizationService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,18 +52,29 @@ builder.Services.AddControllers(options =>
 
 builder.Services.Scan(scan => scan
     .FromAssemblyOf<Program>()
-    .AddClasses(classes => classes.WithAttribute<ScopedServiceAttribute>())
+    .AddClasses()
     .AsSelfWithInterfaces()
     .WithScopedLifetime()
 );
-builder.Services.AddScoped<IUserActionsFacade, UserActionsFacadeImpl>();
-builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddScoped<ITokenCleanupService, TokenCleanupService>();
-builder.Services.AddScoped<IEmailSender, EmailSender>();
+builder.Services.AddMemoryCache();
+builder.Services.AddAutoMapper(typeof(Program));
+
+builder.Services.Scan(scan => scan
+        .FromAssemblies(typeof(Program).Assembly)
+        .AddClasses(classes => classes
+                .Where(t => t.Name.EndsWith("Service") || 
+                            t.Name.EndsWith("Facade") ||
+                            t.Name.EndsWith("Impl"))
+        )
+        .UsingRegistrationStrategy(RegistrationStrategy.Skip)
+        .AsImplementedInterfaces() 
+        .WithScopedLifetime() 
+);
 
 builder.Services.AddScoped<TokenCleanupJob>();
 builder.Services.RegisterMerriamWebster(mwConfig);
 builder.Services.AddScheduler();
+builder.Services.AddFluentValidationAutoValidation();
 
 var jwtKey = builder.Configuration["Jwt:Key"];
 if (string.IsNullOrEmpty(jwtKey) || jwtKey.Length < 32)

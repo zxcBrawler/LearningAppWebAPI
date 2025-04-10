@@ -4,6 +4,8 @@ using LearningAppWebAPI.Models;
 using LearningAppWebAPI.Models.Enum;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Alachisoft.NCache.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace LearningAppWebAPI.Data
 {
@@ -12,8 +14,9 @@ namespace LearningAppWebAPI.Data
     /// The app db context class
     /// </summary>
     /// <seealso cref="DbContext"/>
-    public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
+    public class AppDbContext(DbContextOptions<AppDbContext> options, IMemoryCache memoryCache) : DbContext(options)
     {
+
         private static readonly ValueComparer<List<PartOfSpeechEnum>> PartOfSpeechComparer = 
             new ValueComparer<List<PartOfSpeechEnum>>(
                 (c1, c2) => c1.SequenceEqual(c2),

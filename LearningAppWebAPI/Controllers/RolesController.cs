@@ -1,4 +1,6 @@
 using LearningAppWebAPI.Domain.Service;
+using LearningAppWebAPI.Domain.Service.Impl;
+using LearningAppWebAPI.Domain.Service.Interface;
 using LearningAppWebAPI.Models.DTO.Simple;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,7 +13,7 @@ namespace LearningAppWebAPI.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [ApiExplorerSettings(GroupName = "admin")]
-    public class RolesController(RoleService roleService) : ControllerBase
+    public class RolesController(IRoleService roleService) : ControllerBase
     {
         /// <summary>
         /// Gets the role

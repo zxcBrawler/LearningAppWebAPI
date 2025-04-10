@@ -10,6 +10,7 @@ namespace LearningAppWebAPI.Models
     /// 
     /// </summary>
     [Table("role")]
+    [Serializable]
     public class Role
     {
    
@@ -27,10 +28,10 @@ namespace LearningAppWebAPI.Models
         [MaxLength(50)]
         [Column("role_name")]
         public TypeRoleEnum RoleName { get; set; }
-   
+
         /// <summary>
         /// 
         /// </summary>
-        public List<User>? User { get; init; }
+        public List<User> User { get; set; } = [];
     }
 }

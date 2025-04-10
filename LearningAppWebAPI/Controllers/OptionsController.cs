@@ -1,5 +1,7 @@
 
 using LearningAppWebAPI.Domain.Service;
+using LearningAppWebAPI.Domain.Service.Impl;
+using LearningAppWebAPI.Domain.Service.Interface;
 using LearningAppWebAPI.Models;
 using LearningAppWebAPI.Models.DTO.Complex;
 using LearningAppWebAPI.Models.DTO.Request;
@@ -14,7 +16,7 @@ namespace LearningAppWebAPI.Controllers
     [Route("api/[controller]")]
     [ApiExplorerSettings(GroupName = "admin")]
     [ApiController]
-    public class OptionsController(OptionService optionService) : ControllerBase
+    public class OptionsController(IOptionService optionService) : ControllerBase
     {
         /* // GET: api/Options
          [HttpGet]
@@ -89,7 +91,7 @@ namespace LearningAppWebAPI.Controllers
                 return BadRequest();
             }
 
-            return CreatedAtAction("GetOption", new { id = result.Id }, result);
+            return CreatedAtAction("GetOption", new { id = result.Value.Id }, result);
         }
 
         /* // DELETE: api/Options/5

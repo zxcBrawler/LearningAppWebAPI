@@ -8,6 +8,7 @@ namespace LearningAppWebAPI.Models
     /// The multiple choice exercise class
     /// </summary>
     [Table("multiple_choice_exercise")]
+    [Serializable]
     public class MultipleChoiceExercise
     {
    

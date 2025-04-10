@@ -13,14 +13,20 @@ namespace LearningAppWebAPI.Models.DTO.Complex
         /// <summary>
         /// 
         /// </summary>
-        [JsonPropertyName("multiple_choice_exercise")] public MultipleChoiceExerciseComplexDto? MultipleChoiceExercise { get; set; }
+        [JsonPropertyName("multiple_choice_exercise")] 
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public MultipleChoiceExerciseComplexDto? MultipleChoiceExercise { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        [JsonPropertyName("text_answer_exercise")] public TextAnswerExerciseSimpleDto? TextAnswerExercise { get; set; }
+        [JsonPropertyName("text_answer_exercise")] 
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public TextAnswerExerciseSimpleDto? TextAnswerExercise { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        [JsonPropertyName("true_false_exercise")] public TrueFalseExerciseSimpleDto? TrueFalseExercise { get; set; }
+        [JsonPropertyName("true_false_exercise")] 
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public TrueFalseExerciseSimpleDto? TrueFalseExercise { get; set; }
     }
 }

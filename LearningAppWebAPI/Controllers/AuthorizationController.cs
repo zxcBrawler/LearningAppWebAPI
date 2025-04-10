@@ -1,7 +1,9 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using FluentValidation;
 using LearningAppWebAPI.Data;
 using LearningAppWebAPI.Domain.Service;
+using LearningAppWebAPI.Domain.Service.Impl;
 using LearningAppWebAPI.Models.DTO.Request;
 using LearningAppWebAPI.Models.DTO.Response;
 using LearningAppWebAPI.Security;
@@ -9,6 +11,7 @@ using LearningAppWebAPI.Utils.CustomAttributes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using IAuthorizationService = LearningAppWebAPI.Domain.Service.Interface.IAuthorizationService;
 
 namespace LearningAppWebAPI.Controllers
 {
@@ -27,7 +30,7 @@ namespace LearningAppWebAPI.Controllers
     [Route("api/[controller]/[action]")]
     [ApiExplorerSettings(GroupName = "users")]
     [ApiController]
-    public class AuthorizationController(AuthorizationService authorizationService) : ControllerBase
+    public class AuthorizationController(IAuthorizationService authorizationService) : ControllerBase
     {
         
         /// <summary>
@@ -55,11 +58,7 @@ namespace LearningAppWebAPI.Controllers
         [AllowAnonymous]
         [NoCurrentUser]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequestDto)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+        { 
             var userResult = await authorizationService.LoginAsync(loginRequestDto);
 
             if (userResult.IsSuccess) return Ok(userResult.Value);
@@ -98,9 +97,11 @@ namespace LearningAppWebAPI.Controllers
             return StatusCode(result.StatusCode, result.IsSuccess ? result.Value : result.ErrorMessage);
         }
 
+        
         /// <summary>
-        /// 
+        /// Sends confirmation Email to user's mail after successfully signing up
         /// </summary>
+        /// <param name="userId">User Id</param>
         /// <returns></returns>
         [HttpGet("{userId:long}")]
         [AllowAnonymous]

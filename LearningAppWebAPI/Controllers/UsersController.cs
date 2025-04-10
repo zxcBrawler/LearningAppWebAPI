@@ -1,5 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
 using LearningAppWebAPI.Data;
 using LearningAppWebAPI.Domain.Service;
+using LearningAppWebAPI.Domain.Service.Impl;
+using LearningAppWebAPI.Domain.Service.Interface;
 using LearningAppWebAPI.Models.DTO.Complex;
 using LearningAppWebAPI.Models.DTO.Request;
 using LearningAppWebAPI.Models.DTO.Simple;
@@ -13,7 +16,7 @@ namespace LearningAppWebAPI.Controllers
     [Route("api/[controller]")]
     [ApiExplorerSettings(GroupName = "admin")]
     [ApiController]
-    public class UsersController(UserService userService) : ControllerBase
+    public class UsersController(IUserService userService) : ControllerBase
     {
         /// <summary>
         /// Gets all users.

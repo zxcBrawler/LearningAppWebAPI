@@ -7,6 +7,7 @@ namespace LearningAppWebAPI.Models;
 /// 
 /// </summary>
 [Table("blacklisted_access_token")]
+[Serializable]
 public class BlacklistedAccessToken
 {
     /// <summary>

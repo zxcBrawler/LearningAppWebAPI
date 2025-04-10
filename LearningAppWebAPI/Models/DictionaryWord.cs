@@ -6,6 +6,7 @@ namespace LearningAppWebAPI.Models;
 /// 
 /// </summary>
 [Table("dictionary_words")]
+[Serializable]
 public class DictionaryWord
 {
     

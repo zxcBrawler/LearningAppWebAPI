@@ -1,24 +1,21 @@
+using AutoMapper;
 using LearningAppWebAPI.Data;
 using LearningAppWebAPI.Domain.Repository;
+using LearningAppWebAPI.Domain.Service.Interface;
 using LearningAppWebAPI.Models;
 using LearningAppWebAPI.Models.DTO.Request;
 using LearningAppWebAPI.Models.DTO.Simple;
-using LearningAppWebAPI.Security;
 using LearningAppWebAPI.Utils;
 using LearningAppWebAPI.Utils.CustomAttributes;
 
-namespace LearningAppWebAPI.Domain.Service
+namespace LearningAppWebAPI.Domain.Service.Impl
 {
     /// <summary>
     /// The user service class
     /// </summary>
     [ScopedService]
-    public class UserService(UserRepository userRepository, RoleRepository roleRepository)
+    public class UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, IMapper mapper) : IUserService
     {
-        /// <summary>
-        /// The configure mapper
-        /// </summary>
-        private readonly AutoMapper.Mapper _mapper = MapperConfig.ConfigureMapper();
 
         /// <summary>
         /// Gets the all users
@@ -29,7 +26,7 @@ namespace LearningAppWebAPI.Domain.Service
             try
             {
                 var users = await userRepository.GetAllAsync();
-                var userDtoList = users.Select(_mapper.Map<UserSimpleDto>).ToList();
+                var userDtoList = users.Select(mapper.Map<UserSimpleDto>).ToList();
                 return DataState<List<UserSimpleDto>>.Success(userDtoList, StatusCodes.Status200OK);
             }
             catch (Exception ex)
@@ -48,7 +45,7 @@ namespace LearningAppWebAPI.Domain.Service
             try
             {
                 var user = await userRepository.GetByIdAsync(id);
-                return user == null ? DataState<UserSimpleDto>.Failure("User not found.", StatusCodes.Status404NotFound) : DataState<UserSimpleDto>.Success(_mapper.Map<UserSimpleDto>(user), StatusCodes.Status200OK);
+                return user == null ? DataState<UserSimpleDto>.Failure("User not found.", StatusCodes.Status404NotFound) : DataState<UserSimpleDto>.Success(mapper.Map<UserSimpleDto>(user), StatusCodes.Status200OK);
             }
             catch (Exception ex)
             {
@@ -85,7 +82,7 @@ namespace LearningAppWebAPI.Domain.Service
                 };
 
                 await userRepository.CreateAsync(user);
-                return DataState<UserSimpleDto>.Success(_mapper.Map<UserSimpleDto>(user), StatusCodes.Status201Created);
+                return DataState<UserSimpleDto>.Success(mapper.Map<UserSimpleDto>(user), StatusCodes.Status201Created);
             }
             catch (Exception ex)
             {

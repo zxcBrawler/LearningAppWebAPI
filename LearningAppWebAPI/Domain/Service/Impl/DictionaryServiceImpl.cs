@@ -1,22 +1,19 @@
-﻿using Google.Protobuf.WellKnownTypes;
+﻿using AutoMapper;
 using LearningAppWebAPI.Data;
 using LearningAppWebAPI.Domain.Repository;
+using LearningAppWebAPI.Domain.Service.Interface;
 using LearningAppWebAPI.Models;
 using LearningAppWebAPI.Models.DTO.Request;
 using LearningAppWebAPI.Models.DTO.Simple;
-using LearningAppWebAPI.Utils;
-using LearningAppWebAPI.Utils.CustomAttributes;
 
-namespace LearningAppWebAPI.Domain.Service;
+namespace LearningAppWebAPI.Domain.Service.Impl;
 
 /// <summary>
 /// 
 /// </summary>
 /// <param name="dictionaryRepository"></param>
-[ScopedService]
-public class DictionaryService(DictionaryRepository dictionaryRepository, WordRepository wordRepository)
+public class DictionaryServiceImpl(DictionaryRepository dictionaryRepository, WordRepository wordRepository, IMapper mapper) : IDictionaryService
 {
-    private readonly AutoMapper.Mapper _mapper = MapperConfig.ConfigureMapper();
     
     /// <summary>
     /// 
@@ -28,7 +25,7 @@ public class DictionaryService(DictionaryRepository dictionaryRepository, WordRe
         try
         {
             var dictionaries = await dictionaryRepository.GetAllByUserIdAsync(userId);
-            return DataState<List<DictionarySimpleDto>>.Success(dictionaries.Select(_mapper.Map<DictionarySimpleDto>).ToList(), StatusCodes.Status200OK);
+            return DataState<List<DictionarySimpleDto>>.Success(dictionaries.Select(mapper.Map<DictionarySimpleDto>).ToList(), StatusCodes.Status200OK);
         }
         catch (Exception ex)
         {
@@ -47,7 +44,7 @@ public class DictionaryService(DictionaryRepository dictionaryRepository, WordRe
         try
         {
             var userDictionary = await dictionaryRepository.GetByIdAndUserIdAsync(dictionaryId, userId);
-            return userDictionary == null ? DataState<DictionarySimpleDto>.Failure($"Dictionary with id = {dictionaryId} not found for user with id = {userId}", StatusCodes.Status404NotFound) : DataState<DictionarySimpleDto>.Success(_mapper.Map<DictionarySimpleDto>(userDictionary), StatusCodes.Status200OK);
+            return userDictionary == null ? DataState<DictionarySimpleDto>.Failure($"Dictionary with id = {dictionaryId} not found for user with id = {userId}", StatusCodes.Status404NotFound) : DataState<DictionarySimpleDto>.Success(mapper.Map<DictionarySimpleDto>(userDictionary), StatusCodes.Status200OK);
         }
         catch (Exception ex)
         {
@@ -74,7 +71,7 @@ public class DictionaryService(DictionaryRepository dictionaryRepository, WordRe
             };
 
             await dictionaryRepository.CreateAsync(dictionary);
-            return DataState<DictionarySimpleDto>.Success(_mapper.Map<DictionarySimpleDto>(dictionary), StatusCodes.Status201Created);
+            return DataState<DictionarySimpleDto>.Success(mapper.Map<DictionarySimpleDto>(dictionary), StatusCodes.Status201Created);
         }
         catch (Exception ex)
         {
@@ -163,7 +160,7 @@ public class DictionaryService(DictionaryRepository dictionaryRepository, WordRe
             dictionary.Words ??= [];
             dictionary.Words?.Add(word);
             await dictionaryRepository.UpdateAsync(dictionaryId ,dictionary);
-            return DataState<DictionarySimpleDto>.Success(_mapper.Map<DictionarySimpleDto>(dictionary), StatusCodes.Status201Created);
+            return DataState<DictionarySimpleDto>.Success(mapper.Map<DictionarySimpleDto>(dictionary), StatusCodes.Status201Created);
         }
         catch (Exception ex)
         {

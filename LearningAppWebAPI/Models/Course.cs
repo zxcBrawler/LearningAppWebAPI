@@ -8,6 +8,7 @@ namespace LearningAppWebAPI.Models
     /// The course class
     /// </summary>
     [Table("course")]
+    [Serializable]
     public class Course
     {
         /// <summary>
@@ -72,15 +73,15 @@ namespace LearningAppWebAPI.Models
         [Column("updated_at")]
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime UpdatedAt { get; init; } = DateTime.UtcNow;
-        
+
         /// <summary>
         /// Lessons of the course
         /// </summary>
-        public List<Lesson>? Lesson { get; init; }
-        
+        public List<Lesson> Lesson { get; set; } = [];
+
         /// <summary>
         /// Users that have enrolled to the course
         /// </summary>
-        public List<User>? Users { get; init; }
+        public List<User> Users { get; init; } = [];
     }
 }

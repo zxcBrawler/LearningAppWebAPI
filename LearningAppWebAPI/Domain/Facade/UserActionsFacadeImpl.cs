@@ -1,5 +1,7 @@
 ﻿using LearningAppWebAPI.Data;
 using LearningAppWebAPI.Domain.Service;
+using LearningAppWebAPI.Domain.Service.Impl;
+using LearningAppWebAPI.Domain.Service.Interface;
 using LearningAppWebAPI.Models.DTO.Complex;
 using LearningAppWebAPI.Models.DTO.Request;
 using LearningAppWebAPI.Models.DTO.Response;
@@ -14,7 +16,7 @@ namespace LearningAppWebAPI.Domain.Facade;
 /// <param name="userService"></param>
 /// <param name="userCourseService"></param>
 /// <param name="dictionaryService"></param>
-public class UserActionsFacadeImpl(UserService userService, UserCourseService userCourseService, DictionaryService dictionaryService, ITokenService tokenService) : IUserActionsFacade
+public class UserActionsFacadeImpl(IUserService userService, IUserCourseService userCourseService, IDictionaryService dictionaryService, ITokenService tokenService) : IUserActionsFacade
 {
     /// <summary>
     /// 

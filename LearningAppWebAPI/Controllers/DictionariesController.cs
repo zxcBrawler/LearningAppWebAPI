@@ -1,4 +1,6 @@
 using LearningAppWebAPI.Domain.Service;
+using LearningAppWebAPI.Domain.Service.Impl;
+using LearningAppWebAPI.Domain.Service.Interface;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LearningAppWebAPI.Controllers
@@ -10,7 +12,7 @@ namespace LearningAppWebAPI.Controllers
     [Route("api/[controller]/[action]")]
     [ApiExplorerSettings(GroupName = "admin")]
     [ApiController]
-    public class DictionariesController(DictionaryService dictionaryService) : ControllerBase
+    public class DictionariesController(IDictionaryService dictionaryService) : ControllerBase
     {
 
         /// <summary>

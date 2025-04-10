@@ -1,4 +1,6 @@
 using LearningAppWebAPI.Domain.Service;
+using LearningAppWebAPI.Domain.Service.Impl;
+using LearningAppWebAPI.Domain.Service.Interface;
 using LearningAppWebAPI.Models.DTO.Complex;
 using LearningAppWebAPI.Models.DTO.Simple;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +14,7 @@ namespace LearningAppWebAPI.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [ApiExplorerSettings(GroupName = "admin")]
-    public class UserCoursesController(UserCourseService userCourseService) : ControllerBase
+    public class UserCoursesController(IUserCourseService userCourseService) : ControllerBase
     {
         // GET: api/UserCourses
         /// <summary>

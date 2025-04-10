@@ -8,6 +8,7 @@ namespace LearningAppWebAPI.Models;
 /// 
 /// </summary>
 [Table("word")]
+[Serializable]
 public class Word
 {
     /// <summary>

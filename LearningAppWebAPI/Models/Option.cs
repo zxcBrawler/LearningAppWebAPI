@@ -10,6 +10,7 @@ namespace LearningAppWebAPI.Models
     /// The option class
     /// </summary>
     [Table("option")]
+    [Serializable]
     public class Option
     {
    

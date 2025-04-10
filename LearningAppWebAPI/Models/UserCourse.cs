@@ -10,6 +10,7 @@ namespace LearningAppWebAPI.Models
     /// The user course class
     /// </summary>
     [Table("user_course")]
+    [Serializable]
     public class UserCourse
     {
 

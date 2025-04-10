@@ -7,6 +7,7 @@ namespace LearningAppWebAPI.Models
     /// The exercise class
     /// </summary>
     [Table("exercise")]
+    [Serializable]
     public class Exercise
     {
         /// <summary>

@@ -1,4 +1,6 @@
 using LearningAppWebAPI.Domain.Service;
+using LearningAppWebAPI.Domain.Service.Impl;
+using LearningAppWebAPI.Domain.Service.Interface;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LearningAppWebAPI.Controllers
@@ -10,7 +12,7 @@ namespace LearningAppWebAPI.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [ApiExplorerSettings(GroupName = "admin")]
-    public class ExercisesController(ExerciseService exerciseService) : ControllerBase
+    public class ExercisesController(IExerciseService exerciseService) : ControllerBase
     {
         // GET: api/Exercises
         /* [HttpGet]

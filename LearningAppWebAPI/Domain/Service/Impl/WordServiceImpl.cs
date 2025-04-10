@@ -1,18 +1,18 @@
-﻿using LearningAppWebAPI.Data;
+﻿using AutoMapper;
+using LearningAppWebAPI.Data;
 using LearningAppWebAPI.Domain.Repository;
+using LearningAppWebAPI.Domain.Service.Interface;
 using LearningAppWebAPI.Models.DTO.Simple;
 using LearningAppWebAPI.Utils.CustomAttributes;
 
-namespace LearningAppWebAPI.Domain.Service;
+namespace LearningAppWebAPI.Domain.Service.Impl;
 
 /// <summary>
 /// 
 /// </summary>
 /// <param name="wordRepository"></param>
-[ScopedService]
-public class WordService(WordRepository wordRepository)
+public class WordServiceImpl(WordRepository wordRepository, IMapper mapper) : IWordService
 {
-    private readonly AutoMapper.Mapper _mapper = MapperConfig.ConfigureMapper();
     /// <summary>
     /// 
     /// </summary>
@@ -22,7 +22,7 @@ public class WordService(WordRepository wordRepository)
         try
         {
             var words = await wordRepository.GetAllAsync();
-            return DataState<List<WordSimpleDto>>.Success(words.Select(_mapper.Map<WordSimpleDto>).ToList(), StatusCodes.Status200OK);
+            return DataState<List<WordSimpleDto>>.Success(words.Select(mapper.Map<WordSimpleDto>).ToList(), StatusCodes.Status200OK);
         }
         catch (Exception ex)
         {
@@ -40,7 +40,7 @@ public class WordService(WordRepository wordRepository)
         try
         {
             var word = await wordRepository.GetByIdAsync(wordId);
-            return word == null ? DataState<WordSimpleDto>.Failure($"No word found with id: {wordId}", StatusCodes.Status404NotFound) : DataState<WordSimpleDto>.Success(_mapper.Map<WordSimpleDto>(word), StatusCodes.Status200OK);
+            return word == null ? DataState<WordSimpleDto>.Failure($"No word found with id: {wordId}", StatusCodes.Status404NotFound) : DataState<WordSimpleDto>.Success(mapper.Map<WordSimpleDto>(word), StatusCodes.Status200OK);
         }
         catch (Exception e)
         {
