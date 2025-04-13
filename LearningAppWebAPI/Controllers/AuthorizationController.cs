@@ -1,16 +1,9 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using FluentValidation;
-using LearningAppWebAPI.Data;
-using LearningAppWebAPI.Domain.Service;
-using LearningAppWebAPI.Domain.Service.Impl;
 using LearningAppWebAPI.Models.DTO.Request;
-using LearningAppWebAPI.Models.DTO.Response;
-using LearningAppWebAPI.Security;
 using LearningAppWebAPI.Utils.CustomAttributes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using IAuthorizationService = LearningAppWebAPI.Domain.Service.Interface.IAuthorizationService;
 
 namespace LearningAppWebAPI.Controllers

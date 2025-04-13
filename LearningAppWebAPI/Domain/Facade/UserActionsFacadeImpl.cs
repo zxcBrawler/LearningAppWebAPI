@@ -48,6 +48,11 @@ public class UserActionsFacadeImpl(IUserService userService, IUserCourseService 
         return await userCourseService.GetByAllByUserId(userId);
     }
 
+    public async Task<DataState<List<CourseComplexDto>>> GetOtherCourses(long userId)
+    {
+        return await userCourseService.GetOtherCourses(userId);
+    }
+
     /// <summary>
     /// 
     /// </summary>

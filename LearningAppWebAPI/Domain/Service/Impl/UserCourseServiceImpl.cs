@@ -3,6 +3,7 @@ using LearningAppWebAPI.Data;
 using LearningAppWebAPI.Domain.Repository;
 using LearningAppWebAPI.Domain.Service.Interface;
 using LearningAppWebAPI.Models;
+using LearningAppWebAPI.Models.DTO.Complex;
 using LearningAppWebAPI.Models.DTO.Simple;
 
 namespace LearningAppWebAPI.Domain.Service.Impl
@@ -75,6 +76,23 @@ namespace LearningAppWebAPI.Domain.Service.Impl
             catch (Exception e)
             {
                 return DataState<UserCourseSimpleDto>.Failure("You have already applied to this course", StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        public async Task<DataState<List<CourseComplexDto>>> GetOtherCourses(long userId)
+        {
+            try
+            {
+                var allCourses = await courseRepository.GetAllAsync();
+                var currentUserCourses = userCourseRepository.GetByAllByUserId(userId);
+                var availableCourses = allCourses
+                    .Where(course => currentUserCourses.Result.All(userCourse => userCourse.CourseId != course.Id))
+                    .ToList();
+                return DataState<List<CourseComplexDto>>.Success(mapper.Map<List<CourseComplexDto>>(availableCourses), StatusCodes.Status200OK);
+            }
+            catch (Exception e)
+            {
+                return DataState<List<CourseComplexDto>>.Failure("ISR", StatusCodes.Status500InternalServerError);
             }
         }
     }

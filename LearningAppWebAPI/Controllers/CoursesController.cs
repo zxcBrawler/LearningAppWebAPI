@@ -33,11 +33,10 @@ public class CoursesController(ICourseService courseService) : BasicController
     /// <param name="id">The id</param>
     /// <returns>A task containing an action result of course complex dto</returns>
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<CourseComplexDto>> GetCourse(int id)
+    public async Task<IActionResult> GetCourse(long id)
     {
         var course = await courseService.GetCourseById(id);
-        if (course == null) return NotFound();
-        return Ok(course);
+        return StatusCode(course.StatusCode, course.IsSuccess ? course.Value : course.ErrorMessage);
     }
 
     /// <summary>

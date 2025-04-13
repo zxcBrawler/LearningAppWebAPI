@@ -33,6 +33,7 @@ public interface IUserActionsFacade
     /// <param name="userId"></param>
     /// <returns></returns>
     Task<DataState<List<UserCourseSimpleDto>>> GetUserCourses(long userId);
+    Task<DataState<List<CourseComplexDto>>> GetOtherCourses(long userId);
     /// <summary>
     /// 
     /// </summary>

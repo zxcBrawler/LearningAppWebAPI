@@ -1,4 +1,5 @@
 using AutoMapper;
+using LearningAppWebAPI.Data;
 using LearningAppWebAPI.Domain.Repository;
 using LearningAppWebAPI.Domain.Service.Interface;
 using LearningAppWebAPI.Models;
@@ -32,10 +33,18 @@ namespace LearningAppWebAPI.Domain.Service.Impl
         /// </summary>
         /// <param name="id">The id</param>
         /// <returns>A task containing the course complex dto</returns>
-        public async Task<CourseComplexDto?> GetCourseById(int id)
+        public async Task<DataState<CourseComplexDto>> GetCourseById(long id)
         {
-            var course = await courseRepository.GetByIdAsync(id);
-            return course == null ? null : mapper.Map<CourseComplexDto>(course);
+            try
+            {
+                var course = await courseRepository.GetByIdAsync(id);
+                return course == null ? DataState<CourseComplexDto>.Failure($"Course with id {id} not found", StatusCodes.Status404NotFound) : DataState<CourseComplexDto>.Success(mapper.Map<CourseComplexDto>(course), StatusCodes.Status200OK);
+            }
+            catch (Exception e)
+            {
+                return DataState<CourseComplexDto>.Failure(e.Message, StatusCodes.Status500InternalServerError);
+            }
+            
         }
 
 
@@ -45,7 +54,7 @@ namespace LearningAppWebAPI.Domain.Service.Impl
         /// <param name="id">The id</param>
         /// <param name="addCourseRequestDto">The add course request dto</param>
         /// <returns>A task containing the bool</returns>
-        public async Task<bool> UpdateCourse(int id, AddCourseRequestDto addCourseRequestDto)
+        public async Task<bool> UpdateCourse(long id, AddCourseRequestDto addCourseRequestDto)
         {
 
 
@@ -96,7 +105,7 @@ namespace LearningAppWebAPI.Domain.Service.Impl
         /// </summary>
         /// <param name="id">The id</param>
         /// <returns>A task containing the bool</returns>
-        public async Task<bool> DeleteCourse(int id)
+        public async Task<bool> DeleteCourse(long id)
         {
             return await courseRepository.DeleteAsync(id);
         }

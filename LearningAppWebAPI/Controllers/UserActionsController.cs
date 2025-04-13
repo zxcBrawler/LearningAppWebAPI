@@ -45,6 +45,16 @@ namespace LearningAppWebAPI.Controllers
             var courses = await userActionsFacade.GetUserCourses(UserId);
             return StatusCode(courses.StatusCode, courses.IsSuccess ? courses.Value : courses.ErrorMessage);
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> GetOtherCourses()
+        {
+            var courses = await userActionsFacade.GetOtherCourses(UserId);
+            return StatusCode(courses.StatusCode, courses.IsSuccess ? courses.Value : courses.ErrorMessage);
+        }
         
         /// <summary>
         /// Retrieves all dictionaries belonging to the current authenticated user

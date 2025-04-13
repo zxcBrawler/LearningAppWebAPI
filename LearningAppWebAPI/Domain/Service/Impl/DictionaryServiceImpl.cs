@@ -117,7 +117,7 @@ public class DictionaryServiceImpl(DictionaryRepository dictionaryRepository, Wo
         try
         {
             var deleteResult = await dictionaryRepository.DeleteAsync(id);
-            return !deleteResult ? DataState<bool>.Failure("Dictionary deletion failed.", StatusCodes.Status400BadRequest) : DataState<bool>.Success(true, StatusCodes.Status204NoContent);
+            return !deleteResult ? DataState<bool>.Failure("Dictionary deletion failed.", StatusCodes.Status400BadRequest) : DataState<bool>.Success(true, StatusCodes.Status200OK);
         }
         catch (Exception ex)
         {
