@@ -28,5 +28,10 @@ namespace LearningAppWebAPI.Models.DTO.Simple
         /// 
         /// </summary>
         [JsonPropertyName("course_progress")] public float CourseProgress { get; set; } 
+        /// <summary>
+        /// 
+        /// </summary>
+        [JsonPropertyName("total_lessons")]
+        public int TotalLessons { get; set; }
     }
 }

@@ -43,7 +43,11 @@ namespace LearningAppWebAPI.Models
         [DefaultValue(0)]
         public float CourseProgress { get; init; }
         
-
+        /// <summary>
+        /// 
+        /// </summary>
+        [Column("total_lessons")]
+        public int TotalLessons { get; set; }
         /// <summary>
         /// 
         /// </summary>

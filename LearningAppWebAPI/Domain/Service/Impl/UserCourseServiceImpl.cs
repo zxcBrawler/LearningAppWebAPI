@@ -61,13 +61,22 @@ namespace LearningAppWebAPI.Domain.Service.Impl
             try
             {
                 var currentUser = await userRepository.GetByIdAsync(userId);
+                if (currentUser == null)
+                {
+                    return DataState<UserCourseSimpleDto>.Failure($"User {userId} does not exist", StatusCodes.Status404NotFound);
+                }
                 var currentCourse = await courseRepository.GetByIdAsync(courseId);
+                if (currentCourse == null)
+                {
+                    return DataState<UserCourseSimpleDto>.Failure($"Course {courseId} not found", StatusCodes.Status404NotFound);
+                }
                 var newUserCourse = new UserCourse
                 {
                     UserId = userId,
                     CourseId = courseId,
                     User = currentUser,
-                    Course = currentCourse
+                    Course = currentCourse,
+                    TotalLessons = currentCourse.Lesson.Count
                     
                 };
                 var result = await userCourseRepository.CreateAsync(newUserCourse);
@@ -79,6 +88,11 @@ namespace LearningAppWebAPI.Domain.Service.Impl
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public async Task<DataState<List<CourseComplexDto>>> GetOtherCourses(long userId)
         {
             try

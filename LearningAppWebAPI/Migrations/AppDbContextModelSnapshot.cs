@@ -531,6 +531,10 @@ namespace LearningAppWebAPI.Migrations
                         .HasColumnType("tinyint(1)")
                         .HasColumnName("is_finished");
 
+                    b.Property<int>("TotalLessons")
+                        .HasColumnType("int")
+                        .HasColumnName("total_lessons");
+
                     b.HasKey("UserId", "CourseId");
 
                     b.HasIndex("CourseId");
