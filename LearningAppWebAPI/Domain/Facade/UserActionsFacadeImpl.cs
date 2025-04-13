@@ -48,6 +48,22 @@ public class UserActionsFacadeImpl(IUserService userService, IUserCourseService 
         return await userCourseService.GetByAllByUserId(userId);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="courseId"></param>
+    /// <returns></returns>
+    public async Task<DataState<UserCourseSimpleDto>> GetUserCourse(long userId, long courseId)
+    {
+        return await userCourseService.GetByCourseIdAndUserId(userId, courseId);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <returns></returns>
     public async Task<DataState<List<CourseComplexDto>>> GetOtherCourses(long userId)
     {
         return await userCourseService.GetOtherCourses(userId);
@@ -130,6 +146,11 @@ public class UserActionsFacadeImpl(IUserService userService, IUserCourseService 
     public async Task<DataState<UserCourseSimpleDto>> StartNewCourse(long userId, long courseId)
     {
         return await userCourseService.StartNewCourse(userId, courseId);
+    }
+
+    public async Task<DataState<UserCourseSimpleDto>> CompleteLesson(long userId, long courseId)
+    {
+        return await userCourseService.CompleteLesson(userId, courseId);
     }
 
     /// <summary>

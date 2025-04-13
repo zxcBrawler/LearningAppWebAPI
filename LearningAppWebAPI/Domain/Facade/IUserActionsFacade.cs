@@ -33,6 +33,12 @@ public interface IUserActionsFacade
     /// <param name="userId"></param>
     /// <returns></returns>
     Task<DataState<List<UserCourseSimpleDto>>> GetUserCourses(long userId);
+    Task<DataState<UserCourseSimpleDto>> GetUserCourse(long userId, long courseId);
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <returns></returns>
     Task<DataState<List<CourseComplexDto>>> GetOtherCourses(long userId);
     /// <summary>
     /// 
@@ -89,6 +95,13 @@ public interface IUserActionsFacade
     /// <param name="courseId"></param>
     /// <returns></returns>
     Task<DataState<UserCourseSimpleDto>> StartNewCourse(long userId, long courseId);
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="courseId"></param>
+    /// <returns></returns>
+    Task<DataState<UserCourseSimpleDto>> CompleteLesson(long userId, long courseId);
     
     /// <summary>
     /// 

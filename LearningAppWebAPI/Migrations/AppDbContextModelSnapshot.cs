@@ -527,6 +527,10 @@ namespace LearningAppWebAPI.Migrations
                         .HasColumnType("float")
                         .HasColumnName("course_progress");
 
+                    b.Property<int>("CurrentLesson")
+                        .HasColumnType("int")
+                        .HasColumnName("current_lesson");
+
                     b.Property<bool>("IsFinished")
                         .HasColumnType("tinyint(1)")
                         .HasColumnName("is_finished");

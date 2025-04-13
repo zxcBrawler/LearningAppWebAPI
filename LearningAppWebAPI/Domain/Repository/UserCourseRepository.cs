@@ -1,3 +1,4 @@
+using Alachisoft.NCache.Common.Threading;
 using LearningAppWebAPI.Data;
 using LearningAppWebAPI.Models;
 using LearningAppWebAPI.Utils;
@@ -78,6 +79,17 @@ namespace LearningAppWebAPI.Domain.Repository
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="courseId"></param>
+        /// <returns></returns>
+        public async Task<UserCourse?> GetByUserIdAndCourseId(long userId, long courseId)
+        {
+            return await Context.UserCourse.Where(u => u.User!.Id == userId && u.Course!.Id == courseId).FirstOrDefaultAsync();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="id"></param>
         /// <param name="entity"></param>
         /// <returns></returns>
@@ -85,6 +97,44 @@ namespace LearningAppWebAPI.Domain.Repository
         public override Task<bool> UpdateAsync(int id, UserCourse entity)
         {
             throw new NotImplementedException();
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="courseId"></param>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public async Task<bool> UpdateCourseAsync(long userId, long courseId, UserCourse entity)
+        {
+            if (userId != entity.UserId || courseId != entity.CourseId)
+            {
+                return false;
+            }
+            try
+            {
+                var existing = await Context.UserCourse
+                    .AsTracking()
+                    .FirstOrDefaultAsync(c => c.UserId == userId && c.CourseId == courseId);
+
+                if (existing == null)
+                {
+                    return false;
+                }
+                Context.Entry(existing).CurrentValues.SetValues(entity);
+                
+                var affectedRows = await Context.SaveChangesAsync();
+                return affectedRows > 0;
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                var stillExists = await Context.UserCourse
+                    .AsNoTracking()
+                    .AnyAsync(c => c.UserId == userId && c.CourseId == courseId);
+            
+                return !stillExists;
+            }
         }
     }
 }

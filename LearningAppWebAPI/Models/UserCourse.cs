@@ -10,7 +10,6 @@ namespace LearningAppWebAPI.Models
     /// The user course class
     /// </summary>
     [Table("user_course")]
-    [Serializable]
     public class UserCourse
     {
 
@@ -33,7 +32,7 @@ namespace LearningAppWebAPI.Models
         /// </summary>
         [Column("is_finished")]
         [DefaultValue(false)]
-        public bool IsFinished { get; init; }
+        public bool IsFinished { get; set; }
 
 
         /// <summary>
@@ -41,13 +40,20 @@ namespace LearningAppWebAPI.Models
         /// </summary>
         [Column("course_progress")]
         [DefaultValue(0)]
-        public float CourseProgress { get; init; }
+        public float CourseProgress { get; set; }
         
         /// <summary>
         /// 
         /// </summary>
         [Column("total_lessons")]
         public int TotalLessons { get; set; }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        [Column("current_lesson")]
+        [DefaultValue(1)]
+        public int CurrentLesson { get; set; }
         /// <summary>
         /// 
         /// </summary>

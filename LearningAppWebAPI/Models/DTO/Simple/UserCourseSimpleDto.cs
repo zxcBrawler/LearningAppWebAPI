@@ -8,9 +8,17 @@ namespace LearningAppWebAPI.Models.DTO.Simple
     /// </summary>
     public class UserCourseSimpleDto
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        [JsonPropertyName("user_id")]
+        public long UserId { get; init; }
         
-
-
+        /// <summary>
+        /// 
+        /// </summary>
+        [JsonPropertyName("course_id")]
+        public long CourseId { get; init; }
         
         /// <summary>
         /// 
@@ -33,5 +41,11 @@ namespace LearningAppWebAPI.Models.DTO.Simple
         /// </summary>
         [JsonPropertyName("total_lessons")]
         public int TotalLessons { get; set; }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        [JsonPropertyName("current_lesson")]
+        public int CurrentLesson { get; set; }
     }
 }

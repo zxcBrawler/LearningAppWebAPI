@@ -48,6 +48,17 @@ namespace LearningAppWebAPI.Controllers
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="courseId"></param>
+        /// <returns></returns>
+        [HttpGet("{courseId:long}")]
+        public async Task<IActionResult> GetUserCourse(long courseId)
+        {
+            var courses = await userActionsFacade.GetUserCourse(UserId, courseId);
+            return StatusCode(courses.StatusCode, courses.IsSuccess ? courses.Value : courses.ErrorMessage);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
         /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> GetOtherCourses()
@@ -161,6 +172,18 @@ namespace LearningAppWebAPI.Controllers
         public async Task<IActionResult> StartCourse(long courseId)
         {
             var response = await userActionsFacade.StartNewCourse(UserId, courseId);
+            return StatusCode(response.StatusCode, response.IsSuccess ? response.Value : response.ErrorMessage);
+        
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="courseId"></param>
+        /// <returns></returns>
+        [HttpPost("{courseId:int}")]
+        public async Task<IActionResult> CompleteLesson(long courseId)
+        {
+            var response = await userActionsFacade.CompleteLesson(UserId, courseId);
             return StatusCode(response.StatusCode, response.IsSuccess ? response.Value : response.ErrorMessage);
         
         }
