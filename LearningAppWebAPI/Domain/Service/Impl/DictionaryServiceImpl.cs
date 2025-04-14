@@ -106,16 +106,22 @@ public class DictionaryServiceImpl(DictionaryRepository dictionaryRepository, Wo
             return DataState<bool>.Failure($"Error updating dictionary: {ex.Message}", StatusCodes.Status500InternalServerError);
         }
     }
-    
+
     /// <summary>
     /// 
     /// </summary>
+    /// <param name="userId"></param>
     /// <param name="id"></param>
     /// <returns></returns>
-    public async Task<DataState<bool>> DeleteDictionaryAsync(int id)
+    public async Task<DataState<bool>> DeleteDictionaryAsync(long userId, int id)
     {
         try
         {
+            var userDictionary = await dictionaryRepository.GetByIdAndUserIdAsync(id, userId);
+            if (userDictionary == null)
+            {
+                return DataState<bool>.Failure($"Dictionary with id {id} does not belong to user with id = {userId}", StatusCodes.Status404NotFound);
+            }
             var deleteResult = await dictionaryRepository.DeleteAsync(id);
             return !deleteResult ? DataState<bool>.Failure("Dictionary deletion failed.", StatusCodes.Status400BadRequest) : DataState<bool>.Success(true, StatusCodes.Status200OK);
         }

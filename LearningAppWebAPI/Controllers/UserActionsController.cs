@@ -258,7 +258,7 @@ namespace LearningAppWebAPI.Controllers
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteDictionary(int id)
         {
-            var result = await userActionsFacade.DeleteDictionary(id);
+            var result = await userActionsFacade.DeleteDictionary(UserId, id);
             return StatusCode(result.StatusCode, result.IsSuccess ? result.Value : result.ErrorMessage);
         }
     }

@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearningAppWebAPI", "LearningAppWebAPI\LearningAppWebAPI.csproj", "{2257D01A-AD8A-4797-ACFE-1F6E7777F078}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearningAppWebAPI", "LearningAppWebAPI\LearningAppWebAPI.csproj", "{BA25B596-F053-4265-8C9C-70AD35098158}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -8,9 +8,9 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{2257D01A-AD8A-4797-ACFE-1F6E7777F078}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2257D01A-AD8A-4797-ACFE-1F6E7777F078}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2257D01A-AD8A-4797-ACFE-1F6E7777F078}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2257D01A-AD8A-4797-ACFE-1F6E7777F078}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA25B596-F053-4265-8C9C-70AD35098158}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA25B596-F053-4265-8C9C-70AD35098158}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA25B596-F053-4265-8C9C-70AD35098158}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA25B596-F053-4265-8C9C-70AD35098158}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

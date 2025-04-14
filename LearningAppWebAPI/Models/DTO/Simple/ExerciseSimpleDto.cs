@@ -12,7 +12,7 @@ public class ExerciseSimpleDto
     /// <summary>
     /// Gets or sets the value of the id
     /// </summary>
-    public int Id { get; init; }
+    [JsonPropertyName("id_exercise")] public int Id { get; init; }
     /// <summary>
     /// 
     /// </summary>

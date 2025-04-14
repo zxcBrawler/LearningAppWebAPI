@@ -70,7 +70,7 @@ public interface IUserActionsFacade
     /// </summary>
     /// <param name="dictionaryId"></param>
     /// <returns></returns>
-    Task<DataState<bool>> DeleteDictionary(int dictionaryId);
+    Task<DataState<bool>> DeleteDictionary(long userId, int dictionaryId);
     
     /// <summary>
     /// 

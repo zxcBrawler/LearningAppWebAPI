@@ -106,11 +106,12 @@ public class UserActionsFacadeImpl(IUserService userService, IUserCourseService 
     /// <summary>
     /// 
     /// </summary>
+    /// <param name="userId"></param>
     /// <param name="dictionaryId"></param>
     /// <returns></returns>
-    public async Task<DataState<bool>> DeleteDictionary(int dictionaryId)
+    public async Task<DataState<bool>> DeleteDictionary(long userId, int dictionaryId)
     {
-        return await dictionaryService.DeleteDictionaryAsync(dictionaryId);
+        return await dictionaryService.DeleteDictionaryAsync(userId, dictionaryId);
     }
 
     /// <summary>
