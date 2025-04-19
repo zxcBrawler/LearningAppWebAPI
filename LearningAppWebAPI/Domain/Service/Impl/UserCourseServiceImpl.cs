@@ -5,6 +5,7 @@ using LearningAppWebAPI.Domain.Service.Interface;
 using LearningAppWebAPI.Models;
 using LearningAppWebAPI.Models.DTO.Complex;
 using LearningAppWebAPI.Models.DTO.Simple;
+using LearningAppWebAPI.Utils;
 
 namespace LearningAppWebAPI.Domain.Service.Impl
 {
@@ -113,8 +114,9 @@ namespace LearningAppWebAPI.Domain.Service.Impl
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="courseId"></param>
+        /// <param name="userLifeCount"></param>
         /// <returns></returns>
-        public async Task<DataState<UserCourseSimpleDto>> CompleteLesson(long userId, long courseId)
+        public async Task<DataState<UserCourseSimpleDto>> CompleteLesson(long userId, long courseId, int userLifeCount)
         {
             try
             {
@@ -130,7 +132,7 @@ namespace LearningAppWebAPI.Domain.Service.Impl
                     return DataState<UserCourseSimpleDto>.Failure($"Course {courseId} not found", StatusCodes.Status404NotFound);
                 }
 
-                await UpdateUserXp(userId, course.Lesson[currentUserCourse.CurrentLesson - 1].Id);
+                await UpdateUserXp(userId, course.Lesson[currentUserCourse.CurrentLesson - 1].Id, userLifeCount);
                 if (currentUserCourse.CurrentLesson < currentUserCourse.TotalLessons)
                 {
                     currentUserCourse.CurrentLesson += 1;
@@ -170,11 +172,11 @@ namespace LearningAppWebAPI.Domain.Service.Impl
             }
             catch (Exception e)
             {
-                return DataState<List<CourseComplexDto>>.Failure("ISR", StatusCodes.Status500InternalServerError);
+                return DataState<List<CourseComplexDto>>.Failure(e.Message, StatusCodes.Status500InternalServerError);
             }
         }
 
-        private async Task UpdateUserXp(long userId, int lessonId)
+        private async Task UpdateUserXp(long userId, int lessonId, int userLifeCount)
         {
             var currentUser = await userRepository.GetByIdAsync(userId);
             var currentLesson = await lessonRepository.GetByIdAsync(lessonId);
@@ -182,8 +184,14 @@ namespace LearningAppWebAPI.Domain.Service.Impl
             {
                 return;
             }
-            var totalLessonXp = currentLesson.Exercises.Sum(exercise => exercise.XpReward);
-            currentUser.CurrentXp += totalLessonXp;
+           
+            var lessonXp = currentLesson.Exercises.Sum(exercise => exercise.XpReward);
+            
+            currentUser.CurrentXp += XpCalculator.CalculateXp(lessonXp, userLifeCount);
+            if (currentUser.CurrentXp >= currentUser.Level * 4000)
+            {
+                currentUser.Level++;
+            }
             await userRepository.UpdateAsync(userId, currentUser);
         }
     }

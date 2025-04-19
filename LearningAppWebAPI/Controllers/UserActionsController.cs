@@ -175,15 +175,17 @@ namespace LearningAppWebAPI.Controllers
             return StatusCode(response.StatusCode, response.IsSuccess ? response.Value : response.ErrorMessage);
         
         }
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="courseId"></param>
+        /// <param name="userLifeCount"></param>
         /// <returns></returns>
         [HttpPost("{courseId:int}")]
-        public async Task<IActionResult> CompleteLesson(long courseId)
+        public async Task<IActionResult> CompleteLesson(long courseId, int userLifeCount)
         {
-            var response = await userActionsFacade.CompleteLesson(UserId, courseId);
+            var response = await userActionsFacade.CompleteLesson(UserId, courseId, userLifeCount );
             return StatusCode(response.StatusCode, response.IsSuccess ? response.Value : response.ErrorMessage);
         
         }

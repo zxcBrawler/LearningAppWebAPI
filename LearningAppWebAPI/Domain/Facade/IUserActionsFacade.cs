@@ -101,7 +101,7 @@ public interface IUserActionsFacade
     /// <param name="userId"></param>
     /// <param name="courseId"></param>
     /// <returns></returns>
-    Task<DataState<UserCourseSimpleDto>> CompleteLesson(long userId, long courseId);
+    Task<DataState<UserCourseSimpleDto>> CompleteLesson(long userId, long courseId, int userLifeCount);
     
     /// <summary>
     /// 

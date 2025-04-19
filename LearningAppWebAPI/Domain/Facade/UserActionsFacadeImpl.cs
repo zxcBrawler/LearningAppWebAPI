@@ -149,9 +149,9 @@ public class UserActionsFacadeImpl(IUserService userService, IUserCourseService 
         return await userCourseService.StartNewCourse(userId, courseId);
     }
 
-    public async Task<DataState<UserCourseSimpleDto>> CompleteLesson(long userId, long courseId)
+    public async Task<DataState<UserCourseSimpleDto>> CompleteLesson(long userId, long courseId, int userLifeCount)
     {
-        return await userCourseService.CompleteLesson(userId, courseId);
+        return await userCourseService.CompleteLesson(userId, courseId, userLifeCount);
     }
 
     /// <summary>
