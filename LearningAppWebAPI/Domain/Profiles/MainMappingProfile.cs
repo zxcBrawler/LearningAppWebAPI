@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using LearningAppWebAPI.Models;
 using LearningAppWebAPI.Models.DTO.Complex;
+using LearningAppWebAPI.Models.DTO.Response;
 using LearningAppWebAPI.Models.DTO.Simple;
+using MerriamWebster.NET.Results;
 
 namespace LearningAppWebAPI.Domain.Profiles;
 
