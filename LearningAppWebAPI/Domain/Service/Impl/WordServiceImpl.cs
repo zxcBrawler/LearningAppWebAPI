@@ -1,7 +1,10 @@
-﻿using AutoMapper;
+﻿using System.Text;
+using AutoMapper;
 using LearningAppWebAPI.Data;
 using LearningAppWebAPI.Domain.Repository;
 using LearningAppWebAPI.Domain.Service.Interface;
+using LearningAppWebAPI.Models;
+using LearningAppWebAPI.Models.DTO.Response;
 using LearningAppWebAPI.Models.DTO.Simple;
 using LearningAppWebAPI.Utils.CustomAttributes;
 
@@ -11,7 +14,7 @@ namespace LearningAppWebAPI.Domain.Service.Impl;
 /// 
 /// </summary>
 /// <param name="wordRepository"></param>
-public class WordServiceImpl(WordRepository wordRepository, IMapper mapper) : IWordService
+public class WordServiceImpl(WordRepository wordRepository, IMapper mapper, DictionaryRepository dictionaryRepository) : IWordService
 {
     /// <summary>
     /// 
@@ -46,5 +49,73 @@ public class WordServiceImpl(WordRepository wordRepository, IMapper mapper) : IW
         {
             return DataState<WordSimpleDto>.Failure($"Error getting word: {e.Message}", StatusCodes.Status500InternalServerError);
         }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="word"></param>
+    /// <param name="dictionaryId"></param>
+    /// <returns></returns>
+    public async Task<DataState<WordSimpleDto>> AddWord(MerriamWebsterResponseDto word, int dictionaryId, long userId)
+    {
+        try
+        {
+            var existedWord = await wordRepository.GetByValueAndPartOfSpeech(word.Headword, word.PartOfSpeech);
+            if (existedWord != null)
+            {
+            }
+            else
+            {
+                var newWord = new Word
+                {
+                    WordValue = word.Headword,
+                    WordDefinition = word.ShortDefinitions.Aggregate((current, next) => $"{current}; {next}"),
+                    LanguageLevel = GenerateRandomLanguageLevel(),
+                    PartOfSpeech = word.PartOfSpeech,
+                    
+                };
+                if (word.Pronunciation != null)
+                {
+                    newWord.WordPronunciation = word.Pronunciation.Pronunciation;
+                    newWord.WordPronunciationAudio = word.Pronunciation.AudioLink.ToString();
+                }
+                
+                existedWord = await wordRepository.CreateAsync(newWord);
+            }
+           
+            
+            var dictionary = await dictionaryRepository.GetByIdAndUserIdAsync(dictionaryId, userId);
+            if (dictionary == null)
+            {
+                return DataState<WordSimpleDto>.Failure(
+                    $"Dictionary with id = {dictionaryId} not found for user with id = {userId}",
+                    StatusCodes.Status404NotFound);
+            }
+            
+            if (dictionary.Words?.Any(w => w.Id == existedWord.Id) ?? false)
+            {
+                return DataState<WordSimpleDto>.Failure(
+                    $"Word with id = {existedWord.Id} already exists in dictionary with id = {dictionaryId}",
+                    StatusCodes.Status400BadRequest);
+            }
+            dictionary.Words ??= [];
+            dictionary.Words?.Add(existedWord);
+            await dictionaryRepository.UpdateAsync(dictionaryId ,dictionary);
+            return DataState<WordSimpleDto>.Success(mapper.Map<WordSimpleDto>(existedWord), StatusCodes.Status201Created);
+
+        }
+        catch (Exception e)
+        {
+            return DataState<WordSimpleDto>.Failure($"Error adding word: {e.Message}", StatusCodes.Status500InternalServerError);
+        }
+    }
+
+    private static string GenerateRandomLanguageLevel()
+    {
+        var languageLevels = new[] { "A1", "A2", "B1", "B2", "C1" };
+        var random = new Random();
+        var index = random.Next(languageLevels.Length);
+        return languageLevels[index];
     }
 }

@@ -231,7 +231,7 @@ namespace LearningAppWebAPI.Controllers
             return StatusCode(response.StatusCode, response.IsSuccess ? response.Value : response.ErrorMessage);
         }
         
-        /// <summary>
+        /*/// <summary>
         /// Adds a word to a user's dictionary
         /// </summary>
         /// <param name="dictionaryId">ID of the target dictionary</param>
@@ -246,7 +246,8 @@ namespace LearningAppWebAPI.Controllers
         {
             var response = await userActionsFacade.AddWordToDictionary(UserId, dictionaryId, wordId);
             return StatusCode(response.StatusCode, response.IsSuccess ? response.Value : response.ErrorMessage);
-        }
+        }*/
+        
         
         /// <summary>
         /// Deletes a dictionary for the current authenticated user

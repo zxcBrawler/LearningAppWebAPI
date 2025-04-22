@@ -37,9 +37,11 @@ public class WordRepository(AppDbContext context) : AbstractBaseRepository<Word,
     /// <param name="entity"></param>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
-    public override Task<Word> CreateAsync(Word entity)
+    public override async Task<Word> CreateAsync(Word entity)
     {
-        throw new NotImplementedException();
+        await Context.Word.AddAsync(entity);
+        await Context.SaveChangesAsync();
+        return entity;
     }
 
     /// <summary>
@@ -63,5 +65,16 @@ public class WordRepository(AppDbContext context) : AbstractBaseRepository<Word,
     public override Task<bool> DeleteAsync(int id)
     {
         throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
+    /// <param name="partOfSpeech"></param>
+    /// <returns></returns>
+    public async Task<Word?> GetByValueAndPartOfSpeech(string value, string partOfSpeech)
+    {
+        return await Context.Word.Where(v => v.WordValue == value && v.PartOfSpeech == partOfSpeech).FirstOrDefaultAsync();
     }
 }

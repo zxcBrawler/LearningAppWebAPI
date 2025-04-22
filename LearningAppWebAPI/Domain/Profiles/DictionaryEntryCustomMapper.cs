@@ -21,7 +21,7 @@ public static class DictionaryEntryCustomMapper
             PartOfSpeech = resultModel.FunctionalLabel,
             Pronunciation = resultModel.Headword.Pronunciations != null ? resultModel.Headword.Pronunciations.Select(p => new PronunciationResponseDto()
             {
-                AudioLink = p.AudioLink ?? new Uri(""),
+                AudioLink = p.AudioLink ?? new Uri("https://google.com"),
                 Pronunciation = p.WrittenPronunciation,
             }).FirstOrDefault() : new PronunciationResponseDto(),
             ShortDefinitions = resultModel.ShortDefs.ToList()

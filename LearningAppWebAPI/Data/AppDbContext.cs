@@ -16,12 +16,6 @@ namespace LearningAppWebAPI.Data
     /// <seealso cref="DbContext"/>
     public class AppDbContext(DbContextOptions<AppDbContext> options, IMemoryCache memoryCache) : DbContext(options)
     {
-
-        private static readonly ValueComparer<List<PartOfSpeechEnum>> PartOfSpeechComparer = 
-            new ValueComparer<List<PartOfSpeechEnum>>(
-                (c1, c2) => c1.SequenceEqual(c2),
-                c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
-                c => c.ToList());
         /// <summary>
         /// Gets or sets the value of the user
         /// </summary>
@@ -217,16 +211,7 @@ namespace LearningAppWebAPI.Data
             modelBuilder.Entity<Role>()
                 .Property(e => e.RoleName)
                 .HasConversion<int>();
-            modelBuilder.Entity<Word>(entity =>
-            {
-                entity.Property(e => e.PartOfSpeech)
-                    .HasConversion(
-                        v => string.Join(',', v.Select(e => e.ToString())),
-                        v => v.Split(',', StringSplitOptions.RemoveEmptyEntries)
-                            .Select(Enum.Parse<PartOfSpeechEnum>)
-                            .ToList())
-                    .Metadata.SetValueComparer(PartOfSpeechComparer);
-            });
+   
             
             modelBuilder.Entity<Role>().HasData(
                 Enum.GetValues<TypeRoleEnum>()
@@ -236,70 +221,6 @@ namespace LearningAppWebAPI.Data
                         RoleName = e,
                     })
             );
-            
-            
-            //TEST DATA
-            modelBuilder.Entity<Word>().HasData(
-                new Word
-                {
-                    Id = 1,
-                    WordValue = "perseverance",
-                    WordDefinition = "steadfastness in doing something despite difficulty",
-                    WordPronunciation = "pər-sə-ˈvir-ən(t)s",
-                    UsageExamples = "Her perseverance in the face of adversity was inspiring.",
-                    PartOfSpeech = [PartOfSpeechEnum.Noun],
-                    LanguageLevel = "C1"
-                },
-                new Word
-                {
-                    Id = 2,
-                    WordValue = "ephemeral",
-                    WordDefinition = "lasting for a very short time",
-                    WordPronunciation = "i-ˈfem-rəl",
-                    UsageExamples = "The ephemeral nature of cherry blossoms makes them special.",
-                    PartOfSpeech = [PartOfSpeechEnum.Adjective],
-                    LanguageLevel = "B2"
-                },
-                new Word
-                {
-                    Id = 3,
-                    WordValue = "run",
-                    WordDefinition = "move at a speed faster than walking",
-                    WordPronunciation = "rən",
-                    UsageExamples = "I run every morning.|The program runs smoothly.|He runs a successful business.",
-                    PartOfSpeech =
-                    [
-                        PartOfSpeechEnum.Verb,
-                        PartOfSpeechEnum.Noun
-                    ],
-                    LanguageLevel = "A1"
-                },
-                new Word
-                {
-                    Id = 4,
-                    WordValue = "fast",
-                    WordDefinition = "moving or capable of moving at high speed",
-                    WordPronunciation = "fäst",
-                    UsageExamples = "She's a fast runner.|The clock is running fast.|He fasted for three days.",
-                    PartOfSpeech =
-                    [
-                        PartOfSpeechEnum.Adjective,
-                        PartOfSpeechEnum.Adverb,
-                        PartOfSpeechEnum.Verb
-                    ],
-                    LanguageLevel = "A2"
-                },
-                new Word
-                {
-                    Id = 5,
-                    WordValue = "serendipity",
-                    WordDefinition = "the occurrence of events by chance in a happy way",
-                    WordPronunciation = "ser-ən-ˈdi-pə-tē",
-                    UsageExamples = "Their meeting was pure serendipity.",
-                    PartOfSpeech = [PartOfSpeechEnum.Noun],
-                    LanguageLevel = "C2"
-                }
-        );
         }
     }
 }

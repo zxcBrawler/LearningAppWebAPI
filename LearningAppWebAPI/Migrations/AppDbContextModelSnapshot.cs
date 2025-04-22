@@ -566,12 +566,6 @@ namespace LearningAppWebAPI.Migrations
                         .HasColumnType("longtext")
                         .HasColumnName("part_of_speech");
 
-                    b.Property<string>("UsageExamples")
-                        .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("varchar(1000)")
-                        .HasColumnName("usage_examples");
-
                     b.Property<string>("WordDefinition")
                         .IsRequired()
                         .HasMaxLength(500)
@@ -579,10 +573,14 @@ namespace LearningAppWebAPI.Migrations
                         .HasColumnName("word_definition");
 
                     b.Property<string>("WordPronunciation")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)")
                         .HasColumnName("word_pronunciation");
+
+                    b.Property<string>("WordPronunciationAudio")
+                        .HasMaxLength(1000)
+                        .HasColumnType("varchar(1000)")
+                        .HasColumnName("word_pronunciation_audio");
 
                     b.Property<string>("WordValue")
                         .IsRequired()
@@ -596,58 +594,6 @@ namespace LearningAppWebAPI.Migrations
                         .IsUnique();
 
                     b.ToTable("word");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            LanguageLevel = "C1",
-                            PartOfSpeech = "Noun",
-                            UsageExamples = "Her perseverance in the face of adversity was inspiring.",
-                            WordDefinition = "steadfastness in doing something despite difficulty",
-                            WordPronunciation = "pər-sə-ˈvir-ən(t)s",
-                            WordValue = "perseverance"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            LanguageLevel = "B2",
-                            PartOfSpeech = "Adjective",
-                            UsageExamples = "The ephemeral nature of cherry blossoms makes them special.",
-                            WordDefinition = "lasting for a very short time",
-                            WordPronunciation = "i-ˈfem-rəl",
-                            WordValue = "ephemeral"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            LanguageLevel = "A1",
-                            PartOfSpeech = "Verb,Noun",
-                            UsageExamples = "I run every morning.|The program runs smoothly.|He runs a successful business.",
-                            WordDefinition = "move at a speed faster than walking",
-                            WordPronunciation = "rən",
-                            WordValue = "run"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            LanguageLevel = "A2",
-                            PartOfSpeech = "Adjective,Adverb,Verb",
-                            UsageExamples = "She's a fast runner.|The clock is running fast.|He fasted for three days.",
-                            WordDefinition = "moving or capable of moving at high speed",
-                            WordPronunciation = "fäst",
-                            WordValue = "fast"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            LanguageLevel = "C2",
-                            PartOfSpeech = "Noun",
-                            UsageExamples = "Their meeting was pure serendipity.",
-                            WordDefinition = "the occurrence of events by chance in a happy way",
-                            WordPronunciation = "ser-ən-ˈdi-pə-tē",
-                            WordValue = "serendipity"
-                        });
                 });
 
             modelBuilder.Entity("LearningAppWebAPI.Models.Dictionary", b =>

@@ -25,34 +25,34 @@ public class Word
     [Required]
     [MaxLength(200)]
     [Column("word_value")]
-    public string? WordValue { get; set; }
+    public required string WordValue { get; set; }
     /// <summary>
     /// 
     /// </summary>
     [Required]
     [MaxLength(500)]
     [Column("word_definition")]
-    public string? WordDefinition { get; set; }
+    public required string WordDefinition { get; set; }
     /// <summary>
     /// 
     /// </summary>
-    [Required]
     [MaxLength(100)]
     [Column("word_pronunciation")]
     public string? WordPronunciation { get; set; }
     /// <summary>
     /// 
     /// </summary>
-    [Required]
     [MaxLength(1000)]
-    [Column("usage_examples")]
-    public string? UsageExamples { get; set; }
+    [Column("word_pronunciation_audio")]
+    public string? WordPronunciationAudio { get; set; }
+   
     /// <summary>
     /// 
     /// </summary>
+    [MaxLength(50)]
     [Required]
     [Column("part_of_speech")]
-    public List<PartOfSpeechEnum> PartOfSpeech { get; set; }
+    public required string PartOfSpeech { get; set; }
     /// <summary>
     /// 
     /// </summary>

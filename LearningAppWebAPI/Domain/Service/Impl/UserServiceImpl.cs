@@ -68,7 +68,7 @@ namespace LearningAppWebAPI.Domain.Service.Impl
                     return DataState<UserSimpleDto>.Failure("Role not found.", StatusCodes.Status404NotFound);
                 }
 
-                User user = new()
+                var user = new User
                 {
                     Username = requestDto.Username,
                     Email = requestDto.Email,
