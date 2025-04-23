@@ -40,5 +40,18 @@ namespace LearningAppWebAPI.Controllers
             var result = await wordService.AddWord(word, dictionaryId, UserId);
             return StatusCode(result.StatusCode, result.IsSuccess ? result.Value : result.ErrorMessage);
         }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="wordId"></param>
+        /// <param name="dictionaryId"></param>
+        /// <returns></returns>
+        [HttpDelete("{dictionaryId:int}/{wordId:int}")]
+        public async Task<IActionResult> DeleteWordFromDictionary(int dictionaryId, int wordId)
+        {
+            var result = await wordService.DeleteWordFromDictionary(wordId, dictionaryId);
+            return StatusCode(result.StatusCode, result.IsSuccess ? result.Value : result.ErrorMessage);
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using LearningAppWebAPI.Data;
 using LearningAppWebAPI.Models;
+using LearningAppWebAPI.Models.DTO.Simple;
 using LearningAppWebAPI.Utils.CustomAttributes;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,6 +30,23 @@ public class DictionaryRepository(AppDbContext context) : AbstractBaseRepository
     public async Task<List<Dictionary>> GetAllByUserIdAsync(long userId)
     {
         return await Context.Dictionary.Where(d => d.UserId == userId).ToListAsync();
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="wordId"></param>
+    /// <param name="dictionaryId"></param>
+    /// <returns></returns>
+
+
+    public async Task<bool> DeleteWordFromDictionary(int wordId, int dictionaryId)
+    {
+        var word = await Context.DictionaryWord.FirstOrDefaultAsync(w => w.WordId == wordId && w.DictionaryId == dictionaryId);
+        if (word == null) return false;
+        Context.DictionaryWord.Remove(word);
+        await Context.SaveChangesAsync();
+        return true;
     }
 
     /// <summary>

@@ -111,6 +111,25 @@ public class WordServiceImpl(WordRepository wordRepository, IMapper mapper, Dict
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="wordId"></param>
+    /// <param name="dictionaryId"></param>
+    /// <returns></returns>
+    public async Task<DataState<bool>> DeleteWordFromDictionary(int wordId, int dictionaryId)
+    {
+        try
+        {
+            var dictionaryWord = await dictionaryRepository.DeleteWordFromDictionary(wordId, dictionaryId);
+            return !dictionaryWord ? DataState<bool>.Failure("Word not found in dictionary", StatusCodes.Status404NotFound) : DataState<bool>.Success(true, StatusCodes.Status200OK);
+        }
+        catch (Exception e)
+        {
+            return DataState<bool>.Failure($"Error deleting word: {e.Message}", StatusCodes.Status500InternalServerError);
+        }
+    }
+
     private static string GenerateRandomLanguageLevel()
     {
         var languageLevels = new[] { "A1", "A2", "B1", "B2", "C1" };

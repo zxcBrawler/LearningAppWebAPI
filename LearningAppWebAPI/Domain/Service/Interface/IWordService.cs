@@ -10,4 +10,5 @@ public interface IWordService
     Task<DataState<WordSimpleDto>> GetWordByIdAsync(int wordId);
     
     Task<DataState<WordSimpleDto>> AddWord(MerriamWebsterResponseDto word, int dictionaryId, long userId);
+    Task<DataState<bool>> DeleteWordFromDictionary(int wordId, int dictionaryId);
 }
