@@ -464,9 +464,21 @@ namespace LearningAppWebAPI.Migrations
                         .HasColumnType("varchar(125)")
                         .HasColumnName("email");
 
+                    b.Property<DateTime?>("EmailNotificationsDateTime")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("email_notifications_datetime");
+
+                    b.Property<bool>("IsEmailNotificationsEnabled")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("is_email_notifications_enabled");
+
                     b.Property<bool>("IsRegistrationConfirmed")
                         .HasColumnType("tinyint(1)")
                         .HasColumnName("is_registration_confirmed");
+
+                    b.Property<DateTime?>("LastNotificationSentAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("last_notification_sent_at");
 
                     b.Property<int>("Level")
                         .HasColumnType("int")
@@ -563,7 +575,8 @@ namespace LearningAppWebAPI.Migrations
 
                     b.Property<string>("PartOfSpeech")
                         .IsRequired()
-                        .HasColumnType("longtext")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
                         .HasColumnName("part_of_speech");
 
                     b.Property<string>("WordDefinition")

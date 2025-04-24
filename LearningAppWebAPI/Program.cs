@@ -191,6 +191,9 @@ app.Services.UseScheduler(scheduler =>
 {
     scheduler.Schedule<TokenCleanupJob>()
         .EveryMinute();
+    scheduler.Schedule<NotificationSenderJob>()
+        .EveryMinute()
+        .PreventOverlapping("NotificationSenderJob");
 });
 
 app.UseHttpsRedirection();

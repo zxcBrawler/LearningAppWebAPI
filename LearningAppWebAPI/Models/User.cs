@@ -92,7 +92,25 @@ namespace LearningAppWebAPI.Models
         [Column("is_registration_confirmed")]
         [DefaultValue(false)]
         public bool IsRegistrationConfirmed { get; set; }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        [Column("is_email_notifications_enabled")]
+        [DefaultValue(false)]
+        public bool IsEmailNotificationsEnabled { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        [Column("email_notifications_datetime")]
+        public DateTime? EmailNotificationsDateTime { get; set; }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        [Column("last_notification_sent_at")]
+        public DateTime? LastNotificationSentAt { get; set; }
         /// <summary>
         /// 
         /// </summary>

@@ -41,4 +41,29 @@ public class EmailSender(IConfiguration config) : IEmailSender
         mailMessage.Body = mailBody.ToString();
         client.Send(mailMessage);
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="toEmail"></param>
+    /// <param name="subject"></param>
+    public void SendNotificationEmail(string toEmail, string subject)
+    {
+        using var client = new SmtpClient(config["Mail:Host"], int.Parse(config["Mail:Port"]));
+        client.EnableSsl = true;
+        client.UseDefaultCredentials = false;
+        client.Credentials = new NetworkCredential(config["Mail:From"], config["Mail:Password"]);
+        var mailMessage = new MailMessage();
+        mailMessage.From = new MailAddress(config["Mail:From"]);
+        mailMessage.To.Add(toEmail);
+        mailMessage.Subject = subject;
+        mailMessage.IsBodyHtml = true;
+        var mailBody = new StringBuilder();
+        mailBody.AppendFormat("<h1>Your Daily Learning Reminder from Learning App!</h1>");
+        mailBody.AppendFormat("<h2>Hello! It's time to continue your learning journey. Don't forget to learn something new today!</h2>");
+        mailBody.AppendFormat("<br />");
+        mailMessage.IsBodyHtml = true;
+        mailMessage.Body = mailBody.ToString();
+        client.Send(mailMessage);
+    }
 }
